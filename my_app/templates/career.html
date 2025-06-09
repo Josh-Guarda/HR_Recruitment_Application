@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}
+Careers Page
+{% endblock%}
+
+
+{%block content%}
+    <section id="section-1" class="text-dark p-5 text-center ">
+        <div class="container">
+            <div class="d-sm-flex align-items-center justify-content-center">
+                <div>
+                    <h1>Available Job Opportunities</h1>
+                    <h3 class="lead text-muted my-4">
+                       Discover your next career opportunity with our company
+                    </h3>
+                    <p>Please <span class="text-dark"><a href="">login</a></span> to apply for positions</p>
+                </div>
+            </div>
+        </div>
+     </section>
+
+
+    
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-2">
+            {%for job in jobs %}
+            <div class="col">
+                <div class="card h-100 shadow-md hover-shadow transition">
+                    <div class="card-header d-flex justify-content-between align-items-start">
+                        <div>
+                        <h5 class="card-title mb-0">{{job.job_title}}</h5>
+                        <small class="text-muted">{{job.department}}</small>
+                        </div>
+                        <span class="badge bg-secondary">{{job.employment_type}}</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text small" style="max-height: 4.5em; overflow: hidden;">{{job.description}}</p>
+                        <div class="mb-2 small">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Location:</span>
+                                <span>{{job.location}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Salary:</span>
+                                <span>₱{{ "{:,}".format(job.min_sal) }} - ₱{{ "{:,}".format(job.max_sal) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Start Date:</span>
+                                <span>{{job.start_date}}</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-dark w-100">
+                        Apply Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+{% endblock %}
