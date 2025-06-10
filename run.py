@@ -1,11 +1,11 @@
 from my_app import app
-from my_app import app, db
-from my_app.models import Usertype,Users,Department,Jobs
-import datetime
+# from my_app import app, db
+# from my_app.models import Usertype,Users,Department,Jobs
+# import datetime
 
-with app.app_context():
+# with app.app_context():
     
-    db.create_all()
+#     db.create_all()
     
     # job2=Jobs(
     #     job_title="Sr. Software Engineer",
