@@ -17,7 +17,10 @@ class Department(db.Model):
 
     #other fields
     user_id = db.Column(db.Integer(),db.ForeignKey('users.id'))
- 
+    
+    
+    create_uid = db.Column(db.Integer())
+    write_uid = db.Column(db.Integer())
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
     
@@ -57,6 +60,9 @@ class Jobs(db.Model):
     
     #other fields
     user_uid = db.Column(db.Integer(),db.ForeignKey('users.id'))
+    
+    create_uid = db.Column(db.Integer())
+    write_uid = db.Column(db.Integer())
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
     
