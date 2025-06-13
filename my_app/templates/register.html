@@ -17,42 +17,43 @@ Registration Page
             <form method="POST">
                 {{form.hidden_tag() }}
                 
-                
                 <div class="row mb-3">
                 <div class="col">
-                    <label for="firstName" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="firstName" placeholder="John">
+                    {{form.firstname.label()}}
+                    {{form.firstname(class="form-control", placeholder="Juan")}}
+                    
                 </div>
                 <div class="col">
-                    <label for="lastName" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" placeholder="Doe">
+                    {{form.lastname.label()}}
+                    {{form.lastname(class="form-control", placeholder="Dela Cruz ")}}
                 </div>
                 </div>
                 
                 <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="your@email.com">
+                    {{form.email_address.label()}}
+                    {{form.email_address(class="form-control", placeholder="your@email.com")}}
                 </div>
-
+                
                 <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Create a password">
+                    {{ form.password.label() }}
+                    {{ form.password(class="form-control", placeholder="Create a password") }}
                 </div>
 
                 <div class="mb-4">
-                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+                    {{ form.password2.label() }}
+                    {{ form.password2(class="form-control", placeholder="Confirm Password") }}
                 </div>
+                
 
-                <button type="submit" class="btn btn-dark w-100">Create Account</button>
+                <button id="showToastBtn" type="submit" class="btn btn-dark w-100">Create Account</button>
             </form>
             
             <div class="mt-4 text-center">
                 <p class="text-muted small mb-2">
                 Already have an account?
-                <a href="/login" class="text-decoration-none">Sign in here</a>
+                <a href="{{url_for('login_page')}}"class="text-decoration-none">Sign in here</a>
                 </p>
-                <a href="/" class="text-muted small text-decoration-none">← Back to Job Listings</a>
+                <a href="{{url_for('home_page')}}" class="text-muted small text-decoration-none">← Back to Home</a>
             </div>
             </div>
         </div>

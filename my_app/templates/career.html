@@ -14,7 +14,10 @@ Careers Page
                     <h3 class="lead text-muted my-4">
                        Discover your next career opportunity with our company
                     </h3>
-                    <p>Please <span class="text-dark"><a href="">login</a></span> to apply for positions</p>
+                    
+                    {% if current_user.is_anonymous%}
+                        <p>Please <span class="text-dark"><a href="">login</a></span> to apply for positions</p>
+                    {% endif %}
                 </div>
             </div>
         </div>

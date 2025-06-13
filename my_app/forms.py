@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField,HiddenField
 from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError
-from my_app.models import Users
+from my_app.models import Users,Usertype
 
 
 class RegisterForm(FlaskForm):
@@ -16,18 +16,20 @@ class RegisterForm(FlaskForm):
         if email_address:
             raise ValidationError('Email Already exist! Please try a different Email Address.')
     
-    username = StringField(label='User Name', validators=[Length(min=6,max=30), DataRequired()])
-    username = StringField(label='User Name', validators=[Length(min=6,max=30), DataRequired()])
-    email_address=StringField(label='Email Address', validators=[Email(), DataRequired()])
-    password1= PasswordField(label='Password' , validators=[Length(min=8,max=30), DataRequired()])
-    password2= PasswordField(label='Confirm Password', validators=[EqualTo('password1'), DataRequired()])
+    firstname = StringField(label='First Name', validators=[Length(min=6,max=30), DataRequired()])
+    lastname = StringField(label='Last Name', validators=[Length(min=6,max=30), DataRequired()])
+    email_address=StringField(label='Email', validators=[Email(), DataRequired()])
+    password= PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
+    password2= PasswordField(label='Confirm Password', validators=[EqualTo('password'), DataRequired()])
+    usertype = HiddenField(label='User Type')
+    
     submit=SubmitField(label='Create Account')
     
     
 
 class LoginForm(FlaskForm):
-    username = StringField(label='User Name', validators= [DataRequired()]) 
-    password1= PasswordField(label='Password' , validators=[DataRequired()])
+    email_address = StringField(label='Email', validators= [DataRequired()]) 
+    password= PasswordField(label='Password' , validators=[DataRequired()])
     submit=SubmitField(label='Sign in')
     
     

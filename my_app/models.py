@@ -1,4 +1,12 @@
-from my_app import db
+from my_app import db,login_manager
+from my_app import bcrpt
+from flask_login import UserMixin
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(int(user_id))
+
 
 
 
@@ -19,16 +27,14 @@ class Department(db.Model):
     #relationship fields
     rel_id_dept = db.relationship('Users',backref='rel_id_dept',lazy=True)
     
-    
-    
     create_uid = db.Column(db.Integer())
     write_uid = db.Column(db.Integer())
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
     
  
- 
-class Users(db.Model):
+
+class Users(db.Model,UserMixin):
     id = db.Column(db.Integer(),primary_key=True)
     
     firstname=db.Column(db.String(length=30),nullable=False)
@@ -38,15 +44,30 @@ class Users(db.Model):
     
     
     #relationship fields
-    
     rel_id_jobs = db.relationship('Jobs',backref='rel_id_jobs',lazy=True)
-    
     department_id =db.Column(db.Integer(),db.ForeignKey('department.id'))
     user_type_id = db.Column(db.Integer(),db.ForeignKey('usertype.id'))
     
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
     
+
+
+    @property
+    def password(self):
+        return self.password
+
+    @password.setter
+    def password(self, plain_text_password):
+        self.password_hash = bcrpt.generate_password_hash(plain_text_password).decode('utf-8')
+    
+    
+    def check_password_correction(self,attempted_password):
+        return bcrpt.check_password_hash(self.password_hash,attempted_password)
+            
+
+
+
 
     
 class Jobs(db.Model):

@@ -7,9 +7,7 @@ Sign In Page
 
 {% block content%}
     <!-- LOGIN -->
-    
-
-<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light rounded ">
+    <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light rounded ">
         <div class="card w-100" style="max-width: 500px;">
             <div class="card-header text-center py-4">
             <h2 class="h4 mb-1">Welcome Back</h2>
@@ -18,26 +16,27 @@ Sign In Page
             <div class="card-body">
 
             <form method="POST">
+                {{form.hidden_tag() }}
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="your@email.com">
-                    </div>
+                    {{form.email_address.label()}}
+                    {{form.email_address(class="form-control", placeholder="your@email.com")}}
+                </div>
+                
+                <div class="mb-3">
+                    {{form.password.label()}}
+                    {{form.password(class="form-control", placeholder="Enter you password")}}
+                </div>
 
-                    <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Create a password">
-                    </div>
-
-        
-                <button type="submit" class="btn btn-dark w-100">Sign In</button>
+                
+                <button id="showToastBtn" type="submit" class="btn btn-dark w-100">Sign In</button>
             </form>
 
             <div class="mt-4 text-center">
                 <p class="text-muted small mb-2">
                 Don't have an account?
-                <a href="/login" class="text-decoration-none">Sign up here</a>
+                <a href="{{url_for('register_page')}}" class="text-decoration-none">Sign up here</a>
                 </p>
-                <a href="/" class="text-muted small text-decoration-none">← Back to Job Listings</a>
+                <a href="{{url_for('home_page')}}" class="text-muted small text-decoration-none">← Back to Home</a>
             </div>
             </div>
         </div>
