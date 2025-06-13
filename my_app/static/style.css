@@ -8,8 +8,6 @@
   --white: #ffffff;
   --teal: #20c997;
   --info: #53b8f3;
-  --login: #9e5807;
-  --login-light: #d88527;
   --max-width: 1200px;
 }
 
@@ -18,4 +16,24 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+#nav-btn{
+  color: #ee7373;
+/* box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset;
+-webkit-box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset;
+-moz-box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset; */
+}
+#nav-btn:hover{
+  background-color: #eb7070;
+  transition: .3s ease-in;
+  
+  color: #ffffff;
+  box-shadow: none;
+}
+#nav-btn:focus,#nav-btn:active{
+  box-shadow: none !important;
+  outline: none !important;
+
+}
+
 

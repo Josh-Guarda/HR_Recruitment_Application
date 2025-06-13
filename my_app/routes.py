@@ -1,21 +1,25 @@
 from my_app import app
-from flask import render_template,url_for
-from my_app.models import Jobs
+from flask import render_template, redirect, url_for, flash
+from my_app.models import Jobs,Users,Usertype
+from my_app.forms import RegisterForm,LoginForm
+from my_app import db
+from flask_login import login_user,current_user, logout_user, login_required
+from datetime import datetime
+
 
 @app.route("/")
 @app.route("/home")
-
 def home_page():
-    return render_template('main.html')
+    return render_template('main.html',show_navbar=True)
     
 
 @app.route("/career")
+@login_required
 def career_page():
     jobs=Jobs.query.all()
     
     
-    
-    
+
     # jobs= [
     #     {'id':1,'job_title':'Sr. Software Engineer','department':'Information Technology','employment_type':'Full-time','min_sal':80000,'max_sal':100000,'start_date':'07/01/2025','location':'Bonifacio Global City Taguig','description':'We are looking for an experienced software developer to join our team. You will be responsible for developing high-quality applications and working with the latest technologies.'},
     #     {'id':2,'job_title':'Sr. Marketing Manager','department':'Marketing Department','employment_type':'Full-time','min_sal':80000,'max_sal':100000,'start_date':'07/01/2025',
@@ -24,18 +28,74 @@ def career_page():
     #      'location':'Makati City','description':'We are looking for an experienced Recruitment Manager to join our team. You will be responsible on HumanResources Management and Recruitment.'}
     # ]
     # ,job=job
-    return render_template("career.html",jobs=jobs)
+    return render_template("career.html",jobs=jobs,show_navbar=True)
 
 
 
 
 
 
-@app.route("/register")
+@app.route("/register",methods=['GET','POST'])
 def register_page():
-    return render_template('register.html')
+    form = RegisterForm()
+    
+    if form.validate_on_submit():
+        user_to_create = Users(firstname=form.firstname.data,
+                               lastname=form.lastname.data,
+                               email_address=form.email_address.data,
+                               password=form.password.data,  #instead of using password_has the password_hash declare in models.py is undergone to some conversion for encryption using flask_bcrypt see Users Model
+                               creation_date = datetime.now().date(),
+                               write_date = datetime.now().date()
+                               )
+        
+        db.session.add(user_to_create)
+        db.session.commit()
+        login_user(user_to_create)
+        flash(f'Account create successfully! You are now logged in as {user_to_create.firstname}',category='success')
+        return redirect(url_for('career_page'))
+        
+
+    if form.errors !={}: # if there is no errors from validations inside the forms.py
+        for err_msg in form.errors.values():
+            flash(f'There is some Error in {err_msg}',category='danger')
+
+    return render_template('register.html',show_navbar=False,form=form)
 
 
-@app.route("/login")
-def login_page():
-    return render_template('login.html')
+
+
+@app.route("/login",methods=["GET","POST"])
+def login_page(): 
+    form=LoginForm()
+    if form.validate_on_submit():
+        attempted_user = Users.query.filter_by(email_address=form.email_address.data).first()
+        if attempted_user and attempted_user.check_password_correction(attempted_password=form.password.data):
+            
+            login_user(attempted_user)
+            flash(f'Success! You are logged in as: {attempted_user.firstname}', category='success')
+            return redirect(url_for('career_page'))
+        else:
+            flash('Invalid username or password.', category='danger')
+    
+    return render_template('login.html',show_navbar=False,form=form)
+
+
+
+@app.route('/logout')
+def logout_page():
+    logout_user()
+    flash('You have been logged out!"', category= 'primary')
+    return redirect(url_for('home_page'))
+
+
+
+
+
+
+
+
+
+
+
+
+
