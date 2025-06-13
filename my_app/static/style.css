@@ -18,22 +18,41 @@
 }
 
 #nav-btn{
-  color: #ee7373;
+  color: #ffffff;
+  background-color: #e24242;
+  
 /* box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset;
 -webkit-box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset;
 -moz-box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset; */
 }
 #nav-btn:hover{
-  background-color: #eb7070;
-  transition: .3s ease-in;
-  
+  background-color: #ec6969;
   color: #ffffff;
   box-shadow: none;
 }
-#nav-btn:focus,#nav-btn:active{
-  box-shadow: none !important;
-  outline: none !important;
-
+#login-btn,#signup-btn{
+  font-size: 1rem;
+  font-weight: 500;
 }
 
+#login-btn:hover{
+  background-color: #ecf1f7;
+}
+#signup-btn:hover{
+  background-color: #001d42;
+}
 
+#nav-btn:focus,#nav-btn:active,#signup-btn:focus,#login-btn:focus,#signup-btn:active,#auth-btn:active{
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+#anom_login{
+  text-decoration: none;
+  font-weight: 500;
+}
+
+#anom_login:hover{
+  text-decoration:underline;
+  text-underline-offset: 5px;
+}
