@@ -90,7 +90,9 @@ def logout_page():
 
 
 
-
+@app.route('/dashboard')
+def dashboard_page():
+    return render_template('dashboard.html',show_navbar=False)
 
 
 

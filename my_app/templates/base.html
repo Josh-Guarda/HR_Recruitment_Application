@@ -29,11 +29,11 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
           <a class="navbar-brand" href={{url_for('home_page')}}>HR Recruitment Portal</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-          </button>
           
-          <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center custom-nav-center" id="navbarNav">
             <!-- Centered Menu -->
             <ul class="navbar-nav ms-auto ">
               <li class="nav-item active">
@@ -46,33 +46,40 @@
             
             <!-- Right-aligned items -->
               {% if current_user.is_authenticated%}
-              <ul class="navbar-nav ms-auto gap-2">
+              <ul class="navbar-nav ms-auto gap-2 ">
                 
-                <span class="text-sm text-muted">Welcome, {{current_user.firstname|capitalize}}</span>
+                <span class="text-sm text-muted UserProf">Welcome, {{current_user.firstname|capitalize}}</span>
                 
-                <li class="nav-item">
+                <!--<li class="nav-item">
                   <button type="button" id="nav-btn" class="btn btn-light fw-normal btn-md border hover-overlay">
                     View Public Site
                   </button>
-                </li>
+                </li>-->
 
                 <li class="nav-item">
-                  <button type="button" id="nav-btn" class="btn btn-light fw-normal btn-md border">
+                  <button type="button" id="nav-btn" class="btn btn-light fw-normal btn-md lead" onclick="location.href='{{ url_for('dashboard_page') }}'">
                     Dashboard
                   </button>
                 </li>
                 
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url_for('logout_page')}}">Logout</a>
+                  <button type="button" id="login-btn" class="btn fw-normal btn-md lead border" onclick="location.href='{{ url_for('logout_page') }}'">
+                    Logout
+                  </button>
+                  <!--<a class="nav-link" href="{{url_for('logout_page')}}"></a> -->
                 </li>
 
               {% else %}
-              <ul class="navbar-nav ms-auto">
+              <ul class="navbar-nav ms-auto gap-1">
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url_for('login_page')}}">Login</a>
+                  <button type="button" id="login-btn" class="btn btn-md border lead " onclick="location.href='{{url_for('login_page')}}'">
+                    Login
+                  </button>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url_for('register_page')}}">Register</a>
+                  <button type="button" id="signup-btn" class="btn btn-md btn-dark border lead  " onclick="location.href='{{url_for('register_page')}}'">
+                    Sign Up
+                  </button>
                 </li>
                </ul> 
               {% endif %}

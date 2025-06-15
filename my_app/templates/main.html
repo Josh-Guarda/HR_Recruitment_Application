@@ -13,8 +13,14 @@
                     <p class="lead my-4">
                         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus porro neque ullam aut assumenda debitis nesciunt voluptate voluptatem, rerum fugiat doloremque reiciendis soluta ut! Ab corporis cum repudiandae ullam minus fugiat, adipisci ducimus sed, dolorem veniam, eveniet itaque. Quis eius obcaecati omnis distinctio quibusdam harum sit nobis ratione in doloribus?
                     </p>
-                    <button class="btn btn-dark px-5" data-bs-toggle="modal"
-              data-bs-target="#enroll">See Careers</button>
+                    
+                    {% if current_user.is_anonymous%}
+                        <p><span><a id="anom_login" class="text-dark" href="{{url_for('register_page')}}">Create an account</a></span> or <span><a id="anom_login" class="text-dark" href="{{url_for('login_page')}}">Sign in</a></span> to see your personalized job recommendations.</p>
+                        
+                    {% endif %}
+                    
+                    <!--<button class="btn btn-dark px-5" data-bs-toggle="modal"
+              data-bs-target="#enroll">See Careers</button>-->
              
                 </div>
                 
