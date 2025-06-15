@@ -29,11 +29,11 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
           <a class="navbar-brand" href={{url_for('home_page')}}>HR Recruitment Portal</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-          </button>
           
-          <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center custom-nav-center" id="navbarNav">
             <!-- Centered Menu -->
             <ul class="navbar-nav ms-auto ">
               <li class="nav-item active">
@@ -46,9 +46,9 @@
             
             <!-- Right-aligned items -->
               {% if current_user.is_authenticated%}
-              <ul class="navbar-nav ms-auto gap-2">
+              <ul class="navbar-nav ms-auto gap-2 ">
                 
-                <span class="text-sm text-muted">Welcome, {{current_user.firstname|capitalize}}</span>
+                <span class="text-sm text-muted UserProf">Welcome, {{current_user.firstname|capitalize}}</span>
                 
                 <!--<li class="nav-item">
                   <button type="button" id="nav-btn" class="btn btn-light fw-normal btn-md border hover-overlay">
