@@ -92,12 +92,15 @@ def logout_page():
 
 @app.route('/admin_dashboard')
 def dashboard_page():
-    return render_template('dashboard/admin_dashboard.html',show_navbar=False)
+    return render_template('admin/admin_dashboard.html',show_navbar=False)
 
 @app.route('/internal_dashboard')
 def internal_dashboard_page():
-    return render_template('dashboard/internal_dashboard.html',show_navbar=False)
+    return render_template('internal/internal_dashboard.html',show_navbar=False)
 
+@app.route('/public_dashboard')
+def public_dashboard_page():
+    return render_template('public/public_dashboard.html',show_navbar=False)
 
 
 
