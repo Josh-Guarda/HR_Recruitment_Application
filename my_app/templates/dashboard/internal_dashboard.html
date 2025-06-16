@@ -1,0 +1,24 @@
+{% extends "dashboard/base_dashboard.html"%}
+
+
+
+
+
+<!--After fixing of user type show this is user is public-->
+{% block nav%}
+<li class="nav-item">
+    <button id="nav-btn" type="button" class="btn btn-light fw-normal border" onclick="location.href='{{ url_for('career_page') }}'">
+    Find Jobs
+    </button>
+</li>
+{% endblock%}
+
+{% block section %}
+
+<div class="container p-5">
+    <h1>Hello Internal User</h1>
+</div>
+{% endblock%}
+
+
+                

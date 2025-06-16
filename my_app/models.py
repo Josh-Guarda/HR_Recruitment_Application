@@ -17,6 +17,8 @@ class Usertype(db.Model):
     #relationship fields
     user_type=db.relationship('Users',backref='desig_user',lazy=True)
     
+    def __str__(self):
+        return self.name
  
  
 class Department(db.Model):

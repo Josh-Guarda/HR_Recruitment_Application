@@ -59,7 +59,7 @@ def register_page():
         for err_msg in form.errors.values():
             flash(f'There is some Error in {err_msg}',category='danger')
 
-    return render_template('register.html',show_navbar=False,form=form)
+    return render_template('auth/register.html',show_navbar=False,form=form)
 
 
 
@@ -77,7 +77,7 @@ def login_page():
         else:
             flash('Invalid username or password.', category='danger')
     
-    return render_template('login.html',show_navbar=False,form=form)
+    return render_template('auth/login.html',show_navbar=False,form=form)
 
 
 
@@ -90,9 +90,13 @@ def logout_page():
 
 
 
-@app.route('/dashboard')
+@app.route('/admin_dashboard')
 def dashboard_page():
-    return render_template('dashboard.html',show_navbar=False)
+    return render_template('dashboard/admin_dashboard.html',show_navbar=False)
+
+@app.route('/internal_dashboard')
+def internal_dashboard_page():
+    return render_template('dashboard/internal_dashboard.html',show_navbar=False)
 
 
 
