@@ -1,5 +1,4 @@
 from flask import Flask
-import flask_admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -9,8 +8,6 @@ app = Flask(__name__)
 app.config.from_pyfile("config.py")
 db = SQLAlchemy(app)
 bcrpt= Bcrypt(app)
-
-
 
 
 
