@@ -5,22 +5,13 @@ Dashboard
 {% endblock title %}
 
 {% block content %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light p-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-4">
     <div class="container">
         <div class="container flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between align-items-center">
-                <!-- if user_type is internal or admin add a span here inside the a tag expected output user_type.name Dashboard  eg. Admin Dashboard-->
+               
                 <a class="navbar-brand fw-bold" href="{{url_for('admin_dashboard')}}">Dashboard</a>
-
-
-
-
-
-
-
-                
-                <!--if user_type is public show only My Profile name profile_page-->
-                 
+                    
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
@@ -50,6 +41,82 @@ Dashboard
         </div>
     </div>
     </nav>
+
+
+    
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Enable body scrolling</button>
+
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center justify-content-center bg-primary rounded me-2" style="width: 2rem; height: 2rem;">
+                    <span class="text-white fw-bold small">HR</span>
+                </div>
+
+                <div id="hr-details" class="d-none d-md-block">
+                    <h2 class="fw-semibold small mb-0">HR System</h2>
+                    <p class="text-muted text-xs mb-0">{{ current_user.user_type|capitalize }}</p>
+                </div>
+            </div>
+
+            
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body ">
+            <ul class="nav flex-column gap-1">
+                <li class="nav-item">
+                    <button class="btn btn-light w-100 text-start d-flex align-items-center" onclick="location.href='{{ url_for('admin_dashboard') }}'" >
+                        <img src="{{ url_for('static', filename='builtin/icons/dashboard.png') }}" width="20" class="me-2">
+                        Dashboard
+                    </button>
+                </li>
+                <li class="nav-item">
+                   <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                         <img src="{{ url_for('static', filename='builtin/icons/briefcase.png') }}" width="20" class="me-2">
+                        Job Management
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                         <img src="{{ url_for('static', filename='builtin/icons/file.png') }}" width="20" class="me-2">
+                        Applications
+                    </button>
+                </li>
+                <li class="nav-item">
+                   <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                        <img src="{{ url_for('static', filename='builtin/icons/group.png') }}" width="20" class="me-2">
+                        User Management
+                    </button>
+                </li>
+                <li class="nav-item">
+                   <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                         <img src="{{ url_for('static', filename='builtin/icons/corporation.png') }}" width="20" class="me-2">
+                        Deparments
+                    </button>
+                </li>
+                <li class="nav-item">
+                   <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                         <img src="{{ url_for('static', filename='builtin/icons/file.png') }}" width="20" class="me-2">
+                        Reports
+                    </button>
+                </li>
+
+            </ul>
+        </div>
+        <div class="offcanvas-footer p-3">
+            <div class="text-center">
+                <h6>{{current_user.user_type|capitalize}} User</h6>
+                <p class='text-muted'>{{current_user.email_address}}</p>
+            </div>
+            
+            <button id="logout-btn" class="btn btn-light w-100" onclick="location.href='{{ url_for('logout_page') }}'">
+                Logout
+            </button>
+        </div>
+        
+    </div>
+    
+
 
     {% block section %}
     
