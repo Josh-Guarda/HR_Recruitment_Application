@@ -49,11 +49,11 @@ class Users(db.Model,UserMixin):
     rel_id_jobs = db.relationship('Jobs',backref='rel_id_jobs',lazy=True)
     department_id =db.Column(db.Integer(),db.ForeignKey('department.id'))
     user_type_id = db.Column(db.Integer(),db.ForeignKey('usertype.id'))
+    user_type = db.relationship('Usertype')
     
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
     
-
 
     @property
     def password(self):

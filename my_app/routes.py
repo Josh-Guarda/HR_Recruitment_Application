@@ -83,29 +83,36 @@ def login_page():
 
 
 
+
+@app.route('/admin/')
+@login_required
+def admin_dashboard():
+    if current_user.user_type.name != "admin":
+        return redirect(url_for("home_page"))
+    return render_template("admin/admin_dashboard.html",show_navbar=False)
+    
+@app.route('/internal/')
+@login_required
+def internal_dashboard():
+    if current_user.user_type.name != "internal":
+        return redirect(url_for("home_page"))
+    return render_template('internal/internal_dashboard.html',show_navbar=False)
+
+@app.route('/public/')
+@login_required
+def public_dashboard():
+    if current_user.user_type.name != "public":
+        return redirect(url_for("home_page"))
+    return render_template('public/public_dashboard.html',show_navbar=False)
+
+
+
 @app.route('/logout')
 def logout_page():
     logout_user()
     flash('You have been logged out!"', category= 'primary')
     return redirect(url_for('home_page'))
 
-
-
-
-@app.route('/admin')
-@login_required
-def dashboard_page():
-    return render_template('admin/admin_dashboard.html',show_navbar=False)
-
-@app.route('/internal')
-@login_required
-def internal_dashboard_page():
-    return render_template('internal/internal_dashboard.html',show_navbar=False)
-
-@app.route('/public')
-@login_required
-def public_dashboard_page():
-    return render_template('public/public_dashboard.html',show_navbar=False)
 
 
 
