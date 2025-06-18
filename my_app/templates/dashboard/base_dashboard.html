@@ -5,47 +5,52 @@ Dashboard
 {% endblock title %}
 
 {% block content %}
+    
+    <!-- All your page contents go here -->
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-4">
-    <div class="container">
-        <div class="container flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between align-items-center">
-               
-                <a class="navbar-brand fw-bold" href="{{url_for('admin_dashboard')}}">Dashboard</a>
-                    
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
+        
+            <div class="container flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                
+                    <a class="navbar-brand fw-bold" href="{{url_for('admin_dashboard')}}">Dashboard</a>
+                        
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
             <!-- Welcome message -->
-            <span class="text-sm text-muted UserProf">Welcome, {{ current_user.firstname|capitalize }} -</span>
-        </div>
-        <div class="collapse navbar-collapse text-end" id="navbarNavAltMarkup">
-            <ul class="navbar-nav ms-auto gap-2">
-                {% block nav%}
-
-                {% endblock%}
-                <li class="nav-item">
-                    <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle border border-secondary" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="ri-user-line"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('logout_page') }}">Logout</a></li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
+                <span class="text-sm text-muted UserProf">Welcome, {{ current_user.firstname|capitalize }} -</span>
+                <br>
+                <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">→ </button>
+            </div>
+        
+        
+            <div class="collapse navbar-collapse text-end" id="navbarNavAltMarkup">
+                <ul class="navbar-nav ms-auto gap-2">
+                    {% block nav%}
+                    
+                    {% endblock%}
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle border border-secondary" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="ri-user-line"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout_page') }}">Logout</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
     </nav>
 
 
     
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Enable body scrolling</button>
-
+    
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
             <div class="d-flex align-items-center gap-2">
@@ -115,12 +120,10 @@ Dashboard
         </div>
         
     </div>
-    
 
+    <section class="main-content">
+    {% block section %}{% endblock%}    
 
-    {% block section %}
-    
-
-    {% endblock%}    
-
+    </section>
 {% endblock%}
+
