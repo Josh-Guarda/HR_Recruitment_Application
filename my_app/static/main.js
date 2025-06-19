@@ -28,3 +28,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const btnPersonal = document.getElementById("btn-application");
+    const btnJob = document.getElementById("btn-job");
+    const sectionPersonal = document.getElementById("section-personal");
+    const sectionJob = document.getElementById("section-job");
+
+    btnPersonal.addEventListener("click", function () {
+        // Button styles
+        btnPersonal.classList.add("active");
+        btnJob.classList.remove("active");
+
+        // Toggle content
+        sectionPersonal.classList.remove("d-none");
+        sectionJob.classList.add("d-none");
+    });
+
+    btnJob.addEventListener("click", function () {
+        btnJob.classList.add("active");
+        btnPersonal.classList.remove("active");
+
+        sectionJob.classList.remove("d-none");
+        sectionPersonal.classList.add("d-none");
+    });
+});
