@@ -5,52 +5,54 @@ Dashboard
 {% endblock title %}
 
 {% block content %}
-    
     <!-- All your page contents go here -->
-    
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow p-4">
-        
-            <div class="container flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between align-items-center">
-                
-                    <a class="navbar-brand fw-bold" href="{{url_for('admin_dashboard')}}">Dashboard</a>
-                        
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <div class="container">
+
+            {% if current_user.user_type.name=='admin' or current_user.user_type.name=='internal'%}
+                <div class="container flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                    
+                        <a class="navbar-brand fw-bold" href="{{url_for('admin_dashboard')}}">Dashboard</a>
+                            
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                <!-- Welcome message -->
+                    <span class="text-sm text-muted UserProf">Welcome, {{ current_user.firstname|capitalize }} -</span>
+                    <br>
+                    <br>
+                    <button class="btn btn-light d-flex justify-content-center align-items-center p-2 dashboard_side_btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
+                        <img src="{{ url_for('static', filename='builtin/icons/menu-button.png') }}" width="20" alt="Menu Icon">
                     </button>
                 </div>
-            <!-- Welcome message -->
-                <span class="text-sm text-muted UserProf">Welcome, {{ current_user.firstname|capitalize }} -</span>
-                <br>
-                <button class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">→ </button>
-            </div>
-        
-        
+            {% else %}
+                <div class="container align-items-center">
+                    <div class="d-flex justify-content-between align-items-center">
+                    
+                        <a class="navbar-brand fw-bold" href="{{url_for('admin_dashboard')}}">User Profile</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    <span class="text-sm text-muted UserProf">Manage your profile and track applications</span>
+                </div>
+            {% endif %}
+            
             <div class="collapse navbar-collapse text-end" id="navbarNavAltMarkup">
                 <ul class="navbar-nav ms-auto gap-2">
                     {% block nav%}
                     
                     {% endblock%}
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle border border-secondary" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="ri-user-line"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ url_for('logout_page') }}">Logout</a></li>
-                            </ul>
-                        </div>
-                    </li>
                 </ul>
             </div>
+        </div>
     </nav>
-
+    
 
     
-    
+    {% if current_user.user_type.name=='admin' or current_user.user_type.name=='internal'%}
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
             <div class="d-flex align-items-center gap-2">
@@ -58,7 +60,7 @@ Dashboard
                     <span class="text-white fw-bold small">HR</span>
                 </div>
 
-                <div id="hr-details" class="d-none d-md-block">
+                <div id="hr-details">
                     <h2 class="fw-semibold small mb-0">HR System</h2>
                     <p class="text-muted text-xs mb-0">{{ current_user.user_type|capitalize }}</p>
                 </div>
@@ -70,42 +72,44 @@ Dashboard
         <div class="offcanvas-body ">
             <ul class="nav flex-column gap-1">
                 <li class="nav-item">
-                    <button class="btn btn-light w-100 text-start d-flex align-items-center" onclick="location.href='{{ url_for('admin_dashboard') }}'" >
+                    <p class="text-muted text-start px-2">Main Navigation</p>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-light w-100 text-start d-flex align-items-center dashboard_side_btn" onclick="location.href='{{ url_for('admin_dashboard') }}'" >
                         <img src="{{ url_for('static', filename='builtin/icons/dashboard.png') }}" width="20" class="me-2">
                         Dashboard
                     </button>
                 </li>
                 <li class="nav-item">
-                   <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                   <button class="btn  w-100 text-start d-flex align-items-center dashboard_side_btn">
                          <img src="{{ url_for('static', filename='builtin/icons/briefcase.png') }}" width="20" class="me-2">
                         Job Management
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                    <button class="btn  w-100 text-start d-flex align-items-center dashboard_side_btn">
                          <img src="{{ url_for('static', filename='builtin/icons/file.png') }}" width="20" class="me-2">
                         Applications
                     </button>
                 </li>
                 <li class="nav-item">
-                   <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                   <button class="btn  w-100 text-start d-flex align-items-center dashboard_side_btn">
                         <img src="{{ url_for('static', filename='builtin/icons/group.png') }}" width="20" class="me-2">
                         User Management
                     </button>
                 </li>
                 <li class="nav-item">
-                   <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                   <button class="btn  w-100 text-start d-flex align-items-center dashboard_side_btn">
                          <img src="{{ url_for('static', filename='builtin/icons/corporation.png') }}" width="20" class="me-2">
                         Deparments
                     </button>
                 </li>
                 <li class="nav-item">
-                   <button class="btn btn-light w-100 text-start d-flex align-items-center">
+                   <button class="btn  w-100 text-start d-flex align-items-center dashboard_side_btn">
                          <img src="{{ url_for('static', filename='builtin/icons/file.png') }}" width="20" class="me-2">
                         Reports
                     </button>
                 </li>
-
             </ul>
         </div>
         <div class="offcanvas-footer p-3">
@@ -118,8 +122,8 @@ Dashboard
                 Logout
             </button>
         </div>
-        
     </div>
+    {% endif %}
 
     <section class="main-content">
     {% block section %}{% endblock%}    

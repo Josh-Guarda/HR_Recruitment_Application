@@ -9,14 +9,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+// Side bar Menu
 document.addEventListener('DOMContentLoaded', function () {
-        const offcanvasEl = document.getElementById('offcanvasScrolling');
-        
-        offcanvasEl.addEventListener('show.bs.offcanvas', function () {
-            document.body.classList.add('sidebar-open');
-        });
+    const offcanvasEl = document.getElementById('offcanvasScrolling');
+    const offcanvas = new bootstrap.Offcanvas(offcanvasEl);
 
-        offcanvasEl.addEventListener('hidden.bs.offcanvas', function () {
-            document.body.classList.remove('sidebar-open');
-        });
+    // Manually add class on initial load
+    document.body.classList.add('sidebar-open');
+    offcanvas.show();
+
+    // Handle class when opened/closed via buttons
+    offcanvasEl.addEventListener('show.bs.offcanvas', function () {
+        document.body.classList.add('sidebar-open');
     });
+
+    offcanvasEl.addEventListener('hidden.bs.offcanvas', function () {
+        document.body.classList.remove('sidebar-open');
+    });
+});
+

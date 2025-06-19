@@ -96,8 +96,7 @@ border-radius: 10px;
 box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
 -webkit-box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
 -moz-box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
-    }
-
+}
 
 #logout-btn{
   color: #ffffff;
@@ -113,19 +112,22 @@ box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
 
 /* Dashboard sidebar*/
 /* Shift header and main content when sidebar is open */
+
+
 body.sidebar-open .navbar{
-    margin-left: 400px; /* Match offcanvas width */
+    margin-left: 250px; 
     transition: margin 0.3s ease;
 }
-
 body.sidebar-open .main-content {
   margin-left: 250px;
   transition: margin 0.3s ease;
 }
 
-
-/* Ensure content doesn't get covered */
 .main-content,.navbar {
-
     transition: margin 0.3s ease;
 } 
+/*  */
+
+.dashboard_side_btn:hover{
+    background-color: #f0eded;
+}
