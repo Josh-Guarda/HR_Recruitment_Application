@@ -34,6 +34,12 @@ class LoginForm(FlaskForm):
     
     
 
-# class Personal_info(FlaskForm):
+class PersonalInfoForm(FlaskForm):
+    firstname = StringField(label='First Name', validators=[Length(min=6,max=30), DataRequired()])
+    lastname = StringField(label='Last Name', validators=[Length(min=6,max=30), DataRequired()])
+    email_address=StringField(label='Email', validators=[Email(), DataRequired()])
+    mobile_number = StringField(label='Mobile Number', validators=[Length(min=11,max=11), DataRequired()])
+    phone_number=StringField(label='Landline Number', validators=[Length(min=8,max=8)],default=('00000000'))
     
-    
+    submit=SubmitField(label='Save')
+    cancel=SubmitField(label='cancel')

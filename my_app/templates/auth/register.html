@@ -16,17 +16,16 @@ Registration Page
             <div class="card-body">
             <form method="POST">
                 {{form.hidden_tag() }}
-                
                 <div class="row mb-3">
-                <div class="col">
-                    {{form.firstname.label()}}
-                    {{form.firstname(class="form-control", placeholder="Juan")}}
-                    
-                </div>
-                <div class="col">
-                    {{form.lastname.label()}}
-                    {{form.lastname(class="form-control", placeholder="Dela Cruz ")}}
-                </div>
+                    <div class="col">
+                        {{form.firstname.label()}}
+                        {{form.firstname(class="form-control", placeholder="Juan")}}
+                        
+                    </div>
+                    <div class="col">
+                        {{form.lastname.label()}}
+                        {{form.lastname(class="form-control", placeholder="Dela Cruz ")}}
+                    </div>
                 </div>
                 
                 <div class="mb-3">

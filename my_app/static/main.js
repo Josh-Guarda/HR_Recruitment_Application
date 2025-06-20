@@ -38,10 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const sectionJob = document.getElementById("section-job");
 
     btnPersonal.addEventListener("click", function () {
-    // Set font colors manually
-        btnJob.style.color = '#a5a3a3'; // muted gray
-        btnPersonal.style.color = 'black'; // active dark text
-       
         // Toggle active class if needed
         btnPersonal.classList.add("active");
         btnJob.classList.remove("active");
@@ -52,9 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     btnJob.addEventListener("click", function () {
-        btnPersonal.style.color = '#a5a3a3'; // muted gray
-        btnJob.style.color = 'black'; // active dark text
-     
         btnJob.classList.add("active");
         btnPersonal.classList.remove("active");
         

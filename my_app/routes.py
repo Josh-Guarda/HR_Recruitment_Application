@@ -1,7 +1,7 @@
 from my_app import app
 from flask import render_template, redirect, url_for, flash,request
 from my_app.models import Jobs,Users,Usertype
-from my_app.forms import RegisterForm,LoginForm
+from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm
 from my_app import db
 from flask_login import login_user,current_user, logout_user, login_required
 from datetime import datetime
@@ -98,12 +98,28 @@ def internal_dashboard():
         return redirect(url_for("home_page"))
     return render_template('internal/internal_dashboard.html',show_navbar=False)
 
-@app.route('/public/')
+
+
+@app.route('/public/',methods=["GET","POST"])
 @login_required
 def public_dashboard():
+    form=PersonalInfoForm(obj=current_user)
+    
+    if form.validate_on_submit():
+        current_user.firstname = form.firstname.data
+        current_user.lastname = form.lastname.data
+        current_user.email_address = form.email_address.data
+        db.session.commit()
+        
+        flash('Your profile has been updated!', category='success')
+        
+        return redirect(url_for('public_dashboard'))
+    
+    
+    
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))
-    return render_template('public/public_dashboard.html',show_navbar=False)
+    return render_template('public/public_dashboard.html',show_navbar=False,form=form)
 
 
 
