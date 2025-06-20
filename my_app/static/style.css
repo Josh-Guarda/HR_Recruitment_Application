@@ -12,19 +12,19 @@
   --max-width: 1200px;
 }
 
+
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
+/* Main nav*/
 #nav-btn{
   color: #ffffff;
   background-color: #228bd1;
   white-space: nowrap;
-/* box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset;
--webkit-box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset;
--moz-box-shadow: -4px -1px 35px -5px rgba(0,0,0,0.53) inset; */
 }
 #nav-btn:hover{
   background-color: #0562a0;
@@ -60,6 +60,15 @@
 }
 
 
+/* ToasMessage */
+#toastMessage{
+  z-index: 9999;
+}
+
+
+
+
+
 @media (max-width: 575.98px) {
   .custom-nav-center {
     justify-content: center !important;
@@ -91,7 +100,6 @@
 
 /* Dashboard */
  .custom-card {
-        
 border-radius: 10px;
 box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
 -webkit-box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
@@ -138,8 +146,5 @@ body.sidebar-open .main-content {
 
 /* Public Dashboard */
 .btn-group-container{
-  background-color: #e3edf5;
-}
-#btn-personal,#btn-application{
-  color: #7a7979;
+  background-color: #75c1ec;
 }

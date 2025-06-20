@@ -45,8 +45,8 @@ class Users(db.Model,UserMixin):
     email_address=db.Column(db.String(length=50),nullable=False,unique=True)
     password_hash=db.Column(db.String(length=30),nullable=False)
     
-    # mobile_number = db.Column(db.String(length=11),nullable=True)
-    # phone_number = db.Column(db.String(length=11),nullable=True)
+    mobile_number = db.Column(db.String(length=11),nullable=True)
+    phone_number = db.Column(db.String(length=8),nullable=True)
     # profile_picture =db.Column(db.Text)
     
     #relationship fields
