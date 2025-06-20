@@ -25,24 +25,42 @@
 {% block section %}
 
 <div class="container p-5">
-    <div class="btn-group  mb-3 w-100" role="group" aria-label="Form Navigation">
-        <button type="button" class="btn btn-outline-light text-dark active fw-bold" id="btn-personal">Personal Info</button>
-        <button type="button" class="btn btn-outline-light text-dark fw-bold" id="btn-application">Job Details</button>
+    <div id='btn-group-container' class="container-fluid p-1 mb-3 rounded btn-group-container">
+        <div class="btn-group  w-100" role="group" aria-label="Form Navigation">
+            <button type="button" class="btn btn-outline-light fw-bold rounded active" id="btn-personal">Profile Settings</button>
+            <button type="button" class="btn btn-outline-light fw-bold rounded" id="btn-application">My Application</button>
+        </div>
     </div>
-
+    
+    
     <!-- Section 1: Personal Info -->
-    <div id="section-personal" class="form-section">
-        <h5>Personal Information</h5>
+    <div id="section-personal" class="form-section container-fluid border rounded py-4">
+        <div class="d-flex flex-column align-items-center justify-content-center pb-5">
+            <h4>Profile Settings</h4>
+            <p class="text-muted">Update your personal information and preferences</p>
+        </div>
+        
+
+
         <input type="text" class="form-control mb-2" placeholder="Full Name">
         <input type="email" class="form-control" placeholder="Email Address">
     </div>
+     
+    
 
-    <!-- Section 2: Job Details -->
-    <div id="section-job" class="form-section d-none">
-        <h5>Job Details</h5>
-        <input type="text" class="form-control mb-2" placeholder="Job Title">
-        <input type="text" class="form-control" placeholder="Department">
+    <!-- Section 2: Application Details -->
+    <div id="section-job" class="form-section d-none py-4">
+        <div class="d-flex flex-column align-items-center justify-content-center pb-5">
+            <h4>My Applications</h4>
+            <p class="text-muted">Track the status of your job applications</p>
+        </div>
+        
+        <div class="container-fluid border text-center text-muted rounded p-5">
+            <h6>You haven't submitted any applications yet.</h6>
+            <p>Browse available job opportunities and apply to get started.</p>
+        </div>
     </div>
+    
 </div>
 
 

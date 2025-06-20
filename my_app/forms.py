@@ -33,3 +33,7 @@ class LoginForm(FlaskForm):
     submit=SubmitField(label='Sign in')
     
     
+
+# class Personal_info(FlaskForm):
+    
+    

@@ -39,11 +39,15 @@ class Department(db.Model):
 class Users(db.Model,UserMixin):
     id = db.Column(db.Integer(),primary_key=True)
     
+    
     firstname=db.Column(db.String(length=30),nullable=False)
     lastname=db.Column(db.String(length=30),nullable=False)
     email_address=db.Column(db.String(length=50),nullable=False,unique=True)
     password_hash=db.Column(db.String(length=30),nullable=False)
     
+    # mobile_number = db.Column(db.String(length=11),nullable=True)
+    # phone_number = db.Column(db.String(length=11),nullable=True)
+    # profile_picture =db.Column(db.Text)
     
     #relationship fields
     rel_id_jobs = db.relationship('Jobs',backref='rel_id_jobs',lazy=True)
@@ -68,10 +72,6 @@ class Users(db.Model,UserMixin):
         return bcrpt.check_password_hash(self.password_hash,attempted_password)
             
 
-
-
-
-    
 class Jobs(db.Model):
     id = db.Column(db.Integer(),primary_key=True)
     job_title=db.Column(db.String(length=30),nullable=False)
@@ -93,4 +93,5 @@ class Jobs(db.Model):
     write_date =  db.Column(db.Date(),nullable=False)
     
 
+# class Applicant_profile(db.Model):
     
