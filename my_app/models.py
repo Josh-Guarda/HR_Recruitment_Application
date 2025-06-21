@@ -58,7 +58,7 @@ class Users(db.Model,UserMixin):
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
     
-
+    
     @property
     def password(self):
         return self.password

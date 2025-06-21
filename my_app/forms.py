@@ -16,8 +16,8 @@ class RegisterForm(FlaskForm):
         if email_address:
             raise ValidationError('Email Already exist! Please try a different Email Address.')
     
-    firstname = StringField(label='First Name', validators=[Length(min=6,max=30), DataRequired()])
-    lastname = StringField(label='Last Name', validators=[Length(min=6,max=30), DataRequired()])
+    firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
+    lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])
     email_address=StringField(label='Email', validators=[Email(), DataRequired()])
     password= PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
     password2= PasswordField(label='Confirm Password', validators=[EqualTo('password'), DataRequired()])
@@ -35,11 +35,11 @@ class LoginForm(FlaskForm):
     
 
 class PersonalInfoForm(FlaskForm):
-    firstname = StringField(label='First Name', validators=[Length(min=6,max=30), DataRequired()])
-    lastname = StringField(label='Last Name', validators=[Length(min=6,max=30), DataRequired()])
+    firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
+    lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])
     email_address=StringField(label='Email', validators=[Email(), DataRequired()])
     mobile_number = StringField(label='Mobile Number', validators=[Length(min=11,max=11), DataRequired()])
     phone_number=StringField(label='Landline Number', validators=[Length(min=8,max=8)],default=('00000000'))
     
-    submit=SubmitField(label='Save')
-    cancel=SubmitField(label='cancel')
+    update=SubmitField(label='Save')
+    cancel=SubmitField(label='Cancel')

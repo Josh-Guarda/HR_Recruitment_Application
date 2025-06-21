@@ -39,17 +39,24 @@ def career_page():
 
 @app.route("/register",methods=['GET','POST'])
 def register_page():
-    form = RegisterForm()
     
+    # TOdo:: Create a separate Create user Interface or Modal that has an option of a usertype for Admin Access. this will serves as dynamic creation of User if 
+    # the user of the app define an internal User
+    
+    
+    
+
+    form = RegisterForm()
     if form.validate_on_submit():
         user_to_create = Users(firstname=form.firstname.data,
                                lastname=form.lastname.data,
                                email_address=form.email_address.data,
                                password=form.password.data,  #instead of using password_has the password_hash declare in models.py is undergone to some conversion for encryption using flask_bcrypt see Users Model
+                               user_type_id = 3, #hard Coded user_type_id to set as PUBLIC USER(3) for all users register to website
                                creation_date = datetime.now().date(),
                                write_date = datetime.now().date()
                                )
-        
+
         db.session.add(user_to_create)
         db.session.commit()
         login_user(user_to_create)
@@ -103,19 +110,30 @@ def internal_dashboard():
 @app.route('/public/',methods=["GET","POST"])
 @login_required
 def public_dashboard():
-    form=PersonalInfoForm(obj=current_user)
     
-    if form.validate_on_submit():
+    # OTHER APPROACH
+    form=PersonalInfoForm(obj=current_user)
+    if request.method =='POST':
+        
+        if form.cancel.data:
+            flash('Update Canceled.', category='danger')
+            return redirect(url_for('public_dashboard'))
+
+        
+        
+        
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.email_address = form.email_address.data
+        current_user.mobile_number = form.mobile_number.data
+        current_user.phone_number = form.phone_number.data
+    
         db.session.commit()
-        
         flash('Your profile has been updated!', category='success')
         
         return redirect(url_for('public_dashboard'))
-    
-    
+
+
     
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))

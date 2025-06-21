@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.html"%}
 
 {% block title %}
 Dashboard
@@ -49,30 +49,7 @@ Dashboard
         </div>
     </nav>
     
-    <!--- Toast Message -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div id="toastMessage"
-              class="toast align-items-center bg-{{ category }} bg-gradient text-light border-0 position-fixed top-0 end-0 m-3"
-              role="alert"
-              aria-live="assertive"
-              aria-atomic="true"
-              data-bs-autohide="true"
-              data-bs-delay="3000">
-            <div class="d-flex">
-              <div class="toast-body">
-                {{ message }}
-              </div>
-              <button type="button" class="btn-close me-2 m-auto text-light" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-
-
+  
 
     <!--- Off Canvass Side Bar -->
     {% if current_user.user_type.name=='admin' or current_user.user_type.name=='internal'%}
