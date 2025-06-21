@@ -148,3 +148,29 @@ body.sidebar-open .main-content {
 .btn-group-container{
   background-color: #75c1ec;
 }
+
+.avatar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+
+}
+.avatar-pic{
+  border-radius: 120px;
+  width: 200px;
+  height: 200px;
+  border: 1px solid rgb(214, 209, 209);
+}
+
+/* Custom hover for update button */
+.btn-outline-success:hover {
+  background-color: #28a745 !important;  /* Your preferred green */
+  color: white !important;
+}
+
+/* Custom hover for cancel button */
+.btn-outline-danger:hover {
+  background-color: #dc3545 !important;  /* Your preferred red */
+  color: white !important;
+}

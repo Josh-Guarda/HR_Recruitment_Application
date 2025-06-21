@@ -12,12 +12,26 @@
     ← Back to Jobs
     </button>
 </li>
-
+<!---
 <li class="nav-item">
     <button type="button" id="logout-btn" class="btn fw-normal btn-md lead border " onclick="location.href='{{ url_for('logout_page') }}'">
         Logout
     </button>
+</li>-->
+
+
+
+<li class="nav-item">
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle border border-secondary" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ url_for('static', filename='builtin/icons/menu-button.png') }}" width="20" alt="Menu Icon">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
+            <li><a class="dropdown-item" href="{{ url_for('logout_page') }}">Logout</a></li>
+        </ul>
+    </div>
 </li>
+
 
 {% endblock%}
 
@@ -34,39 +48,66 @@
     
     <!-- Section 1: Personal Info -->
     <div id="section-personal" class="form-section container-fluid border rounded py-4">
-        <div class="d-flex flex-column align-items-center justify-content-center pb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center pb-4">
             <h4>Profile Settings</h4>
             <p class="text-muted">Update your personal information and preferences</p>
         </div>
-
+        
         <form method="POST">
             {{form.hidden_tag() }}
-            <div class="row mb-5">
-                <div class="col text-center">
-                    {{form.firstname.label(class="mb-1")}}
-                    {{form.firstname(class="form-control", placeholder="Juan")}}
-                    
-                </div>
-                <div class="col text-center">
-                    {{form.lastname.label(class="mb-1")}}
-                    {{form.lastname(class="form-control", placeholder="Dela Cruz ")}}
+
+            <div class="avatar pb-5">
+                <div class="avatar-pic">
                 </div>
             </div>
             
             
 
-            <div class="col w-50 py-5">
-                <div class="col text-center mb-3">
-                    {{ form.email_address.label(class="mb-1") }}
-                    {{ form.email_address(class="form-control", placeholder="your@email.com") }}
-                </div>
-                <div class="col text-center mb-3">
-                    {{ form.mobile_number.label(class="mb-1") }}
-                    {{ form.mobile_number(class="form-control", placeholder="+63*") }}
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted">
+                <div class="col text-center">
+                    {{ form.firstname.label(class="mb-1") }}
+                    {{ form.firstname(class="form-control", placeholder="Juan") }}
                 </div>
                 <div class="col text-center">
-                    {{ form.phone_number.label(class="mb-1") }}
-                    {{ form.phone_number(class="form-control", placeholder="0000-0000") }}
+                    {{ form.lastname.label(class="mb-1") }}
+                    {{ form.lastname(class="form-control", placeholder="Dela Cruz") }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-6 text-center text-muted py-5 pe-lg-3">
+                    <h6 class="mb-4">Contact Details</h6>
+                    <div class="mb-3">
+                        {{ form.email_address.label(class="mb-1") }}
+                        {{ form.email_address(class="form-control", placeholder="your@email.com") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.mobile_number.label(class="mb-1") }}
+                        {{ form.mobile_number(class="form-control", placeholder="+63*") }}
+                    </div>
+                    <div>
+                        {{ form.phone_number.label(class="mb-1") }}
+                        {{ form.phone_number(class="form-control", placeholder="0000-0000") }}
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6 text-center text-muted py-5 ps-lg-3">
+                    <h6 class="mb-4">Other Details</h6>
+                    <div class="mb-3">
+                        
+                    </div>
                 </div>
             </div>
 
@@ -74,8 +115,9 @@
             
             
             <div class="text-center mb-3">
-                <button id="showToastBtn" type="submit" class="btn btn-sm btn-primary px-5">Save</button>
-                <button id="showToastBtn" type="submit" class="btn btn-sm btn-danger px-5">Cancel</button>
+                {{form.update(class="btn btn-sm btn-outline-success text-success px-5")}}
+                {{form.cancel (class="btn btn-sm btn-outline-danger text-danger px-5")}}
+                
             </div>
             
             
