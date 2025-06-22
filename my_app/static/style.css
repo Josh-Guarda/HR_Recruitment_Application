@@ -6,7 +6,7 @@
   --text-light: #767268;
   --extra-light: #f3f4f6;
   --white: #ffffff;
-  --teal: #20c997;
+  --danger:  #f07b73;
   --info: #53b8f3;
 
   --max-width: 1200px;
@@ -143,34 +143,40 @@ body.sidebar-open .main-content {
 }
 
 
-
 /* Public Dashboard */
 .btn-group-container{
   background-color: #75c1ec;
 }
 
-.avatar{
+
+
+
+.avatar {
   display: flex;
   justify-content: center;
   align-items: center;
-  
-
 }
-.avatar-pic{
-  border-radius: 120px;
+
+.avatar-pic {
   width: 200px;
   height: 200px;
-  border: 1px solid rgb(214, 209, 209);
+   border-radius: 50%; 
+  border: 2px solid rgb(185, 181, 181);
+  overflow: hidden; 
 }
 
-/* Custom hover for update button */
+.btn-outline-success{
+  background-color: #28a745;
+  color: white !important;
+}
+.btn-outline-danger{
+  background-color: #dc3545;
+  color: white !important;
+}
 .btn-outline-success:hover {
-  background-color: #28a745 !important;  /* Your preferred green */
-  color: white !important;
+  background-color: #0f7e29 !important;  
 }
 
-/* Custom hover for cancel button */
 .btn-outline-danger:hover {
-  background-color: #dc3545 !important;  /* Your preferred red */
-  color: white !important;
+  background-color: #96111e !important; 
 }
