@@ -56,9 +56,19 @@
         <form method="POST">
             {{form.hidden_tag() }}
 
+            
+
+            
+            
             <div class="avatar pb-5">
-                <div class="avatar-pic">
-                    <img src="{{ url_for('static', filename='builtin/icons/person.png') }}" class="w-100 h-100 object-fit-cover p-4" alt="Avatar">
+                <div id="avatar-container" class="avatar-pic">
+                    <img src="{{ url_for('static', filename='builtin/icons/person.png') }}" class="w-100 h-100 object-fit-cover p-4" alt="Avatar"> 
+
+                    <label for="avatar-upload" class="upload-label">
+                        <!--- <img src="{{ url_for('static', filename='builtin/icons/plus.png') }}" width="30" alt="Menu Icon"> -->
+                        <span class="upload-icon">+</span>
+                    </label>
+                    <input type="file" id="avatar-upload" name="avatar" accept="image/png, image/jpeg" />
                 </div>
             </div>
             
@@ -132,6 +142,8 @@
     </div>
     
 </div>
+
+
 
 
 {% endblock%}

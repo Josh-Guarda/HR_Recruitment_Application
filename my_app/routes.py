@@ -5,7 +5,7 @@ from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm
 from my_app import db
 from flask_login import login_user,current_user, logout_user, login_required
 from datetime import datetime
-
+import os
 
 
 
@@ -120,13 +120,12 @@ def public_dashboard():
             return redirect(url_for('public_dashboard'))
 
         
-        
-        
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.email_address = form.email_address.data
         current_user.mobile_number = form.mobile_number.data
         current_user.phone_number = form.phone_number.data
+        # current_user.profile_picture = form.
     
         db.session.commit()
         flash('Your profile has been updated!', category='success')

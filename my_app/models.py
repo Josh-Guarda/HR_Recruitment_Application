@@ -47,7 +47,10 @@ class Users(db.Model,UserMixin):
     
     mobile_number = db.Column(db.String(length=11),nullable=True)
     phone_number = db.Column(db.String(length=8),nullable=True)
-    # profile_picture =db.Column(db.Text)
+    profile_picture =db.Column(db.String(),nullable=True)
+    
+    
+    
     
     #relationship fields
     rel_id_jobs = db.relationship('Jobs',backref='rel_id_jobs',lazy=True)
