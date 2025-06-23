@@ -53,17 +53,31 @@
             <p class="text-muted">Update your personal information and preferences</p>
         </div>
         
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {{form.hidden_tag() }}
 
             <div class="avatar pb-5">
-                <div class="avatar-pic">
-                    <img src="{{ url_for('static', filename='builtin/icons/person.png') }}" class="w-100 h-100 object-fit-cover p-4" alt="Avatar">
+                
+                <div id="avatar-container">
+                    
+                    <img id="avatar-preview" src="
+                        {% if current_user.profile_picture %}
+                        {{ url_for('static', filename='uploads/avatars/' ~ current_user.profile_picture)}}
+                        {% else %}
+                        {{ url_for('static', filename='builtin/icons/person.png')}}
+                        {% endif %}" 
+                        alt="Avatar"
+                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}'">
+
+
                 </div>
+                <label for="avatar-upload" class="upload-label">
+                        <span class="upload-icon">+</span>
+                </label>
+                <input type="file" id="avatar-upload" name="avatar" accept="image/png,image/jpeg"/>
             </div>
             
             
-
             <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted">
                 <div class="col text-center">
                     {{ form.firstname.label(class="mb-1") }}
@@ -101,8 +115,6 @@
             </div>
 
             
-            
-            
             <div class="text-center mb-3">
                 {{form.update(class="btn btn-sm btn-outline-success text-success px-5")}}
                 {{form.cancel (class="btn btn-sm btn-outline-danger text-danger px-5")}}
@@ -132,6 +144,8 @@
     </div>
     
 </div>
+
+
 
 
 {% endblock%}

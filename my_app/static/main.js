@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
+// Toggle Controller for public dashboard profile settings and My Application button group
 document.addEventListener("DOMContentLoaded", function () {
     const btnPersonal = document.getElementById("btn-personal");
     const btnJob = document.getElementById("btn-application");
@@ -38,11 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const sectionJob = document.getElementById("section-job");
 
     btnPersonal.addEventListener("click", function () {
-        // Toggle active class if needed
         btnPersonal.classList.add("active");
         btnJob.classList.remove("active");
-
-        // Toggle content
         sectionPersonal.classList.remove("d-none");
         sectionJob.classList.add("d-none");
     });
@@ -54,4 +53,15 @@ document.addEventListener("DOMContentLoaded", function () {
         sectionJob.classList.remove("d-none");
         sectionPersonal.classList.add("d-none");
     });
+
+
+    // LOAD AVATAR to CONTAINER WHEN UPLOADED
+    let profilePicture= document.getElementById('avatar-preview');
+    let inputPicture = document.getElementById('avatar-upload');
+
+    inputPicture.onchange=function() {
+        profilePicture.src = URL.createObjectURL(inputPicture.files[0]);
+    }
+
+
 });

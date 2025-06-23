@@ -148,21 +148,47 @@ body.sidebar-open .main-content {
   background-color: #75c1ec;
 }
 
-
-
-
-.avatar {
+.avatar{
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.avatar-pic {
-  width: 200px;
-  height: 200px;
-   border-radius: 50%; 
+#avatar-container{
+  border-radius: 50%; 
   border: 2px solid rgb(185, 181, 181);
   overflow: hidden; 
+}
+
+#avatar-preview{
+  width: 200px;
+  height: 200px;
+}
+#avatar-upload {
+  display: none;
+}
+
+.upload-label {
+  bottom: 20px;
+  left: 130px;
+  position: sticky;
+  background-color: #179eec; 
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  font-size: 28px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-label:hover {
+  background-color: #086083; 
 }
 
 .btn-outline-success{
@@ -173,6 +199,7 @@ body.sidebar-open .main-content {
   background-color: #dc3545;
   color: white !important;
 }
+
 .btn-outline-success:hover {
   background-color: #0f7e29 !important;  
 }
@@ -180,3 +207,5 @@ body.sidebar-open .main-content {
 .btn-outline-danger:hover {
   background-color: #96111e !important; 
 }
+
+
