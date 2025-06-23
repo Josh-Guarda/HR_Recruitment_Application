@@ -5,6 +5,8 @@ from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm
 from my_app import db
 from flask_login import login_user,current_user, logout_user, login_required
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import uuid
 import os
 
 
@@ -119,21 +121,31 @@ def public_dashboard():
             flash('Update Canceled.', category='danger')
             return redirect(url_for('public_dashboard'))
 
-        
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.email_address = form.email_address.data
         current_user.mobile_number = form.mobile_number.data
         current_user.phone_number = form.phone_number.data
-        # current_user.profile_picture = form.
-    
+        # Handle avatar upload
+
+        if form.avatar.data:
+            avatar_file = form.avatar.data
+            
+            filename = secure_filename(avatar_file.filename)
+            ext = avatar_file.filename.rsplit('.', 1)[-1].lower()
+            avatar_name = str(uuid.uuid4()) + "_" + filename
+            
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            upload_path = os.path.join(app.config['UPLOAD_FOLDER'],avatar_name)
+            avatar_file.save(upload_path)
+            current_user.profile_picture = avatar_name
+            print("Saved avatar as:", avatar_name)
+            
         db.session.commit()
         flash('Your profile has been updated!', category='success')
         
         return redirect(url_for('public_dashboard'))
 
-
-    
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))
     return render_template('public/public_dashboard.html',show_navbar=False,form=form)

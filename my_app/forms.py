@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField,HiddenField
 from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError
 from my_app.models import Users,Usertype
+from flask_wtf.file import FileField,FileAllowed
+from werkzeug.utils import secure_filename
 
 
 class RegisterForm(FlaskForm):
@@ -35,6 +37,7 @@ class LoginForm(FlaskForm):
     
 
 class PersonalInfoForm(FlaskForm):
+    avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])
     firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
     lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])
     email_address=StringField(label='Email', validators=[Email(), DataRequired()])
@@ -43,3 +46,6 @@ class PersonalInfoForm(FlaskForm):
     
     update=SubmitField(label='Save')
     cancel=SubmitField(label='Cancel')
+    
+    
+   

@@ -5,10 +5,18 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 
 app = Flask(__name__)
+#BASE CONFIG
 app.config.from_pyfile("config.py")
+#UPLOADS
+UPLOAD_FOLDER = 'static/uploads/avatars'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+#SQL DB
 db = SQLAlchemy(app)
+#ENCRYPTING for PW
 bcrpt= Bcrypt(app)
 
+#MIGRATE from flask_migrate for any additional column to define in sqlalchemy
 migrate = Migrate(app, db)  
 
 

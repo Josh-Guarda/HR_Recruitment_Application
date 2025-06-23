@@ -44,14 +44,11 @@ class Users(db.Model,UserMixin):
     lastname=db.Column(db.String(length=30),nullable=False)
     email_address=db.Column(db.String(length=50),nullable=False,unique=True)
     password_hash=db.Column(db.String(length=30),nullable=False)
-    
     mobile_number = db.Column(db.String(length=11),nullable=True)
     phone_number = db.Column(db.String(length=8),nullable=True)
     profile_picture =db.Column(db.String(),nullable=True)
     
-    
-    
-    
+
     #relationship fields
     rel_id_jobs = db.relationship('Jobs',backref='rel_id_jobs',lazy=True)
     department_id =db.Column(db.Integer(),db.ForeignKey('department.id'))
@@ -94,7 +91,4 @@ class Jobs(db.Model):
     write_uid = db.Column(db.Integer())
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
-    
-
-# class Applicant_profile(db.Model):
     

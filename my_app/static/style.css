@@ -154,24 +154,25 @@ body.sidebar-open .main-content {
   align-items: center;
 }
 
-.avatar-pic{
-  width: 200px;
-  height: 200px;
-   border-radius: 50%; 
+#avatar-container{
+  border-radius: 50%; 
   border: 2px solid rgb(185, 181, 181);
   overflow: hidden; 
 }
 
+#avatar-preview{
+  width: 200px;
+  height: 200px;
+}
 #avatar-upload {
   display: none;
 }
 
-/* Style the label to look like a button */
 .upload-label {
   bottom: 20px;
   left: 130px;
   position: sticky;
-  background-color: #179eec; /* Bootstrap primary */
+  background-color: #179eec; 
   color: white;
   width: 40px;
   height: 40px;
@@ -187,10 +188,8 @@ body.sidebar-open .main-content {
 }
 
 .upload-label:hover {
-  background-color: #086083; /* Slightly darker */
+  background-color: #086083; 
 }
-
-
 
 .btn-outline-success{
   background-color: #28a745;
@@ -200,6 +199,7 @@ body.sidebar-open .main-content {
   background-color: #dc3545;
   color: white !important;
 }
+
 .btn-outline-success:hover {
   background-color: #0f7e29 !important;  
 }
