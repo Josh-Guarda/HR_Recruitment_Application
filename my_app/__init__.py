@@ -7,8 +7,9 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 #BASE CONFIG
 app.config.from_pyfile("config.py")
+
 #UPLOADS
-UPLOAD_FOLDER = 'C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/uploads/avatars'
+UPLOAD_FOLDER = 'C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/uploads/avatars' #Note: make this as the absolute file path on your machine or server directory to avoid FileNotFoundError: [Errno 2] No such file or directory:
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #SQL DB
