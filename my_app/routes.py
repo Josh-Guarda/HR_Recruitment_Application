@@ -1,7 +1,7 @@
 from my_app import app
 from flask import render_template, redirect, url_for, flash,request
 from my_app.models import Jobs,Users,Usertype
-from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm
+from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ValidationError
 from my_app import db
 from flask_login import login_user,current_user, logout_user, login_required
 from datetime import datetime
@@ -134,18 +134,20 @@ def public_dashboard():
             filename = secure_filename(avatar_file.filename)
             ext = avatar_file.filename.rsplit('.', 1)[-1].lower()
             avatar_name = str(uuid.uuid4()) + "_" + filename
-            
-            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
             upload_path = os.path.join(app.config['UPLOAD_FOLDER'],avatar_name)
-            avatar_file.save(upload_path)
-            current_user.profile_picture = avatar_name
-            print("Saved avatar as:", avatar_name)
             
+            try:
+                avatar_file.save(upload_path)
+                current_user.profile_picture = avatar_name
+
+            except FileNotFoundError as e:
+                flash('directory cannot found!', category='danger')
+                
+                
         db.session.commit()
         flash('Your profile has been updated!', category='success')
-        
         return redirect(url_for('public_dashboard'))
-
+                
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))
     return render_template('public/public_dashboard.html',show_navbar=False,form=form)

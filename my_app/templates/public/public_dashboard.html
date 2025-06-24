@@ -23,8 +23,16 @@
 
 <li class="nav-item">
     <div class="dropdown">
-        <button class="btn btn-light border border-secondary rounded-circle custom-dropdown-btn p-2 d-lg-flex" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="{{ url_for('static', filename='builtin/icons/person.png') }}" width="20" alt="Menu Icon">
+        <button class="btn btn-light border border-secondary rounded-circle p-0 d-lg-flex" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+            
+            <img id="avatar-icon" src="
+            {% if current_user.profile_picture %}
+            {{url_for('static', filename='uploads/avatars/'~ current_user.profile_picture)}} 
+            {% else %}
+            {{ url_for('static', filename='builtin/icons/person.png') }}"
+             onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}'
+            {% endif %}">
+            
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
             <li><a class="dropdown-item" href="{{ url_for('logout_page') }}">Logout</a></li>
@@ -57,12 +65,10 @@
             {{form.hidden_tag() }}
 
             <div class="avatar pb-5">
-                
                 <div id="avatar-container">
-                    
                     <img id="avatar-preview" src="
                         {% if current_user.profile_picture %}
-                        {{ url_for('static', filename='uploads/avatars/' ~ current_user.profile_picture)}}
+                        {{ url_for('static', filename='uploads/avatars/'~ current_user.profile_picture)}}
                         {% else %}
                         {{ url_for('static', filename='builtin/icons/person.png')}}
                         {% endif %}" 
