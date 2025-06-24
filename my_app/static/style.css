@@ -148,6 +148,13 @@ body.sidebar-open .main-content {
   background-color: #75c1ec;
 }
 
+
+#avatar-icon{
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+}
+
 .avatar{
   display: flex;
   justify-content: center;
@@ -164,6 +171,8 @@ body.sidebar-open .main-content {
   width: 200px;
   height: 200px;
 }
+
+
 #avatar-upload {
   display: none;
 }

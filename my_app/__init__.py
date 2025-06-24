@@ -8,7 +8,7 @@ app = Flask(__name__)
 #BASE CONFIG
 app.config.from_pyfile("config.py")
 #UPLOADS
-UPLOAD_FOLDER = 'static/uploads/avatars'
+UPLOAD_FOLDER = 'C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/uploads/avatars'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #SQL DB
