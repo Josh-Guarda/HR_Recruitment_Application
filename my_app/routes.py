@@ -130,7 +130,6 @@ def public_dashboard():
 
         if form.avatar.data:
             avatar_file = form.avatar.data
-            
             filename = secure_filename(avatar_file.filename)
             ext = avatar_file.filename.rsplit('.', 1)[-1].lower()
             avatar_name = str(uuid.uuid4()) + "_" + filename
@@ -143,7 +142,7 @@ def public_dashboard():
             except FileNotFoundError as e:
                 flash('directory cannot found!', category='danger')
                 
-                
+            
         db.session.commit()
         flash('Your profile has been updated!', category='success')
         return redirect(url_for('public_dashboard'))
