@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField,HiddenField
 from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError
 from my_app.models import Users,Usertype
 from flask_wtf.file import FileField,FileAllowed
-from werkzeug.utils import secure_filename
+
 
 
 class RegisterForm(FlaskForm):
