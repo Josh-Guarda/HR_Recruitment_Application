@@ -9,6 +9,21 @@ from werkzeug.utils import secure_filename
 import uuid
 import os
 
+from my_app import admin
+from my_app.models import Department
+from flask_admin.babel import gettext
+from flask_admin.base import MenuLink
+from flask_admin.contrib import sqla
+from flask_admin.contrib.sqla import filters
+from flask_admin.contrib.sqla.filters import BaseSQLAFilter
+from flask_admin.contrib.sqla.filters import FilterEqual
+
+
+
+
+
+
+
 
 
 @app.route("/")
@@ -115,19 +130,19 @@ def public_dashboard():
     
     # OTHER APPROACH
     form=PersonalInfoForm(obj=current_user)
-    if request.method =='POST':
+    if form.validate_on_submit():
         
         if form.cancel.data:
             flash('Update Canceled.', category='danger')
             return redirect(url_for('public_dashboard'))
-
+        
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.email_address = form.email_address.data
         current_user.mobile_number = form.mobile_number.data
         current_user.phone_number = form.phone_number.data
+        
         # Handle avatar upload
-
         if form.avatar.data:
             avatar_file = form.avatar.data
             filename = secure_filename(avatar_file.filename)
@@ -146,6 +161,15 @@ def public_dashboard():
         db.session.commit()
         flash('Your profile has been updated!', category='success')
         return redirect(url_for('public_dashboard'))
+    
+    
+    if form.errors !={}: # if there is no errors from validations inside the forms.py
+        for err_msg in form.errors.values():
+            flash(f'There is some Error in {err_msg}',category='danger')
+    
+    
+    
+    
                 
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))
@@ -166,3 +190,119 @@ def logout_page():
 
 
 
+
+
+
+
+# class DepartmentAdmin(sqla.ModelView):
+#     can_set_page_size = True
+#     page_size = 5
+#     page_size_options = (5, 10, 15)
+#     can_view_details = True  # show a modal dialog with records details
+#     action_disallowed_list = [
+#         "delete",
+#     ]
+
+#     form_choices = {
+#         "type": Usertype,
+#     }
+#     form_args = {
+#         "dialling_code": {"label": "Dialling code"},
+#         "local_phone_number": {
+#             "label": "Phone number",
+#             "validators": [is_numberic_validator],
+#         },
+#     }
+#     form_widget_args = {"id": {"readonly": True}}
+#     column_list = [
+#         "type",
+#         "first_name",
+#         "last_name",
+#         "email",
+#         "ip_address",
+#         "currency",
+#         "timezone",
+#         "phone_number",
+#     ]
+#     column_searchable_list = [
+#         "first_name",
+#         "last_name",
+#         "phone_number",
+#         "email",
+#         "timezone"
+#     ]
+#     column_editable_list = ["type", "currency", "timezone"]
+#     column_details_list = [
+#         "id",
+#         "featured_post",
+#         "website",
+#         "enum_choice_field",
+#         "sqla_utils_choice_field",
+#         "sqla_utils_enum_choice_field",
+#     ] + column_list
+#     form_columns = [
+#         "id",
+#         "type",
+#         "featured_post",
+#         "enum_choice_field",
+#         "sqla_utils_choice_field",
+#         "sqla_utils_enum_choice_field",
+#         "last_name",
+#         "first_name",
+#         "email",
+#         "website",
+#         "dialling_code",
+#         "local_phone_number",
+#     ]
+#     form_create_rules = [
+#         "last_name",
+#         "first_name",
+#         "type",
+#         "email",
+#     ]
+
+#     column_auto_select_related = True
+#     column_default_sort = [
+#         ("last_name", False),
+#         ("first_name", False),
+#     ]  # sort on multiple columns
+
+#     # custom filter: each filter in the list is a filter operation (equals, not equals,
+#     # etc) filters with the same name will appear as operations under the same filter
+#     column_filters = [
+#         "first_name",
+#         FilterEqual(column=User.last_name, name="Last Name"),
+#         FilterLastNameBrown(
+#             column=User.last_name, name="Last Name", options=(("1", "Yes"), ("0", "No"))
+#         ),
+#         "phone_number",
+#         "email",
+#         "ip_address",
+#         "currency",
+#         "timezone",
+#     ]
+#     column_formatters = {"phone_number": phone_number_formatter}
+
+#     # setup edit forms so that only posts created by this user can be selected as
+#     # 'featured'
+#     def edit_form(self, obj):
+#         return self._filtered_posts(super().edit_form(obj))
+
+#     def _filtered_posts(self, form):
+#         form.featured_post.query_factory = lambda: Post.query.filter(
+#             Post.user_id == form._obj.id
+#         ).all()
+#         return form
+
+
+
+
+
+
+
+
+
+
+
+# # Add views
+# admin.add_view(DepartmentAdmin(Department, db.session))
