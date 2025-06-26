@@ -37,22 +37,35 @@ class Department(db.Model):
 
 class Users(db.Model,UserMixin):
     id = db.Column(db.Integer(),primary_key=True)
-    
-    
     firstname=db.Column(db.String(length=30),nullable=False)
     lastname=db.Column(db.String(length=30),nullable=False)
     email_address=db.Column(db.String(length=50),nullable=False,unique=True)
     password_hash=db.Column(db.String(length=30),nullable=False)
+    
+    address_1 = db.Column(db.String(length=100),nullable=True)
+    address_2 = db.Column(db.String(length=100),nullable=True)
+    zipcode = db.Column(db.Integer(),nullable=True)
+
     mobile_number = db.Column(db.String(length=11),nullable=True)
     phone_number = db.Column(db.String(length=8),nullable=True)
     profile_picture =db.Column(db.String(),nullable=True)
     
-
     #relationship fields
     rel_id_jobs = db.relationship('Jobs',backref='rel_id_jobs',lazy=True)
     department_id =db.Column(db.Integer(),db.ForeignKey('department.id'))
+    
     user_type_id = db.Column(db.Integer(),db.ForeignKey('usertype.id'))
     user_type = db.relationship('Usertype')
+    
+    brgy_id = db.Column(db.Integer(),db.ForeignKey('barangay.id'))
+    barangay = db.relationship('Barangay')
+    
+    
+    munci_id = db.Column(db.Integer(),db.ForeignKey('municipality.id'))
+    municipality = db.relationship('Municipality')
+    
+    prov_id = db.Column(db.Integer(),db.ForeignKey('province.id'))
+    province= db.relationship('Province')
     
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
@@ -70,6 +83,34 @@ class Users(db.Model,UserMixin):
     def check_password_correction(self,attempted_password):
         return bcrpt.check_password_hash(self.password_hash,attempted_password)
             
+
+
+class Barangay(db.Model):
+    id = db.Column(db.Integer(),primary_key=True)
+    name=db.Column(db.String(length=50),nullable=True)
+
+    barangay=db.relationship('Users',backref='desig_barangay',lazy=True)
+
+
+class Municipality(db.Model):
+    id = db.Column(db.Integer(),primary_key=True)
+    name=db.Column(db.String(length=50),nullable=True)
+
+    municipality=db.relationship('Users',backref='desig_municipality',lazy=True)
+
+
+class Province(db.Model):
+    id = db.Column(db.Integer(),primary_key=True)
+    name=db.Column(db.String(length=50),nullable=True)
+
+    province=db.relationship('Users',backref='desig_province',lazy=True)
+
+
+
+
+
+
+
 
 class Jobs(db.Model):
     id = db.Column(db.Integer(),primary_key=True)
