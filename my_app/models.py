@@ -13,7 +13,6 @@ def load_user(user_id):
 class Usertype(db.Model):
     id = db.Column(db.Integer(),primary_key=True)
     name=db.Column(db.String(length=30),unique=True,nullable=False)
-    
     #relationship fields
     user_type=db.relationship('Users',backref='desig_user',lazy=True)
     

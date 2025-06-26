@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField,HiddenField
+from flask_login import current_user
 from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError
 from my_app.models import Users,Usertype
 from flask_wtf.file import FileField,FileAllowed
@@ -37,6 +38,25 @@ class LoginForm(FlaskForm):
     
 
 class PersonalInfoForm(FlaskForm):
+    
+    def validate_mobile_number(self, number_to_check):
+        if not number_to_check.data.isdigit():
+            raise ValidationError('Only numbers are allowed.')
+
+        number_to_save = Users.query.filter_by(mobile_number=number_to_check.data).first()
+        if number_to_save and number_to_save.id !=current_user.id:
+            raise ValidationError('Mobile number already exists.')
+        
+    def validate_phone_number(self, number_to_check):
+        if not number_to_check.data.isdigit():
+            raise ValidationError('Only numbers are allowed.')
+
+        number_to_save = Users.query.filter_by(phone_number=number_to_check.data).first()
+        if number_to_save and number_to_save.id !=current_user.id:
+            raise ValidationError('Phone number already exists.')
+        
+        
+        
     avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])
     firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
     lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])
