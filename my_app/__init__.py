@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from flask_admin import Admin
 
 app = Flask(__name__)
 
@@ -26,7 +25,6 @@ login_manager =LoginManager(app) #this line is for LoginManager initialize by in
 login_manager.login_view = "login_page" # type: ignore
 login_manager.login_message_category = "primary"
 
-admin=Admin()
 
 
 

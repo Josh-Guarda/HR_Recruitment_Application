@@ -20,7 +20,6 @@
 </li>-->
 
 
-
 <li class="nav-item">
     <div class="dropdown">
         <button class="btn btn-light border border-secondary rounded-circle p-0 d-lg-flex" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -83,8 +82,8 @@
                 <input type="file" id="avatar-upload" name="avatar" accept="image/png,image/jpeg"/>
             </div>
             
-            
-            <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted">
+
+            <div class="row row-cols-1 row-cols-lg-2 mb-3 text-muted">
                 <div class="col text-center">
                     {{ form.firstname.label(class="mb-1") }}
                     {{ form.firstname(class="form-control", placeholder="Juan") }}
@@ -95,6 +94,43 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col text-center text-muted py-5 ps-lg-3">
+                    <h6 class="mb-4">Address Details</h6>
+                    
+                    <div class="row row-cols-lg-2 mb-5 text-muted">
+                        <div class="col text-center">
+                            {{ form.firstname.label(class="mb-1") }}
+                            {{ form.firstname(class="form-control", placeholder="Juan") }}
+                        </div>
+                        <div class="col text-center">
+                            {{ form.firstname.label(class="mb-1") }}
+                            {{ form.firstname(class="form-control", placeholder="Juan") }}
+                        </div>
+                    </div>
+                    <div class="row row-cols-1 row-cols-lg-4 mb-5 text-muted">
+                        <div class="col text-center">
+                            {{ form.lastname.label(class="mb-1") }}
+                            {{ form.lastname(class="form-control", placeholder="Dela Cruz") }}
+                        </div>
+                        <div class="col text-center">
+                            {{ form.lastname.label(class="mb-1") }}
+                            {{ form.lastname(class="form-control", placeholder="Dela Cruz") }}
+                        </div>
+                        <div class="col text-center">
+                            {{ form.lastname.label(class="mb-1") }}
+                            {{ form.lastname(class="form-control", placeholder="Dela Cruz") }}
+                        </div>
+
+                        <div class="col text-center">
+                            {{ form.lastname.label(class="mb-1") }}
+                            {{ form.lastname(class="form-control", placeholder="Dela Cruz") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
             <div class="row">
                 <div class="col-12 col-lg-6 text-center text-muted py-5 pe-lg-3">
                     <h6 class="mb-4">Contact Details</h6>
@@ -120,16 +156,25 @@
                 </div>
             </div>
 
-            <div class="row">
+            
+
+            
+
+            
+            <!--<div class="row">
             
                 <div class="col text-start text-muted py-5 ps-lg-3">
                     <h6 class="mb-4">Other Details</h6>
                     
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        <button type="button" class="btn btn-outline-light text-dark border-secondary">Bio</button>
+                        <button type="button" class="btn btn-outline-light text-dark border-secondary">Educational Background</button>
+                        <button type="button" class="btn btn-outline-light text-dark border-secondary">Career Experience</button>
+                        <button type="button" class="btn btn-outline-light text-dark border-secondary">Character Reference</button>
+                    </div>
+  
                 </div>
-            </div>
-
-            
-
+            </div> -->
 
 
 
