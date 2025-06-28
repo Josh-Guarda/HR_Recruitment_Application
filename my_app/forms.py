@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField,HiddenField
+from wtforms import StringField, PasswordField, SubmitField,HiddenField,SelectField
 from flask_login import current_user
 from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError
 from my_app.models import Users,Usertype
@@ -60,6 +60,13 @@ class PersonalInfoForm(FlaskForm):
     avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])
     firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
     lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])
+    address_1 =  StringField(label='Address 1', validators=[Length(min=6,max=50)])
+    address_2 =  StringField(label='Address 2', validators=[Length(min=6,max=50)])
+    brgy_id =  SelectField(label='Barangay',default="--Please choose you Barangay--")
+    munci_id =  SelectField(label='Municipality',default="--Please choose you Municipality--")
+    prov_id =  SelectField(label='Province',default="--Please choose you Province--")
+    zipcode = StringField(label='ZipCode', validators=[Length(min=4,max=4)])
+    
     email_address=StringField(label='Email', validators=[Email(), DataRequired()])
     mobile_number = StringField(label='Mobile Number', validators=[Length(min=11,max=11), DataRequired()])
     phone_number=StringField(label='Landline Number', validators=[Length(min=8,max=8)],default=('00000000'))

@@ -13,6 +13,10 @@ app.config.from_pyfile("config.py")
 UPLOAD_FOLDER = 'C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/uploads/avatars' #Note: make this as the absolute file path on your machine or server directory to avoid FileNotFoundError: [Errno 2] No such file or directory:
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+Barangay_JSON='C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/json/ref_brgy.json'
+Municipality_JSON='C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/json/ref_brgy.json'
+Province='C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/json/ref_brgy.json'
+
 #SQL DB
 db = SQLAlchemy(app)
 #ENCRYPTING for PW

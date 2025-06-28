@@ -8,7 +8,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
 import os
-
+import json
 
 
 
@@ -118,12 +118,18 @@ def public_dashboard():
     
     # OTHER APPROACH
     form=PersonalInfoForm(obj=current_user)
+    
+    
+    
+
+    
+    
     if form.validate_on_submit():
         
         if form.cancel.data:
             flash('Update Canceled.', category='danger')
             return redirect(url_for('public_dashboard'))
-        
+
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.email_address = form.email_address.data

@@ -82,6 +82,12 @@ class Users(db.Model,UserMixin):
     
     def check_password_correction(self,attempted_password):
         return bcrpt.check_password_hash(self.password_hash,attempted_password)
+    
+    
+    
+    
+    
+    
             
 
 
