@@ -83,12 +83,6 @@ class Users(db.Model,UserMixin):
     
     def check_password_correction(self,attempted_password):
         return bcrpt.check_password_hash(self.password_hash,attempted_password)
-    
-    
-    
-    
-    
-    
             
 
 class Barangay(db.Model):
@@ -107,7 +101,7 @@ class Municipality(db.Model):
     barangays = db.relationship('Barangay', backref='municipality', lazy=True)
     users = db.relationship('Users', backref='desig_municipality', lazy=True)
 
-
+    
 
 class Province(db.Model):
     id = db.Column(db.Integer(), primary_key=True)

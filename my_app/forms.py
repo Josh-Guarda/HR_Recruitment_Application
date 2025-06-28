@@ -62,9 +62,10 @@ class PersonalInfoForm(FlaskForm):
     lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])
     address_1 =  StringField(label='Address 1', validators=[Length(min=6,max=50)])
     address_2 =  StringField(label='Address 2', validators=[Length(min=6,max=50)])
-    brgy_id =  SelectField(label='Barangay',default="--Please choose you Barangay--")
-    munci_id =  SelectField(label='Municipality',default="--Please choose you Municipality--")
-    prov_id =  SelectField(label='Province',default="--Please choose you Province--")
+    
+    brgy_id =  SelectField(label='Barangay')
+    munci_id =  SelectField(label='Municipality')
+    prov_id =  SelectField(label='Province')
     zipcode = StringField(label='ZipCode', validators=[Length(min=4,max=4)])
     
     email_address=StringField(label='Email', validators=[Email(), DataRequired()])
