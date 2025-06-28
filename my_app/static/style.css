@@ -200,6 +200,13 @@ body.sidebar-open .main-content {
   background-color: #086083; 
 }
 
+
+
+#barangay-select{
+  width: 10px;
+}
+
+
 .btn-outline-success{
   background-color: #28a745;
   color: white !important;

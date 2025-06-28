@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_migrate import Migrate
+import json
 
 app = Flask(__name__)
 
@@ -13,9 +14,25 @@ app.config.from_pyfile("config.py")
 UPLOAD_FOLDER = 'C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/uploads/avatars' #Note: make this as the absolute file path on your machine or server directory to avoid FileNotFoundError: [Errno 2] No such file or directory:
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-Barangay_JSON='C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/json/ref_brgy.json'
-Municipality_JSON='C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/json/ref_brgy.json'
-Province='C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/json/ref_brgy.json'
+
+#ADDRESS JSON FILES From static/
+Barangay_JSON='my_app/static/json/ref_brgy.json'
+Municipality_JSON='my_app/static/json/ref_city_mun.json'
+Province_JSON='my_app/static/json/ref_province.json'
+
+
+#OPEN JSON file to extract RECORDS (THIS will be called to routes.py)
+with open('my_app/static/json/ref_brgy.json', encoding='utf-8') as f:
+    BARANGAY_DATA = json.load(f)['RECORDS']
+
+with open('my_app/static/json/ref_city_mun.json', encoding='utf-8') as f:
+    MUNICIPALITY_DATA = json.load(f)['RECORDS']
+
+with open('my_app/static/json/ref_province.json', encoding='utf-8') as f:
+    PROVINCE_DATA = json.load(f)['RECORDS']
+
+
+
 
 #SQL DB
 db = SQLAlchemy(app)
