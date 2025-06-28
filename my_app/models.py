@@ -61,6 +61,7 @@ class Users(db.Model,UserMixin):
     barangay = db.relationship('Barangay')
     
     
+    
     munci_id = db.Column(db.Integer(),db.ForeignKey('municipality.id'))
     municipality = db.relationship('Municipality')
     
@@ -90,27 +91,30 @@ class Users(db.Model,UserMixin):
     
             
 
-
 class Barangay(db.Model):
-    id = db.Column(db.Integer(),primary_key=True)
-    name=db.Column(db.String(length=50),nullable=True)
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(length=50), nullable=True)
 
-    barangay=db.relationship('Users',backref='desig_barangay',lazy=True)
+    municipality_id = db.Column(db.Integer(), db.ForeignKey('municipality.id'))
+    users = db.relationship('Users', backref='desig_barangay', lazy=True)
 
 
 class Municipality(db.Model):
-    id = db.Column(db.Integer(),primary_key=True)
-    name=db.Column(db.String(length=50),nullable=True)
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(length=50), nullable=True)
 
-    municipality=db.relationship('Users',backref='desig_municipality',lazy=True)
+    prov_id = db.Column(db.Integer(), db.ForeignKey('province.id'))
+    barangays = db.relationship('Barangay', backref='municipality', lazy=True)
+    users = db.relationship('Users', backref='desig_municipality', lazy=True)
+
 
 
 class Province(db.Model):
-    id = db.Column(db.Integer(),primary_key=True)
-    name=db.Column(db.String(length=50),nullable=True)
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(length=50), nullable=True)
 
-    province=db.relationship('Users',backref='desig_province',lazy=True)
-
+    municipalities = db.relationship('Municipality', backref='province', lazy=True)
+    users = db.relationship('Users', backref='desig_province', lazy=True)
 
 
 
