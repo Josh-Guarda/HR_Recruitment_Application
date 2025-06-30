@@ -37,8 +37,26 @@ class LoginForm(FlaskForm):
     
     
 
-class PersonalInfoForm(FlaskForm):
+
+class PasswordResetRequest(FlaskForm):
+    email_address=StringField(label='Email', validators=[Email(), DataRequired()])
+    submit=SubmitField(label='Sign in')
     
+
+    def validate_email(self,email_address_to_check):
+        email_address = Users.query.filter_by(email_address=email_address_to_check.data).first()
+        if email_address:
+            raise ValidationError('Account doesn`t exist, Please Register.')
+     
+        
+class ResetPasswordForm(FlaskForm):
+    password= PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
+    password2= PasswordField(label='Confirm Password', validators=[EqualTo('password'), DataRequired()])
+    submit=SubmitField(label='Reset Password')
+        
+        
+
+class PersonalInfoForm(FlaskForm):
     def validate_mobile_number(self, number_to_check):
         if not number_to_check.data.isdigit():
             raise ValidationError('Only numbers are allowed.')
@@ -76,4 +94,3 @@ class PersonalInfoForm(FlaskForm):
     cancel=SubmitField(label='Cancel')
     
     
-   

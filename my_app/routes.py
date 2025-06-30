@@ -1,19 +1,15 @@
 from my_app import app,db
-# from my_app import Barangay_JSON
-# from flask import jsonify
-
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from my_app import  MUNICIPALITY_DATA, PROVINCE_DATA
-
 from flask import render_template, redirect, url_for, flash,request
 from my_app.models import Jobs,Users,Usertype
-from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ValidationError
-from flask_login import login_user,current_user, logout_user, login_required
+from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,PasswordResetRequest,ResetPasswordForm
+from flask_login import login_user,current_user,logout_user,login_required
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
 import os
-import json
+
 
 
 
@@ -30,8 +26,6 @@ def home_page():
 def career_page():
     jobs=Jobs.query.all()
     
-    
-
     # jobs= [
     #     {'id':1,'job_title':'Sr. Software Engineer','department':'Information Technology','employment_type':'Full-time','min_sal':80000,'max_sal':100000,'start_date':'07/01/2025','location':'Bonifacio Global City Taguig','description':'We are looking for an experienced software developer to join our team. You will be responsible for developing high-quality applications and working with the latest technologies.'},
     #     {'id':2,'job_title':'Sr. Marketing Manager','department':'Marketing Department','employment_type':'Full-time','min_sal':80000,'max_sal':100000,'start_date':'07/01/2025',
@@ -45,17 +39,12 @@ def career_page():
 
 
 
-
-
 @app.route("/register",methods=['GET','POST'])
 def register_page():
     
     # TOdo:: Create a separate Create user Interface or Modal that has an option of a usertype for Admin Access. this will serves as dynamic creation of User if 
     # the user of the app define an internal User
     
-    
-    
-
     form = RegisterForm()
     if form.validate_on_submit():
         user_to_create = Users(firstname=form.firstname.data,
@@ -83,6 +72,10 @@ def register_page():
 
 
 
+
+
+
+
 @app.route("/login",methods=["GET","POST"])
 def login_page(): 
     form=LoginForm()
@@ -101,6 +94,9 @@ def login_page():
 
 
 
+
+
+
 @app.route('/admin/')
 @login_required
 def admin_dashboard():
@@ -115,12 +111,11 @@ def internal_dashboard():
     return render_template('internal/internal_dashboard.html',show_navbar=False)
 
 
-
 @app.route('/public/', methods=["GET", "POST"])
 @login_required
 def public_dashboard():
     form = PersonalInfoForm(obj=current_user)
-
+    pwr_form = PasswordResetRequest()
     # Province always preloaded
     form.prov_id.choices = [('', '-- Select Province --')] + sorted(
         [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
@@ -188,7 +183,7 @@ def public_dashboard():
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))
 
-    return render_template('public/public_dashboard.html', show_navbar=False, form=form)
+    return render_template('public/public_dashboard.html', show_navbar=False, form=form,pwr_form=pwr_form)
 
 
 
@@ -210,7 +205,6 @@ def get_barangays():
         for brgy in BARANGAY_DATA if brgy['citymunCode'] == muni_code
     ]
     return {'data': results}
-
 
 
 
