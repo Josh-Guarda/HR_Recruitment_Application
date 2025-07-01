@@ -1,7 +1,5 @@
 {% extends "dashboard/base_dashboard.html"%}
 
-
-<!--After fixing of user type show this is user is public-->
 {% block nav %}
 <li class="nav-item ">
     <span class="text-muted UserProf">Welcome, {{ current_user.firstname|capitalize }} </span>
@@ -12,12 +10,15 @@
     ← Back to Jobs
     </button>
 </li>
-<!---
-<li class="nav-item">
-    <button type="button" id="logout-btn" class="btn fw-normal btn-md lead border " onclick="location.href='{{ url_for('logout_page') }}'">
-        Logout
-    </button>
-</li>-->
+
+
+{% include "auth/password_reset_request_modal.html" %}
+<!-- <li class="nav-item">
+    <button type="button" class="btn fw-normal btn-md lead border pw-reset-btn" data-bs-toggle="modal" data-bs-target="#PassswordResetRequest">
+        MODAL
+    </button >
+    
+</li> -->
 
 
 <li class="nav-item">
@@ -35,17 +36,12 @@
         </button>
 
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
-            
-            <li>
-            {% include "auth/password_reset_request_modal.html" %}
-            <a class="dropdown-item d-flex justify-content-center align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#PassswordResetRequest" href="#">
-                Password
-                <img src="{{ url_for('static', filename='builtin/icons/lock.png') }}" width="20" alt="Menu Icon">
-            </a>
-            
+            <!--<li>
+                <a class="dropdown-item d-flex justify-content-center align-items-center gap-2" href="#"> Settings
+                    <img src="{{ url_for('static', filename='builtin/icons/cogwheel.png') }}" width="20" alt="Menu Icon">
+                </a>
             </li>
-            
-            <li><hr class="dropdown-divider"></li>
+            <li><hr class="dropdown-divider"></li>-->
             <li ><a class="dropdown-item d-flex justify-content-center align-items-center gap-2" href="{{ url_for('logout_page') }}">Logout
                 <img src="{{ url_for('static', filename='builtin/icons/logout.png') }}" width="20" alt="Menu Icon">
             </a></li>
@@ -66,169 +62,248 @@
             <button type="button" class="btn btn-outline-light fw-bold rounded" id="btn-application">My Application</button>
         </div>
     </div>
+
     
-    
-    <!-- Section 1: Personal Info -->
-    <div id="section-personal" class="form-section container-fluid border rounded py-4">
-        <div class="d-flex flex-column align-items-center justify-content-center pb-4">
-            <h4>Profile Settings</h4>
-            <p class="text-muted">Update your personal information and preferences</p>
-        </div>
-        
-        <form method="POST" enctype="multipart/form-data">
-            {{form.hidden_tag() }}
+    <!--<div class="d-flex flex-column align-items-center justify-content-center p-4">
+        <h4>Profile Settings</h4>
+        <p class="text-muted text-center">Update your personal information and preferences</p>
+    </div>-->
 
-            <div class="avatar pb-5">
-                <div id="avatar-container">
-                    <img id="avatar-preview" src="
-                        {% if current_user.profile_picture %}
-                        {{ url_for('static', filename='uploads/avatars/'~ current_user.profile_picture)}}
-                        {% else %}
-                        {{ url_for('static', filename='builtin/icons/person.png')}}
-                        {% endif %}" 
-                        alt="Avatar"
-                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}'">
-                </div>
-                <label for="avatar-upload" class="upload-label">
-                        <span class="upload-icon">+</span>
-                </label>
-                <input type="file" id="avatar-upload" name="avatar" accept="image/png,image/jpeg"/>
-            </div>
-            
+    <div class="container-fluid overflow-hidden">
+        <div id="profile-nav" class="row vh-100 overflow-auto">
+            <div class="col-12 col-lg-2 px-sm-2 px-0 bg-light d-flex sticky-top gap-2">
+                <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 py-2 text-white">
+                  
+                    <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
+                        <li>
+                            <a href="{{ url_for('public_dashboard')}}" class="nav-link px-sm-0 text-dark px-2">
+                                <i class="fs-5 bi-house"></i><span class="ms-1 d-none d-sm-inline">My Profile</span></a>
+                        </li>
+                            
+                        <li>    
+                            <a href="#" id="Documents" class="nav-link px-sm-0 text-dark px-2">
+                                <i class="fs-5 bi-file-earmark-text"></i><span class="ms-1 d-none d-sm-inline">Documents</span> </a>
+                        </li>
 
-            <div class="row row-cols-1 row-cols-lg-2 mb-3 text-muted">
-                <div class="col text-center">
-                    {{ form.firstname.label(class="mb-1") }}
-                    {{ form.firstname(class="form-control", placeholder="Juan") }}
-                </div>
-                <div class="col text-center">
-                    {{ form.lastname.label(class="mb-1") }}
-                    {{ form.lastname(class="form-control", placeholder="Dela Cruz") }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col text-center text-muted py-5 ps-lg-3">
-                    <h6 class="mb-4">Address Details</h6>
-                    
-                    <div class="row row-cols-lg-2 mb-5 text-muted">
-                        <div class="col text-center">
-                            {{ form.address_1.label(class="mb-1") }}
-                            {{ form.address_1(class="form-control", placeholder="Block # / Lot #") }}
-                        </div>
-                        <div class="col text-center">
-                            {{ form.address_2.label(class="mb-1") }}
-                            {{ form.address_2(class="form-control", placeholder="Street / Phase ") }}
-                        </div>
-                    </div>
-                    <div class="row row-cols-1 row-cols-lg-4 mb-5 text-muted">
-
-                        <div class="col text-center">
-                            {{ form.prov_id.label(class="mb-1") }}
-                            {{ form.prov_id(id="prov_id", class="form-control text-center") }}
-                        </div>
-
-                        <div class="col text-center">
-                            {{ form.munci_id.label(class="mb-1") }}
-                            {{ form.munci_id(id="munci_id", class="form-control text-center") }}
-                        </div>
-
-                        <div class="col text-center">
-                            {{ form.brgy_id.label(class="mb-1") }}    
-                            {{ form.brgy_id(id="brgy_id", class="form-control text-center") }}
-                        </div>
-
-                        <div class="col text-center">
-                            {{ form.zipcode.label(class="mb-1") }}
-                            {{ form.zipcode(class="form-control") }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="row">
-                <div class="col-12 col-lg-6 text-center text-muted py-5 pe-lg-3">
-                    <h6 class="mb-4">Contact Details</h6>
-                    <div class="mb-3">
-                        {{ form.email_address.label(class="mb-1") }}
-                        {{ form.email_address(class="form-control", placeholder="your@email.com") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.mobile_number.label(class="mb-1") }}
-                        {{ form.mobile_number(class="form-control", placeholder="+63*") }}
-                    </div>
-                    <div>
-                        {{ form.phone_number.label(class="mb-1") }}
-                        {{ form.phone_number(class="form-control", placeholder="0000-0000") }}
-                    </div>
-                </div>
-
-                <div class="col-12 col-lg-6 text-center text-muted py-5 ps-lg-3">
-                    <h6 class="mb-4">Login Details</h6>
-                    <div class="mb-3">
+                        <li class="nav-item ">
+                            <a href="#" id="SecurityPassword" class="nav-link px-sm-0 px-2 text-dark">
+                                <i class="fs-5 bi-lock-fill"></i><span class="ms-1 d-none d-sm-inline">Security</span>
+                            </a>
+                        </li>
                         
-                    </div>
+                        <!--<li>
+                            <a href="#" class="nav-link px-sm-0 px-2 text-dark">
+                                <i class="fs-5 bi-table"></i><span class="ms-1 d-none d-sm-inline">Orders</span></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle px-sm-0 px-1" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fs-5 bi-bootstrap"></i><span class="ms-1 d-none d-sm-inline">Bootstrap</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdown">
+                                <li><a class="dropdown-item" href="#">New project...</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link px-sm-0 px-2">
+                                <i class="fs-5 bi-grid"></i><span class="ms-1 d-none d-sm-inline">Products</span></a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link px-sm-0 px-2">
+                                <i class="fs-5 bi-people"></i><span class="ms-1 d-none d-sm-inline">Customers</span> </a>
+                        </li>-->
+                    </ul>
+                    <!---<div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="hugenerd" width="28" height="28" class="rounded-circle">
+                            <span class="d-none d-sm-inline mx-1">Joe</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-light text-small shadow" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="#">New project...</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        </ul>
+                    </div>-->
                 </div>
             </div>
 
-            
-
-            
-
-            
-            <!--<div class="row">
-            
-                <div class="col text-start text-muted py-5 ps-lg-3">
-                    <h6 class="mb-4">Other Details</h6>
+            <div class="col d-flex flex-column h-sm-100">
+                <!-- Section 1: Personal Info -->
+                <div id="section-personal" class="form-section container-fluid border rounded py-5">
+                    <div class="d-flex flex-column align-items-center justify-content-center pb-4">
+                        <h4>Profile Settings</h4>
+                        <p class="text-muted text-center">Update your personal information and preferences</p>
+                    </div>
                     
-                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                        <button type="button" class="btn btn-outline-light text-dark border-secondary">Bio</button>
-                        <button type="button" class="btn btn-outline-light text-dark border-secondary">Educational Background</button>
-                        <button type="button" class="btn btn-outline-light text-dark border-secondary">Career Experience</button>
-                        <button type="button" class="btn btn-outline-light text-dark border-secondary">Character Reference</button>
-                    </div>
-  
+                    <form method="POST" enctype="multipart/form-data">
+                        {{form.hidden_tag() }}
+                        <div class="container d-none d-sm-block">
+                            <div class="avatar pb-5 ">
+                                <div id="avatar-container">
+                                    <img id="avatar-preview" src="
+                                        {% if current_user.profile_picture %}
+                                        {{ url_for('static', filename='uploads/avatars/'~ current_user.profile_picture)}}
+                                        {% else %}
+                                        {{ url_for('static', filename='builtin/icons/person.png')}}
+                                        {% endif %}" 
+                                        alt="Avatar"
+                                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}'">
+                                </div>
+                                <label for="avatar-upload" class="upload-label">
+                                        <span class="upload-icon">+</span>
+                                </label>
+                                <input type="file" id="avatar-upload" name="avatar" accept="image/png,image/jpeg"/>
+                            </div>
+                        </div>
+                        
+                        
+
+                        <div class="row row-cols-1 row-cols-lg-2 mb-3 text-muted">
+                            <div class="col text-center">
+                                {{ form.firstname.label(class="mb-1") }}
+                                {{ form.firstname(class="form-control", placeholder="Juan") }}
+                            </div>
+                            <div class="col text-center">
+                                {{ form.lastname.label(class="mb-1") }}
+                                {{ form.lastname(class="form-control", placeholder="Dela Cruz") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col text-center text-muted py-5 ps-lg-3">
+                                <h6 class="mb-4">Address Details</h6>
+                                
+                                <div class="row row-cols-lg-2 mb-5 text-muted">
+                                    <div class="col text-center">
+                                        {{ form.address_1.label(class="mb-1") }}
+                                        {{ form.address_1(class="form-control", placeholder="Block # / Lot #") }}
+                                    </div>
+                                    <div class="col text-center">
+                                        {{ form.address_2.label(class="mb-1") }}
+                                        {{ form.address_2(class="form-control", placeholder="Street / Phase ") }}
+                                    </div>
+                                </div>
+                                <div class="row row-cols-1 row-cols-lg-4 mb-5 text-muted">
+
+                                    <div class="col text-center">
+                                        {{ form.prov_id.label(class="mb-1") }}
+                                        {{ form.prov_id(id="prov_id", class="form-control text-center") }}
+                                    </div>
+
+                                    <div class="col text-center">
+                                        {{ form.munci_id.label(class="mb-1") }}
+                                        {{ form.munci_id(id="munci_id", class="form-control text-center") }}
+                                    </div>
+
+                                    <div class="col text-center">
+                                        {{ form.brgy_id.label(class="mb-1") }}    
+                                        {{ form.brgy_id(id="brgy_id", class="form-control text-center") }}
+                                    </div>
+
+                                    <div class="col text-center">
+                                        {{ form.zipcode.label(class="mb-1") }}
+                                        {{ form.zipcode(class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="row">
+                            <div class="col-12 col-lg-6 text-center text-muted py-5 pe-lg-3">
+                                <h6 class="mb-4">Contact Details</h6>
+                                <div class="mb-3">
+                                    {{ form.email_address.label(class="mb-1") }}
+                                    {{ form.email_address(class="form-control", placeholder="your@email.com") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.mobile_number.label(class="mb-1") }}
+                                    {{ form.mobile_number(class="form-control", placeholder="+63*") }}
+                                </div>
+                                <div>
+                                    {{ form.phone_number.label(class="mb-1") }}
+                                    {{ form.phone_number(class="form-control", placeholder="0000-0000") }}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6 text-center text-muted py-5 ps-lg-3">
+                                <h6 class="mb-4">Login Details</h6>
+                                <div class="mb-3">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column-sm align-items-center justify-content-center gap-2 mb-3 w-100">
+                            {{form.update(class="btn btn-sm btn-outline-success text-success px-5")}}
+                            {{form.cancel (class="btn btn-sm btn-outline-danger text-danger px-5")}}
+                        </div>
+                    </form>
                 </div>
-            </div> -->
 
 
+                <!-- Section: Documents Details -->
+                <div id="section-documents" class="form-section d-none py-4">
+                    <div class="d-flex flex-column align-items-center justify-content-center pb-5">
+                        <h4>My Documents</h4>
+                        <p class="text-muted text-center">Track all my documents submitted </p>
+                    </div>
+                    
+                    <div class="container-fluid border text-center text-muted rounded p-5">
+                        <h6>You haven't submitted any documents yet.</h6>
+                        <p>Browse available job opportunities and apply to get started.</p>
+                    </div>
+                </div>
 
 
+                <!-- Section: Password Reset Request -->
+                <div id="section-password-reset-req" class="form-section d-none py-4">
+                    <div class="d-flex flex-column align-items-center justify-content-center pb-5">
+                        <h4>Security & Passwords</h4>
+                        <p class="text-muted text-center">Track all my documents submitted </p>
 
-            <div class="text-center mb-3">
-                {{form.update(class="btn btn-sm btn-outline-success text-success px-5")}}
-                {{form.cancel (class="btn btn-sm btn-outline-danger text-danger px-5")}}
-                
+                        
+                        <div class="container ">
+                            <form method="POST">
+                                {{ pwr_form.csrf_token }}
+                                <div class="modal-body">
+                                <p class="text-start text-muted pb-1">Please input your email to proceed.</p>
+                                {{ pwr_form.email_address(class="form-control", placeholder="Input your Email") }}
+                                </div>
+                                <div class="modal-footer">
+                                {{ pwr_form.submit(class="btn btn-primary", placeholder="Input your Email") }}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Section: Application Details -->
+        <div id="section-job" class="form-section d-none py-4">
+            <div class="d-flex flex-column align-items-center justify-content-center pb-5">
+                <h4>My Applications</h4>
+                <p class="text-muted text-center">Track the status of your job applications</p>
             </div>
             
-            
-        </form>
-    
-        
+            <div class="container-fluid border text-center text-muted rounded p-5">
+                <h6>You haven't submitted any applications yet.</h6>
+                <p>Browse available job opportunities and apply to get started.</p>
 
-    </div>
-     
-    
 
-    <!-- Section 2: Application Details -->
-    <div id="section-job" class="form-section d-none py-4">
-        <div class="d-flex flex-column align-items-center justify-content-center pb-5">
-            <h4>My Applications</h4>
-            <p class="text-muted">Track the status of your job applications</p>
-        </div>
-        
-        <div class="container-fluid border text-center text-muted rounded p-5">
-            <h6>You haven't submitted any applications yet.</h6>
-            <p>Browse available job opportunities and apply to get started.</p>
+            </div>
         </div>
     </div>
-    
 </div>
-
-
-
-
 {% endblock%}
 
 

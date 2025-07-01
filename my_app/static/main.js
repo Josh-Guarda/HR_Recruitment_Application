@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-// Side bar Menu
+// ADMIN OFF-Canvass Sidebar Menu
 document.addEventListener('DOMContentLoaded', function () {
     const offcanvasEl = document.getElementById('offcanvasScrolling');
     const offcanvas = new bootstrap.Offcanvas(offcanvasEl);
@@ -32,17 +32,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
 // Toggle Controller for public dashboard profile settings and My Application button group
 document.addEventListener("DOMContentLoaded", function () {
     const btnPersonal = document.getElementById("btn-personal");
     const btnJob = document.getElementById("btn-application");
     const sectionPersonal = document.getElementById("section-personal");
+    const sectionPersonalNav= document.getElementById("profile-nav");
+
     const sectionJob = document.getElementById("section-job");
 
     btnPersonal.addEventListener("click", function () {
         btnPersonal.classList.add("active");
         btnJob.classList.remove("active");
         sectionPersonal.classList.remove("d-none");
+        sectionPersonalNav.classList.remove("d-none");
         sectionJob.classList.add("d-none");
     });
 
@@ -52,7 +56,32 @@ document.addEventListener("DOMContentLoaded", function () {
         
         sectionJob.classList.remove("d-none");
         sectionPersonal.classList.add("d-none");
+        sectionPersonalNav.classList.add("d-none");
     });
+
+
+
+    // SIDEBAR HIDE/SHOW OPTIONS
+
+    const btnDocuments =document.getElementById('Documents')
+    const btnSecurityPassword =document.getElementById('SecurityPassword')
+    const sectionDocuments = document.getElementById("section-documents");
+    const sectionSecurityPassword= document.getElementById("section-password-reset-req");
+
+    
+    btnDocuments.addEventListener("click", function () {
+        sectionPersonal.classList.add("d-none");
+        sectionSecurityPassword.classList.add("d-none");
+        sectionDocuments.classList.remove("d-none");
+    });
+
+    btnSecurityPassword.addEventListener("click", function () {
+        sectionPersonal.classList.add("d-none");
+        sectionSecurityPassword.classList.remove("d-none");
+        sectionDocuments.classList.add("d-none");
+    });
+
+
 
 
     // LOAD AVATAR to CONTAINER WHEN UPLOADED

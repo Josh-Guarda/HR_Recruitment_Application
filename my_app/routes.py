@@ -104,7 +104,8 @@ def admin_dashboard():
         return redirect(url_for("home_page"))
     return render_template("admin/admin_dashboard.html",show_navbar=False)
     
-@app.route('/internal/') 
+@app.route('/internal/')
+@login_required
 def internal_dashboard():
     if current_user.user_type.name != "internal":
         return redirect(url_for("home_page"))
@@ -206,6 +207,14 @@ def get_barangays():
     ]
     return {'data': results}
 
+
+
+# @app.route('/profile-settings')
+# @login_required
+# def profile_settings():
+#     if current_user.user_type.name != "public":
+#         return redirect(url_for("home_page"))
+#     return render_template('public/profile_settings.html')
 
 
 @app.route('/logout')
