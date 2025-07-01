@@ -39,14 +39,14 @@ class LoginForm(FlaskForm):
 
 
 class PasswordResetRequest(FlaskForm):
-    email_address=StringField(label='Email', validators=[Email(), DataRequired()])
-    submit=SubmitField(label='Sign in')
+    email_address=StringField(label='Email Address', validators=[Email(),DataRequired()])
+    submit=SubmitField(label='Reset Password')
     
 
-    def validate_email(self,email_address_to_check):
-        email_address = Users.query.filter_by(email_address=email_address_to_check.data).first()
-        if email_address:
-            raise ValidationError('Account doesn`t exist, Please Register.')
+    # def validate_email(self,email_address_to_check):
+    #     email_address = Users.query.filter_by(email_address=email_address_to_check.data).first()
+    #     if email_address:
+    #         raise ValidationError('Account doesn`t exist, Please Register.')
      
         
 class ResetPasswordForm(FlaskForm):

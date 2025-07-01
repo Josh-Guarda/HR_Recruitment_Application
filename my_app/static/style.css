@@ -144,10 +144,11 @@ body.sidebar-open .main-content {
 
 
 /* Public Dashboard */
+
+
 .btn-group-container{
   background-color: #75c1ec;
 }
-
 
 #avatar-icon{
   height: 38px;
@@ -172,10 +173,11 @@ body.sidebar-open .main-content {
   height: 200px;
 }
 
-
 #avatar-upload {
   display: none;
 }
+
+
 
 .upload-label {
   bottom: 20px;
@@ -199,8 +201,6 @@ body.sidebar-open .main-content {
 .upload-label:hover {
   background-color: #086083; 
 }
-
-
 
 #barangay-select{
   width: 10px;
