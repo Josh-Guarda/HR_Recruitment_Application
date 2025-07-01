@@ -117,6 +117,8 @@ def internal_dashboard():
 def public_dashboard():
     form = PersonalInfoForm(obj=current_user)
     pwr_form = PasswordResetRequest()
+    
+    
     # Province always preloaded
     form.prov_id.choices = [('', '-- Select Province --')] + sorted(
         [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
@@ -126,7 +128,7 @@ def public_dashboard():
     # Only set muni/brgy choices if form has values or user has saved data
     selected_prov = form.prov_id.data or current_user.prov_id
     selected_muni = form.munci_id.data or current_user.munci_id
-
+    
     if selected_prov:
         form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
             [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
@@ -142,13 +144,38 @@ def public_dashboard():
         )
     else:
         form.brgy_id.choices = [('', '-- Select Barangay --')]
-
+    
+    
+    
+    
     # Submit handler
-    if form.validate_on_submit():
+    
+    
+    
+    
+    # Password Reset Request HANDLER
+    if pwr_form.submit.data and pwr_form.validate_on_submit():
+        input_email_address=pwr_form.email_address.data
+        
+        # Your password reset email logic here
+        # send_reset_email(pwr_form.email_address.data)  
+        
+        flash('Password reset email sent!', 'primary')
+        return redirect(url_for('public_dashboard'))
+    
+    if pwr_form.errors:
+        for err_msg in pwr_form.errors.values():
+            flash(f'Error: {err_msg}', category='danger')
+    
+    
+
+    
+    # Personal Information UPDATE HANDLER
+    if form.update.data and form.validate_on_submit():
         if form.cancel.data:
             flash('Update Canceled.', category='danger')
             return redirect(url_for('public_dashboard'))
-
+        
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.email_address = form.email_address.data
