@@ -40,19 +40,18 @@ class LoginForm(FlaskForm):
 
 class PasswordResetRequest(FlaskForm):
     email_address=StringField(label='Email Address', validators=[Email(),DataRequired()])
-    submit=SubmitField(label='Reset Password')
+    submit=SubmitField(label='Reset Password', name='pwr_confirm_pw_reset')
     
 
-    # def validate_email(self,email_address_to_check):
-    #     email_address = Users.query.filter_by(email_address=email_address_to_check.data).first()
-    #     if email_address:
-    #         raise ValidationError('Account doesn`t exist, Please Register.')
-     
+    def validate_email_address(self,email_address_to_check):
+        if email_address_to_check.data != current_user.email_address:
+            raise ValidationError('Email doesn`t match')
+
         
 class ResetPasswordForm(FlaskForm):
     password= PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
     password2= PasswordField(label='Confirm Password', validators=[EqualTo('password'), DataRequired()])
-    submit=SubmitField(label='Reset Password')
+    submit=SubmitField(label='Reset Password' , name='pwr_save_pw')
         
         
 
@@ -90,7 +89,7 @@ class PersonalInfoForm(FlaskForm):
     mobile_number = StringField(label='Mobile Number', validators=[Length(min=11,max=11), DataRequired()])
     phone_number=StringField(label='Landline Number', validators=[Length(min=8,max=8)],default=('00000000'))
     
-    update=SubmitField(label='Save')
+    update=SubmitField(label='Save',name='update_profile')
     cancel=SubmitField(label='Cancel')
     
     

@@ -31,8 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-
 // Toggle Controller for public dashboard profile settings and My Application button group
 document.addEventListener("DOMContentLoaded", function () {
     const btnPersonal = document.getElementById("btn-personal");
