@@ -48,7 +48,6 @@ login_manager.login_message_category = "primary"
 
 
 
-
 def generate_reset_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt='password-reset-salt')

@@ -70,16 +70,18 @@ class Users(db.Model,UserMixin):
     write_date =  db.Column(db.Date(),nullable=False)
     
     
-    # @property
-    # def password(self):
-    #     raise AttributeError("Password is write-only.")
+    @property
+    def password(self):
+        self.password
+        
     
-    # @password.setter
+    @password.setter
     def password(self, plain_text_password):
         self.password_hash = bcrpt.generate_password_hash(plain_text_password).decode('utf-8')
     
     
     def check_password_correction(self,attempted_password):
+        # print('check password correction')
         return bcrpt.check_password_hash(self.password_hash,attempted_password)
             
 
