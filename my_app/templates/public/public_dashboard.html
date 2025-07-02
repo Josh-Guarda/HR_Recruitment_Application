@@ -265,21 +265,23 @@
                 </div>
 
 
-                <!-- Section: Password Reset Request -->
-                <div id="section-password-reset-req" class="form-section d-none py-4">
+                <!-- Section: Change Password -->
+                <div id="section-change-password" class="form-section d-none py-4">
                     <div class="d-flex flex-column align-items-center justify-content-center pb-5">
                         <h4>Security & Passwords</h4>
                         <p class="text-muted text-center">Track all my documents submitted </p>
 
                         <div class="container ">
                             <form method="POST">
-                                {{ pwr_form.csrf_token }}
+                                {{ change_pw_form.hidden_tag() }}
                                 <div class="modal-body">
-                                <p class="text-start text-muted pb-1">Please input your email to proceed.</p>
-                                {{ pwr_form.email_address(class="form-control", placeholder="Input your Email")}}
+                                <p class="text-start text-muted pb-1">Please input the details to proceed.</p>
+                                {{ change_pw_form.current_password(class="form-control mb-2", placeholder="Current Password")}}
+                                {{ change_pw_form.password(class="form-control mb-2", placeholder="New Password")}}
+                                {{ change_pw_form.password2(class="form-control mb-2", placeholder="Confirm Password")}}
                                 </div>
                                 <div class="modal-footer">
-                                {{ pwr_form.submit(class="btn btn-primary", placeholder="Input your Email") }}
+                                {{ change_pw_form.submit(class="btn btn-primary")}}
                                 </div>
                             </form>
                         </div>

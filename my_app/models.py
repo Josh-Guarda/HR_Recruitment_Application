@@ -60,8 +60,6 @@ class Users(db.Model,UserMixin):
     brgy_id = db.Column(db.Integer(),db.ForeignKey('barangay.id'))
     barangay = db.relationship('Barangay')
     
-    
-    
     munci_id = db.Column(db.Integer(),db.ForeignKey('municipality.id'))
     municipality = db.relationship('Municipality')
     
@@ -72,11 +70,11 @@ class Users(db.Model,UserMixin):
     write_date =  db.Column(db.Date(),nullable=False)
     
     
-    @property
-    def password(self):
-        return self.password
-
-    @password.setter
+    # @property
+    # def password(self):
+    #     raise AttributeError("Password is write-only.")
+    
+    # @password.setter
     def password(self, plain_text_password):
         self.password_hash = bcrpt.generate_password_hash(plain_text_password).decode('utf-8')
     
