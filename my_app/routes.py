@@ -189,26 +189,27 @@ def public_dashboard():
     
     
     
-    # Submit handler
+    # Submit HANDLERS
+    
     # Change Password Request HANDLER
     if change_pw_form.submit.data and change_pw_form.validate_on_submit():
         # if change_pw_form.current_password.data != current_user.password:
         if not current_user.check_password_correction(change_pw_form.current_password.data):
             flash('Password is Incorrect', category='danger')
             
-        new_password = change_pw_form.password.data
-        confirm_password = change_pw_form.password2.data
+        else:
+            new_password = change_pw_form.password.data
+            confirm_password = change_pw_form.password2.data
 
-        if new_password != confirm_password:
-            flash('New passwords do not match with Confirm Password!',category='danger')
+            if new_password != confirm_password:
+                flash('New passwords do not match with Confirm Password!',category='danger')
+                
+            else:
+                flash(f'Password changed Successfully!', category='success')
+                current_user.password = new_password
+                db.session.commit()
+                return redirect(url_for('public_dashboard'))
 
-        
-        flash(f'Password changed Successfully!', category='success')
-        current_user.password = new_password
-        print(f'your new Password:{new_password}')
-        db.session.commit()
-        return redirect(url_for('public_dashboard'))
-        
     if change_pw_form.errors:
         for err_msg in change_pw_form.errors.values():
             flash(f'Error: {err_msg}', category='danger')
