@@ -60,11 +60,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // SIDEBAR HIDE/SHOW OPTIONS
-
     const btnDocuments =document.getElementById('Documents')
     const btnSecurityPassword =document.getElementById('SecurityPassword')
     const sectionDocuments = document.getElementById("section-documents");
-    const sectionSecurityPassword= document.getElementById("section-password-reset-req");
+    const sectionSecurityPassword= document.getElementById("section-change-password");
 
     
     btnDocuments.addEventListener("click", function () {

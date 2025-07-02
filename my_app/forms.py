@@ -35,8 +35,6 @@ class LoginForm(FlaskForm):
     password= PasswordField(label='Password' , validators=[DataRequired()])
     submit=SubmitField(label='Sign in')
     
-    
-
 
 class PasswordResetRequest(FlaskForm):
     email_address=StringField(label='Email Address', validators=[Email(),DataRequired()])
@@ -52,9 +50,18 @@ class ResetPasswordForm(FlaskForm):
     password= PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
     password2= PasswordField(label='Confirm Password', validators=[EqualTo('password'), DataRequired()])
     submit=SubmitField(label='Reset Password' , name='pwr_save_pw')
-        
-        
+    
+    
+    
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
+    password= PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
+    password2= PasswordField(label='Confirm Password',validators=[ DataRequired()])
+    submit=SubmitField(label='Reset Password' , name='pwr_save_pw')
+    
 
+    
+    
 class PersonalInfoForm(FlaskForm):
     def validate_mobile_number(self, number_to_check):
         if not number_to_check.data.isdigit():
