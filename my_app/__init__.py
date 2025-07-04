@@ -54,13 +54,14 @@ def generate_reset_token(email):
 
 
 # Returns the email if the token is valid, otherwise returns None
-def verify_reset_token(token, expiration=3600):  # Valid for (3600s) i.e. 1 hour
+def verify_reset_token(token, expiration=180):  # THIS declares the expiration of token base on seconds Valid for (3600s) i.e. 1 hour
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     try:
         email = serializer.loads(token, salt='password-reset-salt', max_age=expiration)
         return email
     except Exception as e:
         return None
+
 
 def mailSetup():
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -71,12 +72,6 @@ def mailSetup():
     mail = Mail(app)
     return mail
 mail =  mailSetup()
-
-
-
-
-
-
 
 
 

@@ -36,28 +36,23 @@ class LoginForm(FlaskForm):
     submit=SubmitField(label='Sign in')
     
 
-class PasswordResetRequest(FlaskForm):
+class ForgotPassword(FlaskForm):
     email_address=StringField(label='Email Address', validators=[Email(),DataRequired()])
-    submit=SubmitField(label='Reset Password', name='pwr_confirm_pw_reset')
+    submit=SubmitField(label='Reset Password')
     
-
-    def validate_email_address(self,email_address_to_check):
-        if email_address_to_check.data != current_user.email_address:
-            raise ValidationError('Email doesn`t match')
-
         
-class ResetPasswordForm(FlaskForm):
-    password= PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
-    password2= PasswordField(label='Confirm Password', validators=[EqualTo('password'), DataRequired()])
-    submit=SubmitField(label='Reset Password' , name='pwr_save_pw')
-    
-    
-    
-class ChangePasswordForm(FlaskForm):
-    current_password = PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
-    password= PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
+class ChangePasswordBeforeLogin(FlaskForm):
+    password= PasswordField(label=' New Password' , validators=[Length(min=3,max=30), DataRequired()])
     password2= PasswordField(label='Confirm Password',validators=[ DataRequired()])
-    submit=SubmitField(label='Reset Password' , name='pwr_save_pw')
+    submit=SubmitField(label='Change Password')
+    
+    
+    
+class ChangePasswordFormInSecurity(FlaskForm):
+    current_password = PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
+    password= PasswordField(label='New Password' , validators=[Length(min=3,max=30), DataRequired()])
+    password2= PasswordField(label='Confirm Password',validators=[ DataRequired()])
+    submit=SubmitField(label='Update Password')
     
 
     

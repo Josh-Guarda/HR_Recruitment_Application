@@ -45,7 +45,7 @@ class Users(db.Model,UserMixin):
     address_1 = db.Column(db.String(length=100),nullable=True)
     address_2 = db.Column(db.String(length=100),nullable=True)
     zipcode = db.Column(db.Integer(),nullable=True)
-
+    
     mobile_number = db.Column(db.String(length=11),nullable=True)
     phone_number = db.Column(db.String(length=8),nullable=True)
     profile_picture =db.Column(db.String(),nullable=True)
@@ -72,9 +72,9 @@ class Users(db.Model,UserMixin):
     
     @property
     def password(self):
-        self.password
+        # self.password
+        raise AttributeError("Password is write-only.")
         
-    
     @password.setter
     def password(self, plain_text_password):
         self.password_hash = bcrpt.generate_password_hash(plain_text_password).decode('utf-8')
