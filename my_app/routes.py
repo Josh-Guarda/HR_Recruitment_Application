@@ -96,7 +96,6 @@ def forgot_password_page():
         return redirect(url_for('login_page'))  # Redirect to login page after sending email
     
 
-
     return render_template('auth/password_reset_request.html',forgot_pw_request=forgot_pw_request)
     # return render_template('auth/password_reset_request.html', token=token)  # ✅ Pass token to template
 
