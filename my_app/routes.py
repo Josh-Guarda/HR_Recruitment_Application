@@ -3,7 +3,7 @@ from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from my_app import  MUNICIPALITY_DATA, PROVINCE_DATA,mail,Message,generate_reset_token,verify_reset_token
 from flask import render_template, redirect, url_for, flash,request,session
 from my_app.models import Jobs,Users
-from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,PasswordResetRequest,ResetPasswordForm,ChangePasswordForm
+from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ChangePasswordFormInSecurity,ForgotPassword,ChangePasswordBeforeLogin
 from flask_login import login_user,current_user,logout_user,login_required
 from datetime import datetime
 from werkzeug.utils import secure_filename
@@ -69,57 +69,70 @@ def register_page():
 
 
 
-# # ✅ Forgot Password Route
-# @app.route('/forgot-password', methods=['POST'])
-# def forgot_password():
-#     reset_pw_request=PasswordResetRequest()
-#     if reset_pw_request.validate_on_submit():
-#         email_address = reset_pw_request.email_address.data
-#         if email_address:
-#             print("Email fetched: ",email_address) #console check ✅
+# ✅ Forgot Password Route
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password_page():
+    forgot_pw_request=ForgotPassword()
+    if forgot_pw_request.validate_on_submit():
+        email_address = forgot_pw_request.email_address.data
+        if email_address:
+            print("Email fetched: ",email_address)
     
-#     try:
-#         # Generate Reset Token
-#         token = generate_reset_token(email_address)
-#         reset_link = url_for('reset_password', token=token, _external=True)
+        try:
+            # Generate Reset Token
+            token = generate_reset_token(email_address)
+            reset_link = url_for('change_password_page', token=token, _external=True)
 
-#         # Send Email
-#         msg = Message('Password Reset Request', sender='noreply@wakenbake.com', recipients=[email_address])
-#         msg.body = f'Click the link to reset your password: {reset_link}'
-#         mail.send(msg)
+            # Send Email
+            msg = Message('Password Reset Request', sender='noreply@wakenbake.com', recipients=[email_address])
+            msg.body = f'Click the link to reset your password: {reset_link}'
+            mail.send(msg)
 
-#         flash('Password reset link has been sent to your email!', 'success')
-#     except Exception as e:
-#         print(e)
-#         flash('An error occurred while sending email. Please try again.', 'error')
+            flash('Password reset link has been sent to your email!', 'success')
+        except Exception as e:
+            print(e)
+            flash('An error occurred while sending email. Please try again.', 'error')
 
-#     return redirect(url_for('login'))  # Redirect to login page after sending email
-
-
-# ✅ Reset Password Route
-# @app.route('/reset-password/<token>', methods=['GET', 'POST'])
-# def reset_password(token):
-#     reset_pw_form= ResetPasswordForm()
-#     email = verify_reset_token(token)
-#     if not email:
-#         flash('Invalid or expired token', 'error')
-#         return redirect(url_for('login'))
-
-#     if reset_pw_form.validate_on_submit():
-#         new_password = reset_pw_form.password.data
-#         confirm_password = reset_pw_form.password2.data
-
-#         if new_password != confirm_password:
-#             flash('Passwords do not match!', 'error')
-#             return redirect(url_for('reset_password', token=token))
+        return redirect(url_for('login_page'))  # Redirect to login page after sending email
+    
 
 
-#         # Update password in the database
-#         db.session.commit()
-#         flash('Your password has been updated!', 'success')
-#         return redirect(url_for('public_dashboard'))
+    return render_template('auth/password_reset_request.html',forgot_pw_request=forgot_pw_request)
+    # return render_template('auth/password_reset_request.html', token=token)  # ✅ Pass token to template
 
-#     return render_template('reset_password.html', token=token)  # ✅ Pass token to template
+
+
+@app.route('/change-password/<token>', methods=['GET', 'POST'])
+def change_password_page(token):
+    change_pw_form= ChangePasswordBeforeLogin()
+    email = verify_reset_token(token)
+    # print(f'your email: {email}')
+    if not email:
+        flash('Invalid or expired token',category='danger')
+        return redirect(url_for('login_page'))
+
+    if change_pw_form.validate_on_submit():
+        print('TEST')
+        new_password = change_pw_form.password.data
+        confirm_password = change_pw_form.password2.data
+
+        if new_password != confirm_password:
+            flash('New passwords do not match with Confirm Password!', category='danger')
+            return redirect(url_for('change_password_page', token=token, change_pw_form=change_pw_form))
+
+        
+        # Update password in the database
+        else:
+            user_to_change_pw = Users.query.filter_by(email_address=email).first()
+            user_to_change_pw.password = new_password
+            db.session.commit()
+
+            flash('Your password has been updated!', 'success')
+            return redirect(url_for('public_dashboard'))
+    
+    return render_template('auth/change_password.html', token=token,change_pw_form=change_pw_form)  # ✅ Pass token to template
+
+
 
 
 @app.route("/login",methods=["GET","POST"])
@@ -134,6 +147,7 @@ def login_page():
             return redirect(url_for('career_page'))
         else:
             flash('Invalid username or password.', category='danger')
+            
     
     return render_template('auth/login.html',show_navbar=False,form=form)
 
@@ -157,8 +171,8 @@ def internal_dashboard():
 @login_required
 def public_dashboard():
     form = PersonalInfoForm(obj=current_user)
-    pwr_form = PasswordResetRequest()
-    change_pw_form= ChangePasswordForm()
+    # pwr_form = PasswordResetRequest()
+    change_pw_form= ChangePasswordFormInSecurity()
     
     # Province always preloaded
     form.prov_id.choices = [('', '-- Select Province --')] + sorted(
@@ -215,21 +229,7 @@ def public_dashboard():
             flash(f'Error: {err_msg}', category='danger')
     
     
-    # # Password Reset Request HANDLER
-    # if pwr_form.submit.data and pwr_form.validate_on_submit():
-    #     input_email_address=pwr_form.email_address.data
-        
-    #     # Your password reset email logic here
-    #     # send_reset_email(pwr_form.email_address.data)  
-        
-    #     flash('Password reset email sent!', 'primary')
-    #     return redirect(url_for('public_dashboard'))
-    
-    # if pwr_form.errors:
-    #     for err_msg in pwr_form.errors.values():
-    #         flash(f'Error: {err_msg}', category='danger')
-    
-    
+
     
     # Personal Information UPDATE HANDLER
     if form.update.data and form.validate_on_submit():
@@ -272,7 +272,7 @@ def public_dashboard():
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))
 
-    return render_template('public/public_dashboard.html', show_navbar=False, form=form, pwr_form=pwr_form, change_pw_form=change_pw_form)
+    return render_template('public/public_dashboard.html', show_navbar=False, form=form, change_pw_form=change_pw_form)
 
 
 
