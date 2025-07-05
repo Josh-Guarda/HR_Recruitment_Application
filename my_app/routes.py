@@ -143,7 +143,13 @@ def login_page():
             
             login_user(attempted_user)
             flash(f'Success! You are logged in as: {attempted_user.firstname}', category='success')
-            return redirect(url_for('career_page'))
+            
+            if current_user.user_type.name == 'admin':
+                return redirect(url_for('admin_dashboard'))
+            elif current_user.user_type.name == 'internal':
+                return redirect(url_for('internal_dashboard'))
+            else:
+                return redirect(url_for('career_page'))
         else:
             flash('Invalid username or password.', category='danger')
             
@@ -170,7 +176,6 @@ def internal_dashboard():
 @login_required
 def public_dashboard():
     form = PersonalInfoForm(obj=current_user)
-    # pwr_form = PasswordResetRequest()
     change_pw_form= ChangePasswordFormInSecurity()
     
     # Province always preloaded
