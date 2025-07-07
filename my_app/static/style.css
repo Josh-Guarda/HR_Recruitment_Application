@@ -102,27 +102,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*Login.html and Register.html*/
 #forgotPw,#SignUpbtn,#SignInbtn{
   text-decoration:none;
@@ -207,6 +186,26 @@ body.sidebar-open .main-content {
 .form-section {
     transition: all 0.5s ease-in-out;
 }
+
+
+/* Admin Dashboard */
+
+.icon-circle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Public Dashboard */
