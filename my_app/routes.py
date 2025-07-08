@@ -157,12 +157,41 @@ def login_page():
     return render_template('auth/login.html',show_navbar=False,form=form)
 
 
+
+
+# ADMIN ROUTES
 @app.route('/admin/')
 @login_required
 def admin_dashboard():
     if current_user.user_type.name != "admin":
         return redirect(url_for("home_page"))
     return render_template("admin/admin_dashboard.html",show_navbar=False)
+
+@app.route('/admin-users-management/')
+@login_required
+def admin_dashboard_manage_users():
+    users=Users.query.all()
+    
+    
+    
+
+    return render_template("admin/admin_users_management.html",show_navbar=False, users=users)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 @app.route('/internal/')
 @login_required
@@ -208,7 +237,6 @@ def public_dashboard():
     
     
     # Submit HANDLERS
-    
     # Change Password Request HANDLER
     if change_pw_form.submit.data and change_pw_form.validate_on_submit():
         # if change_pw_form.current_password.data != current_user.password:

@@ -26,7 +26,10 @@ class Department(db.Model):
     manager_id= db.Column(db.Integer(),unique=True)
 
     #relationship fields
-    rel_id_dept = db.relationship('Users',backref='rel_id_dept',lazy=True)
+    department = db.relationship('Users',backref='desig_dept',lazy=True)
+    
+    manager_id= db.Column(db.Integer())
+    color = db.Column(db.String(length=30),nullable=False)
     
     create_uid = db.Column(db.Integer())
     write_uid = db.Column(db.Integer())
@@ -51,8 +54,11 @@ class Users(db.Model,UserMixin):
     profile_picture =db.Column(db.String(),nullable=True)
     
     #relationship fields
-    rel_id_jobs = db.relationship('Jobs',backref='rel_id_jobs',lazy=True)
     department_id =db.Column(db.Integer(),db.ForeignKey('department.id'))
+    department = db.relationship('Department')
+    
+    
+    
     
     user_type_id = db.Column(db.Integer(),db.ForeignKey('usertype.id'))
     user_type = db.relationship('Usertype')

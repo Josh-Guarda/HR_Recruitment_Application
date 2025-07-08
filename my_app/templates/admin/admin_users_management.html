@@ -1,0 +1,103 @@
+{% extends "admin/admin_dashboard.html"%}
+
+{% block nav%}
+<li class="nav-item">
+    <button id="nav-btn" type="button" class="btn btn-light fw-normal border" onclick="location.href='{{ url_for('home_page') }}'">
+    View Public Site
+    </button>
+</li>
+{% endblock%}
+
+{% block section %}
+
+<section id="UsersManagement"> 
+    <div class="container py-5">
+        <!--<div class="col-md-9 border px-5 py-4 mx-auto d-sm-flex align-items-center">
+            <img class="img-fluid rounded-circle mr-4" style="width: 120px; border: 8px solid #9B5DE5;" src="https://avatars0.githubusercontent.com/u/39916324?s=460&amp;u=602ca47fcce463981a2511a21148236f304ec934&amp;v=4" alt="">
+            <div class="">
+                <span style="font-weight: 600; color: #9B5DE5;">Author</span>
+                <h4>Yahya Makarim</h4>
+                <p class="text-secondary">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit, sapiente
+                    reprehenderit? Praesentium, reprehenderit cumque provident.</p>
+            </div>
+        </div>-->
+
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body p-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for user in users %}
+            <div class="col-sm-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img src="
+                                {{ url_for('static', filename='uploads/avatars/' ~ user.profile_picture) 
+                                if user.profile_picture 
+                                else 
+                                url_for('static', filename='builtin/icons/person.png') }}"
+                                onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
+                                class="rounded-circle mr-4 p-1" style="border: 1px solid {{user.department.color}}" width="64" height="60">
+                                
+
+                                <div class= "px-3">
+                                    <h5 class="mb-1">{{user.firstname|capitalize}} {{user.lastname|capitalize}}</h5>
+                                    <p class="text-muted mb-0">{{user.email_address|capitalize}}</p>
+
+                                    <p class="text-muted mb-0"><span class="badge border rounded-pill bg-light text-dark">{{user.user_type|capitalize}}</span></p>
+                                </div>
+                            </div>
+                            <div class="btn-group gap-1">
+                                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <hr>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook"><i class="fab fa-facebook"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Skype"><i class="fab fa-skype"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Message"><i class="fas fa-envelope"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock%}
+
+
+
+                
