@@ -1,23 +1,59 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 
-:root {
-  --primary-color: #e0ebed;
-  --text-dark: #231e22;
-  --text-light: #767268;
-  --extra-light: #f3f4f6;
-  --white: #ffffff;
-  --danger:  #f07b73;
-  --info: #53b8f3;
-
-  --max-width: 1200px;
-}
-
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
+
+/* body{
+    background-color: #edf0f0;    
+} */
+
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:focus:active,
+.btn-primary:focus-visible {
+    background-color: #388ec0;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.btn-primary:hover{
+    background-color: #0e6394;
+} 
+
+.btn-dark,
+.btn-dark:focus,
+.btn-dark:active,
+.btn-dark:focus:active,
+.btn-dark:focus-visible {
+    background-color: #343636;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.btn-dark:hover{
+    background-color: #616364;
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Main nav main.html*/
@@ -95,12 +131,6 @@
         .footer .footer-links a:hover {
             color: #ff6f61;
         } */
-
-
-
-
-
-
 
 
 /*Login.html and Register.html*/
@@ -191,29 +221,14 @@ body.sidebar-open .main-content {
 
 
 /* Admin Dashboard / DASHBOARD */
-
 .icon-circle {
         width: 56px;
         height: 56px;
         border-radius: 50%;
     }
 
-/* body{
-    background-color: #edf0f0;    
-} */
-.btn-primary, 
-.btn-primary:hover, 
-.btn-primary:focus, 
-.btn-primary:active, 
-.btn-primary.active, 
-.btn-primary.focus, 
-.btn-primary:active, 
-.btn-primary:focus, 
-.btn-primary:hover, 
-.open>.dropdown-toggle.btn-primary {
-    background-color: #3bc0c3;
-    border: 1px solid #3bc0c3;
-}
+
+/* Users Management Kanban-View */
 .p-t-10 {
     padding-top: 10px !important;
 }
@@ -244,11 +259,7 @@ body.sidebar-open .main-content {
     color: #7A7676;
 }
 
-
-
-
-
-
+/* Users Management Tree-View */
 
 
 
