@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
     offcanvasEl.addEventListener('hidden.bs.offcanvas', function () {
         document.body.classList.remove('sidebar-open');
     });
+
+
 });
 
 

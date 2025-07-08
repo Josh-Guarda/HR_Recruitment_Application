@@ -93,7 +93,7 @@ Dashboard
                     </button>
                 </li>
                 <li class="nav-item">
-                   <button class="btn  w-100 text-start d-flex align-items-center dashboard_side_btn">
+                   <button class="btn  w-100 text-start d-flex align-items-center dashboard_side_btn" onclick="location.href='{{ url_for('admin_dashboard_manage_users') }}'">
                         <img src="{{ url_for('static', filename='builtin/icons/group.png') }}" width="20" class="me-2">
                         User Management
                     </button>
@@ -130,7 +130,8 @@ Dashboard
     {% block section %}
     
     {% endblock%}    
-
     </section>
+
+
 {% endblock%}
 
