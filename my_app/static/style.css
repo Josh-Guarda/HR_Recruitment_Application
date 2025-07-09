@@ -31,16 +31,49 @@
 .btn-dark:active,
 .btn-dark:focus:active,
 .btn-dark:focus-visible {
-    background-color: #343636;
+    background-color: #f0efef;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    color: #000;
+}
+
+.btn-dark:hover{
+    background-color: #353534;
+    color: #fffdfd;
+} 
+
+
+.btn-danger,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger:focus:active,
+.btn-danger:focus-visible {
+    background-color: #990909;
     border: none;
     outline: none;
     box-shadow: none;
 }
 
-.btn-dark:hover{
-    background-color: #616364;
+.btn-danger:hover{
+    background-color: #cf0f0f;
 } 
 
+
+.btn-success,
+.btn-success:focus,
+.btn-success:active,
+.btn-success:focus:active,
+.btn-success:focus-visible {
+    background-color: #057001;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.btn-success:hover{
+    background-color: #15a015;
+} 
 
 
 
@@ -260,6 +293,26 @@ body.sidebar-open .main-content {
 }
 
 /* Users Management Tree-View */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
