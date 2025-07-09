@@ -21,9 +21,6 @@ body{
 
 
 
-
-
-
 /* Main nav main.html*/
 #nav-btn{
   color: #ffffff;
@@ -115,10 +112,8 @@ body{
 
 @media (max-width: 991px ) {
   .custom-nav-list-dashboard{
-    
     padding-top: 4rem;
     text-align: center;
-    
   }
   .custom-nav-list-dashboard li{
     margin-bottom: 0.5rem;
@@ -135,6 +130,7 @@ body{
   .custom-nav-center .navbar-nav {
     flex-direction: column;
     align-items: center;
+
   }
 
   .custom-nav-center .navbar-nav .nav-item {
@@ -156,14 +152,7 @@ body{
 
 
 /* Dashboard */
-.custom-nav-class{
-  position: fixed;
-  width: 100%;
-  z-index: 1;
-}
-
-
- .custom-card {
+.custom-card {
 border-radius: 10px;
 box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
 -webkit-box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
@@ -218,10 +207,6 @@ body.sidebar-open .main-content {
 
 
 /* Admin Dashboard/Users Management Kanban-View */
-.users-management-card-container{
-  padding-top: 100px;
-  height: 100%;
-}
 
 .users-management{
   background-color: #24a0ed;
@@ -288,6 +273,15 @@ body.sidebar-open .main-content {
   /* background-color: #75c1ec; */
   background: linear-gradient(to top right, #ffffff 0%, #0099ff 100%);
 }
+
+.profile-sidebar-sticky {
+  position: sticky;
+  top: 0; /* adjust based on your fixed navbar height */
+  align-self: flex-start;
+  z-index: 101;
+  height: 100vh;
+}
+
 
 #avatar-icon{
   height: 38px;
