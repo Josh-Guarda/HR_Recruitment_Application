@@ -1,5 +1,9 @@
 {% extends "admin/admin_dashboard.html"%}
 
+{% block title %}
+Dashboard Users-Management
+{% endblock title %}
+
 {% block nav%}
 <li class="nav-item">
     <button id="nav-btn" type="button" class="btn btn-light fw-normal border" onclick="location.href='{{ url_for('home_page') }}'">
@@ -11,13 +15,13 @@
 {% block section %}
 
 <section id="UsersManagement"> 
-    <div class="container py-5">
-        <div class="row mb-4">
+    <div class="container">
+        <div class="row mb-4 users-management-card-container">
             <div class="col-12">
-                <div class="card shadow-sm">
+                <div class="card users-management">
                     <div class="card-body p-2">
                         <div class="text-center">
-                            <h5 class="pb-3">Users Management</h5>
+                            <h4 class="py-3 text-light">Users Management</h4>
                             <div class="d-flex">
                                 <input type="text" class="form-control" placeholder="Search">
                                 <button class="btn btn-primary" type="button">
@@ -34,7 +38,7 @@
 
                             <!-- Hamburger toggle (visible only on small screens) -->
                             <div class="dropdown d-md-none ms-auto">
-                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-bars"></i>
                                 </button>
 
@@ -42,32 +46,32 @@
                                     <div class="d-flex flex-column gap-2">
                                         <button type="button" class="btn btn-primary w-100">Create New</button>
 
-                                        <button type="button" class="btn btn-sm btn-outline-secondary text-dark border w-100 d-flex align-items-center">
+                                        <button type="button" class="btn btn-sm btn-dark w-100 d-flex align-items-center justify-content-center">
                                             <img src="{{ url_for('static', filename='builtin/icons/filter.png') }}" width="15">
                                             <span class="ms-2">Filter</span>
                                         </button>
 
-                                        <button type="button" class="btn btn-sm btn-outline-secondary text-dark border w-100 d-flex align-items-center">
+                                        <button type="button" class="btn btn-sm btn-dark w-100 d-flex align-items-center justify-content-center">
                                             <img src="{{ url_for('static', filename='builtin/icons/layer.png') }}" width="15">
                                             <span class="ms-2">Group By</span>
                                         </button>
                                         
-                                        <button type="button" class="btn btn-sm btn-outline-secondary text-dark border w-100 d-flex align-items-center">
+                                        <button type="button" class="btn btn-sm btn-dark w-100 d-flex align-items-center justify-content-center">
                                             <img src="{{ url_for('static', filename='builtin/icons/import.png') }}" width="15">
                                             <span class="ms-2">Import</span>
                                         </button>
 
-                                        <button type="button" class="btn btn-sm btn-outline-secondary text-dark border w-100">
+                                        <button type="button" class="btn btn-sm btn-dark w-100" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom">
                                             <i class="bi bi-kanban"></i>
                                         </button>
 
-                                        <button type="button" class="btn btn-sm btn-outline-secondary text-dark border w-100">
+                                        <button type="button" class="btn btn-sm btn-dark w-100">
                                             <i class="ri-menu-line"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <!-- Action buttons for desktop -->
                             <div class="d-none d-md-flex justify-content-between w-50">
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
@@ -85,10 +89,10 @@
                                     </button>
                                 </div>
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                    <button type="button" class="btn btn-sm btn-dark">
+                                    <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="tooltip" title="Kanban View">
                                         <i class="bi bi-kanban"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-dark">
+                                    <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="tooltip" title="List View">
                                         <i class="ri-menu-line"></i>
                                     </button>
                                 </div>
@@ -98,11 +102,10 @@
                 </div>
             </div>
         </div>
-        
-        <div class="row row-cols-1 row-cols-lg-2 g-4">
+        <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
             {% for user in users %}
             <div class="col">
-                <div class="card shadow-sm h-100">
+                <div class="card shadow h-100">
                     <div class="card-body">
                         <div class="d-flex flex-wrap align-items-center justify-content-between">
                             <!-- User Info -->
@@ -136,9 +139,6 @@
                             </a>
                         </div>
                     </div>
-
-                    
-
                     <!-- Social Icons -->
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item">

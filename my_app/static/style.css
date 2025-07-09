@@ -1,88 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 
 
+
+
+
+
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
 
-/* body{
-    background-color: #edf0f0;    
-} */
-
-.btn-primary,
-.btn-primary:focus,
-.btn-primary:active,
-.btn-primary:focus:active,
-.btn-primary:focus-visible {
-    background-color: #388ec0;
-    border: none;
-    outline: none;
-    box-shadow: none;
+body{
+    /* background-color: #edf0f0;     */
+    /* background: linear-gradient(to top, #ffffff 0%, #66ccff 100%) */
+    /* background: linear-gradient(to top left, #ffffff 0%, #ff9900 100%); */
+    background: linear-gradient(to top left, #ffffff 0%, #006699 100%);
 }
-
-.btn-primary:hover{
-    background-color: #0e6394;
-} 
-
-.btn-dark,
-.btn-dark:focus,
-.btn-dark:active,
-.btn-dark:focus:active,
-.btn-dark:focus-visible {
-    background-color: #f0efef;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    color: #000;
-}
-
-.btn-dark:hover{
-    background-color: #353534;
-    color: #fffdfd;
-} 
-
-
-.btn-danger,
-.btn-danger:focus,
-.btn-danger:active,
-.btn-danger:focus:active,
-.btn-danger:focus-visible {
-    background-color: #990909;
-    border: none;
-    outline: none;
-    box-shadow: none;
-}
-
-.btn-danger:hover{
-    background-color: #cf0f0f;
-} 
-
-
-.btn-success,
-.btn-success:focus,
-.btn-success:active,
-.btn-success:focus:active,
-.btn-success:focus-visible {
-    background-color: #057001;
-    border: none;
-    outline: none;
-    box-shadow: none;
-}
-
-.btn-success:hover{
-    background-color: #15a015;
-} 
-
-
-
-
-
-
-
-
-
 
 
 
@@ -106,7 +41,8 @@
 }
 
 #login-btn:hover{
-  background-color: #ecf1f7;
+  color: #ffffff;
+  background-color: #81a9db;
 }
 #signup-btn:hover{
   background-color: #313131;
@@ -177,11 +113,23 @@
   text-underline-offset: 2px;
 }
 
+@media (max-width: 991px ) {
+  .custom-nav-list-dashboard{
+    
+    padding-top: 4rem;
+    text-align: center;
+    
+  }
+  .custom-nav-list-dashboard li{
+    margin-bottom: 0.5rem;
+  }
+}
 
-@media (max-width: 575.98px) {
+@media (max-width: 575.98px ) {
   .custom-nav-center {
     justify-content: center !important;
     text-align: center;
+    padding-top: 50px;
   }
 
   .custom-nav-center .navbar-nav {
@@ -208,6 +156,13 @@
 
 
 /* Dashboard */
+.custom-nav-class{
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+
+
  .custom-card {
 border-radius: 10px;
 box-shadow: -7px 5px 42px -22px rgba(0,0,0,0.2);
@@ -245,7 +200,8 @@ body.sidebar-open .main-content {
 } 
 
 .dashboard_side_btn:hover{
-    background-color: #f0eded;
+    background-color: #edeff0;
+    border: 1px solid black;
 }
 
 .form-section {
@@ -261,7 +217,17 @@ body.sidebar-open .main-content {
     }
 
 
-/* Users Management Kanban-View */
+/* Admin Dashboard/Users Management Kanban-View */
+.users-management-card-container{
+  padding-top: 100px;
+  height: 100%;
+}
+
+.users-management{
+  background-color: #24a0ed;
+}
+
+
 .p-t-10 {
     padding-top: 10px !important;
 }
@@ -292,7 +258,7 @@ body.sidebar-open .main-content {
     color: #7A7676;
 }
 
-/* Users Management Tree-View */
+/* Admin Dashboard/Users Management Tree-View */
 
 
 
@@ -319,7 +285,8 @@ body.sidebar-open .main-content {
 
 /* Public Dashboard */
 .btn-group-container{
-  background-color: #75c1ec;
+  /* background-color: #75c1ec; */
+  background: linear-gradient(to top right, #ffffff 0%, #0099ff 100%);
 }
 
 #avatar-icon{
@@ -397,3 +364,90 @@ body.sidebar-open .main-content {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* BOOTSTRAP CLASS CUSTOM */
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:focus:active,
+.btn-primary:focus-visible {
+    background-color: #388ec0;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform 0.3s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover{
+  transform: translateY(-3px);
+    background-color: #0e6394;
+} 
+
+.btn-dark,
+.btn-dark:focus,
+.btn-dark:active,
+.btn-dark:focus:active,
+.btn-dark:focus-visible {
+    background-color: #f0efef;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    color: #000;
+    transition: transform 0.3s ease, box-shadow 0.2s ease;
+}
+
+.btn-dark:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.btn-danger,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger:focus:active,
+.btn-danger:focus-visible {
+    background-color: #990909;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform 0.3s ease, box-shadow 0.2s ease;
+}
+
+.btn-danger:hover{
+    transform: translateY(-3px);
+    background-color: #cf0f0f;
+} 
+
+
+.btn-success,
+.btn-success:focus,
+.btn-success:active,
+.btn-success:focus:active,
+.btn-success:focus-visible {
+    background-color: #057001;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform 0.3s ease, box-shadow 0.2s ease;
+}
+
+.btn-success:hover{
+    transform: translateY(-3px);
+    background-color: #15a015;
+} 
