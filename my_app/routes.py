@@ -167,14 +167,12 @@ def admin_dashboard():
         return redirect(url_for("home_page"))
     return render_template("admin/admin_dashboard.html",show_navbar=False)
 
+
 @app.route('/admin-users-management/')
 @login_required
 def admin_dashboard_manage_users():
     users=Users.query.all()
     
-    
-    
-
     return render_template("admin/admin_users_management.html",show_navbar=False, users=users)
 
 
@@ -184,15 +182,7 @@ def admin_dashboard_manage_users():
 
 
 
-
-
-
-
-
-
-
-
-    
+# Internal ROUTES
 @app.route('/internal/')
 @login_required
 def internal_dashboard():
@@ -201,6 +191,11 @@ def internal_dashboard():
     return render_template('internal/internal_dashboard.html',show_navbar=False)
 
 
+
+
+
+
+# Public ROUTES
 @app.route('/public/', methods=["GET", "POST"])
 @login_required
 def public_dashboard():
