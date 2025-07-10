@@ -14,7 +14,7 @@ Dashboard Users-Management
 
 {% block section %}
 
-<section id="UsersManagement"> 
+<section id="UsersManagementKanban"> 
     <div class="container">
         <div class="row pt-3">
             <div class="col-12">
@@ -35,42 +35,50 @@ Dashboard Users-Management
                             <!-- Create button -->
                             <button type="button" class="btn btn-primary d-none d-md-block">Create New</button>
 
-                            <!-- Hamburger toggle (visible only on small screens) -->
-                            <div class="dropdown d-md-none ms-auto">
-                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fas fa-bars"></i>
-                                </button>
-
-                                <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 250px;">
-                                    <div class="d-flex flex-column gap-2">
-                                        <button type="button" class="btn btn-primary w-100">Create New</button>
-
-                                        <button type="button" class="btn btn-sm btn-dark w-100 d-flex align-items-center justify-content-center">
-                                            <img src="{{ url_for('static', filename='builtin/icons/filter.png') }}" width="15">
-                                            <span class="ms-2">Filter</span>
-                                        </button>
-
-                                        <button type="button" class="btn btn-sm btn-dark w-100 d-flex align-items-center justify-content-center">
-                                            <img src="{{ url_for('static', filename='builtin/icons/layer.png') }}" width="15">
-                                            <span class="ms-2">Group By</span>
-                                        </button>
-                                        
-                                        <button type="button" class="btn btn-sm btn-dark w-100 d-flex align-items-center justify-content-center">
-                                            <img src="{{ url_for('static', filename='builtin/icons/import.png') }}" width="15">
-                                            <span class="ms-2">Import</span>
-                                        </button>
-
-                                        <button type="button" class="btn btn-sm btn-dark w-100" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom">
-                                            <i class="bi bi-kanban"></i>
-                                        </button>
-
-                                        <button type="button" class="btn btn-sm btn-dark w-100">
-                                            <i class="ri-menu-line"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="navbar d-md-none ms-auto">
                             
+                                <button class="btn btn-light border border-secondary px-2 d-lg-flex"
+                                        type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ri-menu-line"></i>
+                                </button>
+                                
+                                <ul id="dropdown-menu" class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="dropdownMenuButton" style="min-width: 250px;">
+                                    <li id="dropdown-item">
+                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#">
+                                        Create New
+                                    </a>
+                                    </li>
+                                    <li>
+                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex align-items-center justify-content-center" href="#">
+                                        <img src="{{ url_for('static', filename='builtin/icons/filter.png') }}" width="15">
+                                        <span class="ms-2">Filter</span>
+                                    </a>
+                                    </li>
+                                    <li>
+                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex align-items-center justify-content-center" href="javascript:;">
+                                        <img src="{{ url_for('static', filename='builtin/icons/layer.png') }}" width="15">
+                                        <span class="ms-2">Group By</span>
+                                    </a>
+                                    </li>
+                                    <li>
+                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex align-items-center justify-content-center" href="#">
+                                        <img src="{{ url_for('static', filename='builtin/icons/import.png') }}" width="15">
+                                        <span class="ms-2">Import</span>
+                                    </a>
+                                    </li>
+                                    <li>
+                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#" data-bs-toggle="tooltip" title="Kanban View">
+                                        <i class="bi bi-kanban"></i>
+                                    </a>
+                                    </li>
+                                    <li>
+                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#">
+                                        <i class="ri-menu-line"></i>
+                                    </a>
+                                    </li>
+                                </ul>
+                            </div>
+
                             <!-- Action buttons for desktop -->
                             <div class="d-none d-md-flex justify-content-between w-50">
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
@@ -164,6 +172,10 @@ Dashboard Users-Management
     </div>
 </section>
 
+<section id="UsersManagementTree">
+
+
+</section>
 {% endblock%}
 
 
