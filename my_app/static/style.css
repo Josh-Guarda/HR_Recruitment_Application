@@ -1,11 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 
-
-
-
-
-
-
 * {
   padding: 0;
   margin: 0;
@@ -18,7 +12,6 @@ body{
     /* background: linear-gradient(to top left, #ffffff 0%, #ff9900 100%); */
     background: linear-gradient(to top left, #ffffff 0%, #006699 100%);
 }
-
 
 
 /* Main nav main.html*/
@@ -207,9 +200,23 @@ body.sidebar-open .main-content {
 
 
 /* Admin Dashboard/Users Management Kanban-View */
-
 .users-management{
   background-color: #24a0ed;
+}
+
+
+
+.dropdown-menu .dropdown-action-option {
+  transition: all 0.2s ease-in-out;
+  border: 1px solid #dee2e6;
+  margin-bottom: 6px;
+  border-radius: 0.375rem;
+}
+
+.dropdown-menu .dropdown-action-option:hover {
+  transform: translateY(-3px) !important;
+  background-color: #f38b8b !important;
+  color: #ee4e4e !important;
 }
 
 
@@ -269,19 +276,19 @@ body.sidebar-open .main-content {
 
 
 /* Public Dashboard */
+@media(max-width:992px){
+  .profile-sidebar-sticky {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  z-index: 101;
+}
+}
+
 .btn-group-container{
   /* background-color: #75c1ec; */
   background: linear-gradient(to top right, #ffffff 0%, #0099ff 100%);
 }
-
-.profile-sidebar-sticky {
-  position: sticky;
-  top: 0; /* adjust based on your fixed navbar height */
-  align-self: flex-start;
-  z-index: 101;
-  height: 100vh;
-}
-
 
 #avatar-icon{
   height: 38px;
@@ -309,7 +316,6 @@ body.sidebar-open .main-content {
 #avatar-upload {
   display: none;
 }
-
 
 
 .upload-label {
@@ -397,17 +403,19 @@ body.sidebar-open .main-content {
 .btn-dark:active,
 .btn-dark:focus:active,
 .btn-dark:focus-visible {
-    background-color: #f0efef;
-    border: none;
+    background-color: #ffffff;
+    border: 1px solid rgb(92, 86, 86);
     outline: none;
     box-shadow: none;
     color: #000;
-    transition: transform 0.3s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-dark:hover {
+  background-color: #353434;
   transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #fdfcfc;
 }
 
 
