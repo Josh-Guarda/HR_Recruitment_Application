@@ -14,7 +14,7 @@ Dashboard Users-Management
 
 {% block section %}
 
-<section id="UsersManagementKanban"> 
+<section id="UsersManagement"> 
     <div class="container">
         <div class="row pt-3">
             <div class="col-12">
@@ -96,10 +96,10 @@ Dashboard Users-Management
                                     </button>
                                 </div>
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                    <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="tooltip" title="Kanban View">
+                                    <button id="btn-UsersKanbanView" type="button" class="btn btn-sm btn-dark " data-bs-toggle="tooltip" title="Kanban View">
                                         <i class="bi bi-kanban"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-dark" data-bs-toggle="tooltip" title="List View">
+                                    <button id="btn-UsersTreeView" type="button" class="btn btn-sm btn-dark active" data-bs-toggle="tooltip" title="List View">
                                         <i class="ri-menu-line"></i>
                                     </button>
                                 </div>
@@ -109,73 +109,79 @@ Dashboard Users-Management
                 </div>
             </div>
         </div>
-        <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
-            {% for user in users %}
-            <div class="col">
-                <div class="card shadow h-100">
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap align-items-center justify-content-between">
-                            <!-- User Info -->
-                            <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
-                                <img src="{{
-                                url_for('static', filename='uploads/avatars/' + user.profile_picture)
-                                if user.profile_picture
-                                else url_for('static', filename='builtin/icons/person.png')
-                                }}"
-                                onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
-                                class="rounded-circle me-3 p-1"
-                                style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
-                                width="64" height="60">
 
-                                <div class="px-2">
-                                <h5 class="mb-1" >{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
-                                <p class="text-muted mb-0" >{{ user.email_address }}</p>
-                                <p class="text-muted mb-0">
-                                    <span class="badge border rounded-pill bg-light text-dark">{{ user.user_type|capitalize }}</span>
-                                </p>
+
+        <section id="UsersManagementKanbanView" class="container">
+            <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
+                {% for user in users %}
+                <div class="col">
+                    <div class="card shadow h-100">
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                <!-- User Info -->
+                                <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
+                                    <img src="{{
+                                    url_for('static', filename='uploads/avatars/' + user.profile_picture)
+                                    if user.profile_picture
+                                    else url_for('static', filename='builtin/icons/person.png')
+                                    }}"
+                                    onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
+                                    class="rounded-circle me-3 p-1"
+                                    style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
+                                    width="64" height="60">
+
+                                    <div class="px-2">
+                                    <h5 class="mb-1" >{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
+                                    <p class="text-muted mb-0" >{{ user.email_address }}</p>
+                                    <p class="text-muted mb-0">
+                                        <span class="badge border rounded-pill bg-light text-dark">{{ user.user_type|capitalize }}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        <!-- Action Buttons -->
+                            <div class="btn-group gap-1 mt-3 mt-md-0">
+                                <a href="#" class="btn btn-transparent-success custom-tooltip btn-sm " data-bs-toggle="tooltip" title="Edit">
+                                <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <a href="#" class="btn btn-transparent-danger custom-tooltip btn-sm " data-bs-toggle="tooltip" title="Delete">
+                                <i class="fas fa-times"></i>
+                                </a>
                             </div>
                         </div>
-
-                    <!-- Action Buttons -->
-                        <div class="btn-group gap-1 mt-3 mt-md-0">
-                            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="Edit">
-                            <i class="fas fa-pencil-alt"></i>
-                            </a>
-                            <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Delete">
-                            <i class="fas fa-times"></i>
-                            </a>
+                        <!-- Social Icons -->
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" title="Facebook"><i class="fab fa-facebook"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" title="Skype"><i class="fab fa-skype"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#" data-bs-toggle="tooltip" title="Message"><i class="fas fa-envelope"></i></a>
+                            </li>
+                        </ul>
                         </div>
                     </div>
-                    <!-- Social Icons -->
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item">
-                            <a href="#" data-bs-toggle="tooltip" title="Facebook"><i class="fab fa-facebook"></i></a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#" data-bs-toggle="tooltip" title="Twitter"><i class="fab fa-twitter"></i></a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#" data-bs-toggle="tooltip" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#" data-bs-toggle="tooltip" title="Skype"><i class="fab fa-skype"></i></a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#" data-bs-toggle="tooltip" title="Message"><i class="fas fa-envelope"></i></a>
-                        </li>
-                    </ul>
-                    </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
+        </section>
+
+        <section id="UsersManagementTreeView" class="container d-none">
+            <div class="p-5">
+                
+            </div>
+        </section>
     </div>
 </section>
 
-<section id="UsersManagementTree">
-
-
-</section>
 {% endblock%}
 
 

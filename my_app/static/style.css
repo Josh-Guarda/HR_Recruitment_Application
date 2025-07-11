@@ -6,12 +6,12 @@
   box-sizing: border-box;
 }
 
-body{
-    /* background-color: #edf0f0;     */
-    /* background: linear-gradient(to top, #ffffff 0%, #66ccff 100%) */
-    /* background: linear-gradient(to top left, #ffffff 0%, #ff9900 100%); */
+/* body{
+    background-color: #edf0f0;    
+    background: linear-gradient(to top, #ffffff 0%, #66ccff 100%)
+    background: linear-gradient(to top left, #ffffff 0%, #ff9900 100%);
     background: linear-gradient(to top left, #ffffff 0%, #006699 100%);
-}
+} */
 
 
 /* Main nav main.html*/
@@ -204,8 +204,6 @@ body.sidebar-open .main-content {
   background-color: #24a0ed;
 }
 
-
-
 .dropdown-menu .dropdown-action-option {
   transition: all 0.2s ease-in-out;
   border: 1px solid #dee2e6;
@@ -276,13 +274,14 @@ body.sidebar-open .main-content {
 
 
 /* Public Dashboard */
-@media(max-width:992px){
+@media(min-width:992px){
   .profile-sidebar-sticky {
   position: sticky;
   top: 0;
   align-self: flex-start;
   z-index: 101;
-}
+  height: 100vh;
+  }
 }
 
 .btn-group-container{
@@ -381,6 +380,7 @@ body.sidebar-open .main-content {
 
 
 /* BOOTSTRAP CLASS CUSTOM */
+
 .btn-primary,
 .btn-primary:focus,
 .btn-primary:active,
@@ -452,4 +452,69 @@ body.sidebar-open .main-content {
 .btn-success:hover{
     transform: translateY(-3px);
     background-color: #15a015;
+} 
+
+
+
+
+
+.btn-transparent-primary,
+.btn-transparent-primary:focus,
+.btn-transparent-primary:active,
+.btn-transparent-primary:focus:active,
+.btn-transparent-primary:focus-visible {
+    
+    color:#0099ff ;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+}
+
+.btn-transparent-primary:hover{
+  transform: translateY(-3px);
+    border: 1px solid #0099ff;
+} 
+
+
+
+.btn-transparent-success,
+.btn-transparent-success:focus,
+.btn-transparent-success:active,
+.btn-transparent-success:focus:active,
+.btn-transparent-success:focus-visible {
+    
+    color:#057001 ;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+}
+
+.btn-transparent-success:hover{
+  transform: translateY(-3px);
+  color:#12ca0c ;
+
+} 
+
+
+.btn-transparent-danger,
+.btn-transparent-danger:focus,
+.btn-transparent-danger:active,
+.btn-transparent-danger:focus:active,
+.btn-transparent-danger:focus-visible {
+    
+    color:#a00f0f ;
+    border: none;
+    outline: none; 
+    box-shadow: none;
+    /* transition: transform 0.3s ease, box-shadow 0.2s ease; */
+    transition: transform 0.3s ease;
+
+}
+
+.btn-transparent-danger:hover{
+  transform: translateY(-3px);
+  color:#ff0606 ;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
 } 

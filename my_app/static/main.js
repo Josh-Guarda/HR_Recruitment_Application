@@ -1,3 +1,7 @@
+
+
+
+// GLOBAL FUNCTIONALITY
 document.addEventListener("DOMContentLoaded", function () {
 
     // TOAST MESSAGE
@@ -12,9 +16,17 @@ document.addEventListener("DOMContentLoaded", function () {
     tooltipTriggerList.forEach(function (tooltipTriggerEl) {
       new bootstrap.Tooltip(tooltipTriggerEl);
     });
+
+    const tooltipTrigger = document.querySelectorAll('.custom-tooltip');
+    const tooltip = new bootstrap.Tooltip(tooltipTrigger, {
+    delay: { show: 100, hide: 2000 } // Show after 100ms, hide after 2000ms
+    });
 });
 
 
+
+
+// DASHBOARDS SCRIPTS/
 
 // ADMIN OFF-Canvass Sidebar Menu
 document.addEventListener('DOMContentLoaded', function () {
@@ -39,7 +51,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+// ADMIN DASHBOARD SCRIPTS 
+document.addEventListener("DOMContentLoaded", function () {
+    
+    // USERS MANAGEMENT
+    const btnUsersTreeView = document.getElementById("btn-UsersTreeView");
+    const btnUsersKanbanView = document.getElementById("btn-UsersKanbanView");
+    const sectionUsersTreeView= document.getElementById("UsersManagementTreeView");
+    const sectionKanbanView = document.getElementById("UsersManagementKanbanView");
+    
+    btnUsersTreeView.addEventListener("click", function () {
+        btnUsersTreeView.classList.add("active");
+        btnUsersKanbanView.classList.remove("active");
+        sectionUsersTreeView.classList.remove("d-none");
+        sectionKanbanView.classList.add("d-none");
+    });
 
+    btnUsersKanbanView.addEventListener("click", function () {
+        btnUsersKanbanView.classList.add("active");
+        btnUsersTreeView.classList.remove("active");
+        sectionKanbanView.classList.remove("d-none");
+        sectionUsersTreeView.classList.add("d-none");
+    });
+});
+
+
+
+// PUBLIC USER DASHBOARD SCRIPTS:
 // Toggle Controller for public dashboard profile settings and My Application button group
 document.addEventListener("DOMContentLoaded", function () {
     const btnPersonal = document.getElementById("btn-personal");
@@ -48,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sectionPersonalNav= document.getElementById("profile-nav");
 
     const sectionJob = document.getElementById("section-job");
-
+    
     btnPersonal.addEventListener("click", function () {
         btnPersonal.classList.add("active");
         btnJob.classList.remove("active");
@@ -68,13 +106,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    // SIDEBAR HIDE/SHOW OPTIONS
+    // SIDEBAR HIDE/SHOW OPTIONS PUBLIC DASHBOARD
     const btnDocuments =document.getElementById('Documents')
     const btnSecurityPassword =document.getElementById('SecurityPassword')
     const sectionDocuments = document.getElementById("section-documents");
     const sectionSecurityPassword= document.getElementById("section-change-password");
 
-    
+
     btnDocuments.addEventListener("click", function () {
         sectionPersonal.classList.add("d-none");
         sectionSecurityPassword.classList.add("d-none");
@@ -125,8 +163,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
                 data.data.forEach(brgy => {
                     brgySelect.innerHTML += `<option value="${brgy.code}">${brgy.name}</option>`;
-                });
             });
+        });
     });
+
+
+
+
+
+
 
 });
