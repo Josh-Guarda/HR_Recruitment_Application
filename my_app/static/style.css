@@ -403,16 +403,16 @@ body.sidebar-open .main-content {
 .btn-dark:active,
 .btn-dark:focus:active,
 .btn-dark:focus-visible {
-    background-color: #ffffff;
+    background-color: #424242;
     border: 1px solid rgb(92, 86, 86);
     outline: none;
     box-shadow: none;
-    color: #000;
+    color: #ffffff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-dark:hover {
-  background-color: #353434;
+  background-color: #2e2d2d;
   transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   color: #fdfcfc;
