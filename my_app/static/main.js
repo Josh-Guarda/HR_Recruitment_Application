@@ -73,6 +73,110 @@ document.addEventListener("DOMContentLoaded", function () {
         sectionKanbanView.classList.remove("d-none");
         sectionUsersTreeView.classList.add("d-none");
     });
+
+
+    $(document).ready(function(){
+    var dataTable = $('#users_data').DataTable({
+        dom: 'lrtip'  // removes the default search bar (the 'f' option)
+    });
+    $('#users_data').editable({
+        container:'body',
+        selector:'td.firstname',
+        url:'/admin-users-management/',
+        title:'Name',
+        type:'POST',
+        validate:function(value){
+            if($.trim(value) == '')
+            {
+                return 'This field is required';
+            }
+        }
+    });
+
+    $('#users_data').editable({
+        container:'body',
+        selector:'td.lastname',
+        url:'/admin-users-management/',
+        title:'Name',
+        type:'POST',
+        validate:function(value){
+            if($.trim(value) == '')
+            {
+                return 'This field is required';
+            }
+        }
+    });
+ 
+    $('#users_data').editable({
+        container:'body',
+        selector:'td.email_address',
+        url:'/admin-users-management/',
+        title:'Email',
+        type:'POST',
+        validate:function(value){
+            if($.trim(value) == '')
+            {
+                return 'This field is required';
+            }
+        }
+    });
+
+    $('#users_data').editable({
+        container:'body',
+        selector:'td.mobile_number',
+        url:'/admin-users-management/',
+        title:'Email',
+        type:'POST',
+        validate:function(value){
+            if($.trim(value) == '')
+            {
+                return 'This field is required';
+            }
+        }
+    });
+    
+    $('#users_data').editable({
+        container:'body',
+        selector:'td.phone_number',
+        url:'/admin-users-management/',
+        title:'Phone',
+        type:'POST',
+        validate:function(value){
+            if($.trim(value) == '')
+            {
+                return 'This field is required';
+            }
+        }
+    });
+
+    $('#users_data').editable({
+        container:'body',
+        selector:'td.department',
+        url:'/admin-users-management/',
+        title:'Phone',
+        type:'POST',
+        validate:function(value){
+            if($.trim(value) == '')
+            {
+                return 'This field is required';
+            }
+        }
+    });
+
+    $('#users_data').editable({
+        container:'body',
+        selector:'td.user_type',
+        url:'/admin-users-management/',
+        title:'Phone',
+        type:'POST',
+        validate:function(value){
+            if($.trim(value) == '')
+            {
+                return 'This field is required';
+            }
+        }
+    });
+}); 
 });
 
 

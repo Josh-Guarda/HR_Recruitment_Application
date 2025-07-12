@@ -33,7 +33,7 @@ Dashboard Users-Management
                         <!-- Actions section -->
                         <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
                             <!-- Create button -->
-                            <button type="button" class="btn btn-primary d-none d-md-block">Create New</button>
+                            <button type="button" class="btn btn-primary d-none d-md-block"><i class="ri-add-line fs-5"></i><span> </span>Add User</button>
 
                             <div class="navbar d-md-none ms-auto">
                             
@@ -169,14 +169,62 @@ Dashboard Users-Management
                         </ul>
                         </div>
                     </div>
-                </div>
+                </div>  
                 {% endfor %}
             </div>
         </section>
 
         <section id="UsersManagementTreeView" class="container d-none">
-            <div class="p-5">
-                
+            <div class="py-5">
+                <div class="container">
+                    <!--<h3 align="center">DataTable Inline Editing using Python Flask MySQLdb jquery ajax and X-Editable</h3>-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">DataTable</div>
+                        <br/>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table id="users_data" class="table  text-muted">
+                                    <thead>
+                                        <tr align="center">
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Mobile</th>
+                                            <th>Phone</th>
+                                            <th>Department</th>
+                                            <th>User type</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user in users %}
+                                        <tr align="center">
+                                            <td data-pk="{{user.id}}">{{user.id}}</td>
+                                            <td data-pk="{{user.id}}">{{user.firstname}} {{user.lastname}}</td>
+                                            <td data-pk="{{user.id}}">{{user.email_address}}</td>
+                                            <td data-pk="{{user.id}}">{{user.mobile_number}}</td>
+                                            <td data-pk="{{user.id}}">{{user.phone_number}}</td>
+                                            <td data-pk="{{user.id}}">{{user.department.name}}</td>
+                                            
+                                            <td>
+                                                <span class="badge rounded-pill"
+                                                        style="
+                                                        background-color: {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};
+                                                        color:{{ 'white' if user.department and user.department.color else '#4d4a4aff' }};
+                                                        ">
+                                                    {{ user.user_type|capitalize }}
+                                                </span>
+                                                </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
             </div>
         </section>
     </div>
