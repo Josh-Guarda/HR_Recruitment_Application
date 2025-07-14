@@ -21,7 +21,7 @@ Dashboard Users-Management
                 <div class="card users-management">
                     <div class="card-body p-2">
                         <div class="text-center">
-                            <h4 class="py-3 text-light">Users Management</h4>
+                            <h4 class="py-3 text-primary">Users Management</h4>
                             <div class="d-flex">
                                 <input type="text" class="form-control" placeholder="Search">
                                 <button class="btn btn-primary" type="button">
@@ -83,15 +83,15 @@ Dashboard Users-Management
                             <div class="d-none d-md-flex justify-content-between w-50">
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
                                     <button type="button" class="btn btn-sm btn-primary">
-                                        <img src="{{ url_for('static', filename='builtin/icons/filter.png') }}" width="15">
+                                        <i class="ri-filter-line fs-5"></i>
                                         <span class="ms-2">Filter</span>
                                     </button>
                                     <button type="button" class="btn btn-sm btn-primary">
-                                        <img src="{{ url_for('static', filename='builtin/icons/layer.png') }}" width="15">
+                                        <i class="ri-stack-line fs-5"></i>
                                         <span class="ms-2">Group By</span>
                                     </button>
                                     <button type="button" class="btn btn-sm btn-primary">
-                                        <img src="{{ url_for('static', filename='builtin/icons/import.png') }}" width="15">
+                                        <i class="ri-file-line fs-5"></i>
                                         <span class="ms-2">Import</span>
                                     </button>
                                 </div>
@@ -175,35 +175,33 @@ Dashboard Users-Management
         </section>
 
         <section id="UsersManagementTreeView" class="container d-none">
-            <div class="py-5">
-                <div class="container">
-                    <!--<h3 align="center">DataTable Inline Editing using Python Flask MySQLdb jquery ajax and X-Editable</h3>-->
+            <div class="pt-2 pb-5">
                     <div class="panel panel-default">
-                        <div class="panel-heading">DataTable</div>
                         <br/>
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table id="users_data" class="table  text-muted">
+                                <table id="users_data" class="table table-striped table-hover table-bordered align-middle text-center">
                                     <thead>
                                         <tr align="center">
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Mobile</th>
-                                            <th>Phone</th>
-                                            <th>Department</th>
-                                            <th>User type</th>
-                                            
+                                            <th class="py-3"><input type="checkbox" id="checkAll"></th> 
+                                            <th class="py-3">Name</th>
+                                            <th class="py-3">Email</th>
+                                            <th class="py-3">Mobile</th>
+                                            <th class="py-3">Phone</th>
+                                            <th class="py-3">Department</th>
+                                            <th class="py-3">User type</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         {% for user in users %}
-                                        <tr align="center">
-                                            <td data-pk="{{user.id}}">{{user.id}}</td>
+                                        {% include "includes/update_modal.html" %}
+                                        <tr align="center" data-bs-toggle="modal" data-bs-target="#Modal-UserInfo-{{user.id}}">
+                                            <td><input type="checkbox" class="row-check" value="{{ user.id }}"></td>
                                             <td data-pk="{{user.id}}">{{user.firstname}} {{user.lastname}}</td>
                                             <td data-pk="{{user.id}}">{{user.email_address}}</td>
                                             <td data-pk="{{user.id}}">{{user.mobile_number}}</td>
-                                            <td data-pk="{{user.id}}">{{user.phone_number}}</td>
+                                            <td data-pk="{{user.id}}">{{user.phone_number}}</td> 
                                             <td data-pk="{{user.id}}">{{user.department.name}}</td>
                                             
                                             <td>
@@ -214,7 +212,7 @@ Dashboard Users-Management
                                                         ">
                                                     {{ user.user_type|capitalize }}
                                                 </span>
-                                                </td>
+                                            </td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -225,7 +223,6 @@ Dashboard Users-Management
                 </div>
                 <br />
                 <br />
-            </div>
         </section>
     </div>
 </section>

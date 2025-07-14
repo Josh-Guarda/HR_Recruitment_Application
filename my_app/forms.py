@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField,HiddenField,SelectField
+from wtforms import StringField, PasswordField, SubmitField,HiddenField,SelectField,SearchField
 from flask_login import current_user
 from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError
 from my_app.models import Users,Usertype
 from flask_wtf.file import FileField,FileAllowed
 
 
-
+### Login and Authentication Forms ##
+# Main User Registration
 class RegisterForm(FlaskForm):
-    
     def validate_username(self, username_to_check):
         user = Users.query.filter_by(username=username_to_check.data).first()
         if user:
@@ -28,35 +28,56 @@ class RegisterForm(FlaskForm):
     
     submit=SubmitField(label='Create Account')
     
-    
-
+# main Login Form
 class LoginForm(FlaskForm):
     email_address = StringField(label='Email', validators= [DataRequired()]) 
     password= PasswordField(label='Password' , validators=[DataRequired()])
     submit=SubmitField(label='Sign in')
     
-
+# Forgot request form
 class ForgotPassword(FlaskForm):
     email_address=StringField(label='Email Address', validators=[Email(),DataRequired()])
     submit=SubmitField(label='Reset Password')
     
-        
+# Change Password trigger in Login Form
 class ChangePasswordBeforeLogin(FlaskForm):
     password= PasswordField(label=' New Password' , validators=[Length(min=3,max=30), DataRequired()])
     password2= PasswordField(label='Confirm Password',validators=[ DataRequired()])
     submit=SubmitField(label='Change Password')
     
     
-    
-class ChangePasswordFormInSecurity(FlaskForm):
-    current_password = PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
-    password= PasswordField(label='New Password' , validators=[Length(min=3,max=30), DataRequired()])
-    password2= PasswordField(label='Confirm Password',validators=[ DataRequired()])
-    submit=SubmitField(label='Update Password')
+
+
+
+
+
+
+
+### Dashboard / Admin,Internal Dashboard Landing Route ###
+
+# class UsersManagement(FlaskForm):
     
 
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Personal Information Form / Public Dashboard Landing Route ###
+
 class PersonalInfoForm(FlaskForm):
     def validate_mobile_number(self, number_to_check):
         if not number_to_check.data.isdigit():
@@ -73,8 +94,6 @@ class PersonalInfoForm(FlaskForm):
         number_to_save = Users.query.filter_by(phone_number=number_to_check.data).first()
         if number_to_save and number_to_save.id !=current_user.id:
             raise ValidationError('Phone number already exists.')
-        
-        
         
     avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])
     firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
@@ -95,3 +114,12 @@ class PersonalInfoForm(FlaskForm):
     cancel=SubmitField(label='Cancel')
     
     
+# Change Password trigger in Security Nav inside Employee Profile
+class ChangePasswordFormInSecurity(FlaskForm):
+    current_password = PasswordField(label='Password' , validators=[Length(min=3,max=30), DataRequired()])
+    password= PasswordField(label='New Password' , validators=[Length(min=3,max=30), DataRequired()])
+    password2= PasswordField(label='Confirm Password',validators=[ DataRequired()])
+    submit=SubmitField(label='Update Password')
+    
+
+

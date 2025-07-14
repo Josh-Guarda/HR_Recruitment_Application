@@ -74,11 +74,53 @@ document.addEventListener("DOMContentLoaded", function () {
         sectionUsersTreeView.classList.add("d-none");
     });
 
-
     $(document).ready(function(){
     var dataTable = $('#users_data').DataTable({
-        dom: 'lrtip'  // removes the default search bar (the 'f' option)
+        // dom: 'lrtip'  // removes the default search bar (the 'f' option)
+        
+        dom:
+            // Each letter stands for a feature:
+            // l – Length changing (entries per page)
+            // f – Filtering (search bar) 
+            // t – The actual table
+            // i – Table info text (e.g., “Showing 1 to 10 of 50 entries”)
+            // p – Pagination
+            // r – Processing display element (shows loading)
+
+            // So dom: 'lrtip' means:
+            // Length menu (l)
+            // No search bar
+            // Table (t)
+            // Info (i)
+            // Pagination (p)
+
+
+            // TABLE SPACING DESIGN
+            // top row
+            '<"row mb-3 "<"col-md-12 text-end"l>>' +
+            // table
+            'rt' +
+            // bottom row
+            '<"row mt-2 py-5"<"col-md-6"i><"col-md-6 text-end"p>>',
+
+        pagingType: 'simple_numbers',
+        language: { emptyTable: 'No users found – please add one.' ,lengthMenu: 'Show _MENU_ entries'},
+        columnDefs: [
+            { orderable: false, targets: 0 },
+            { targets: '_all', className: 'text-center' }
+        ],
+        select: {
+            style: 'multi',
+            selector: 'td:first-child'   // clicking this cell selects the row
+        },
+        
     });
+
+    // clicking this cell selects all the inside the Tree
+    $('#checkAll').on('click', function () {
+    $('.row-check').prop('checked', this.checked);
+    });
+
     $('#users_data').editable({
         container:'body',
         selector:'td.firstname',
@@ -148,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     });
-
+    
     $('#users_data').editable({
         container:'body',
         selector:'td.department',
