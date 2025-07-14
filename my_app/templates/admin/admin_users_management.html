@@ -33,8 +33,8 @@ Dashboard Users-Management
                         <!-- Actions section -->
                         <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
                             <!-- Create button -->
-                            <button type="button" class="btn btn-primary d-none d-md-block"><i class="ri-add-line fs-5"></i><span> </span>Add User</button>
-
+                            <button type="button" class="btn btn-primary d-none d-md-block" data-bs-toggle="modal" data-bs-target="#CreateUser"><i class="ri-add-line fs-5"></i><span> </span>Add User</button>
+                            {% include "admin/create_modal.html" %}
                             <div class="navbar d-md-none ms-auto">
                             
                                 <button class="btn btn-light border border-secondary px-2 d-lg-flex"
@@ -45,7 +45,7 @@ Dashboard Users-Management
                                 <ul id="dropdown-menu" class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="dropdownMenuButton" style="min-width: 250px;">
                                     <li id="dropdown-item">
                                     <a class="dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#">
-                                        Create New
+                                        Add User
                                     </a>
                                     </li>
                                     <li>
@@ -195,7 +195,7 @@ Dashboard Users-Management
                                     <tbody>
 
                                         {% for user in users %}
-                                        {% include "includes/update_modal.html" %}
+                                        {% include "admin/update_modal.html" %}
                                         <tr align="center" data-bs-toggle="modal" data-bs-target="#Modal-UserInfo-{{user.id}}">
                                             <td><input type="checkbox" class="row-check" value="{{ user.id }}"></td>
                                             <td data-pk="{{user.id}}">{{user.firstname}} {{user.lastname}}</td>

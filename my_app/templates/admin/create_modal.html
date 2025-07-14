@@ -1,0 +1,42 @@
+
+<!-- Beep Sound in Modals -->
+<audio id="modal-beep" src="{{ url_for('static',filename='builtin/sound/beep-sound-software.wav') }}"></audio>
+
+
+
+<div class="modal fade" id="CreateUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae culpa animi, tempora dignissimos pariatur rem! Beatae similique maiores molestiae ab facilis, dolores reiciendis iure error architecto quia, rerum labore perferendis ipsum placeat possimus optio. Impedit quis ad, quod sed repellat, itaque, nemo mollitia laboriosam amet odit earum obcaecati neque recusandae.</p>
+        
+        
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('click', function (event) {
+    const modal = document.getElementById('CreateUser');
+    const modalContent = modal.querySelector('.modal-content');
+    const isModalVisible = modal.classList.contains('show');
+
+    if (isModalVisible && !modalContent.contains(event.target)) {
+      const beep = document.getElementById('modal-beep');
+      beep.currentTime = 0;
+      beep.play();
+    }
+  });
+</script>
