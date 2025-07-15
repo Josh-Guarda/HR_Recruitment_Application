@@ -172,8 +172,78 @@ def admin_dashboard():
 @login_required
 def admin_dashboard_manage_users():
     users=Users.query.all()
+    user_info_form = PersonalInfoForm()
+
+   
+    # Province always preloaded
+    user_info_form.prov_id.choices = [('', '-- Select Province --')] + sorted(
+        [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
+        key=lambda x: x[1].lower()
+    )
+
+    # Only set muni/brgy choices if form has values or user has saved data
+    selected_prov = user_info_form.prov_id.data 
+    selected_muni = user_info_form.munci_id.data
     
-    return render_template("admin/admin_users_management.html",show_navbar=False, users=users)
+    if selected_prov:
+        user_info_form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
+            [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
+            key=lambda x: x[1].lower()
+        )
+    else:
+        user_info_form.munci_id.choices = [('', '-- Select Municipality --')]
+
+    if selected_muni:
+        user_info_form.brgy_id.choices = [('', '-- Select Barangay --')] + sorted(
+            [(b['brgyCode'], b['brgyDesc']) for b in BARANGAY_DATA if b['citymunCode'] == selected_muni],
+            key=lambda x: x[1].lower()
+        )
+    else:
+        user_info_form.brgy_id.choices = [('', '-- Select Barangay --')]
+        
+        
+    
+    # Personal Information UPDATE HANDLER
+    if user_info_form.update.data and user_info_form.validate_on_submit():
+        if user_info_form.cancel.data:
+            flash('Update Canceled.', category='danger')
+            return redirect(url_for('public_dashboard'))
+    
+        
+        current_user.firstname = user_info_form.firstname.data
+        current_user.lastname = user_info_form.lastname.data
+        current_user.email_address = user_info_form.email_address.data
+        current_user.mobile_number = user_info_form.mobile_number.data
+        current_user.phone_number = user_info_form.phone_number.data
+        current_user.address_1 = user_info_form.address_1.data
+        current_user.address_2 = user_info_form.address_2.data
+        current_user.prov_id = user_info_form.prov_id.data
+        current_user.munci_id = user_info_form.munci_id.data
+        current_user.brgy_id = user_info_form.brgy_id.data
+        current_user.zipcode = user_info_form.zipcode.data
+
+        # Avatar logic
+        if user_info_form.avatar.data:
+            avatar_file = user_info_form.avatar.data
+            filename = secure_filename(avatar_file.filename)
+            avatar_name = str(uuid.uuid4()) + "_" + filename
+            upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
+            try:
+                avatar_file.save(upload_path)
+                current_user.profile_picture = avatar_name
+            except FileNotFoundError:
+                flash('Avatar upload directory not found!', category='danger')
+
+        db.session.commit()
+        flash('Your profile has been updated!', category='success')
+        
+
+    if user_info_form.errors:
+        for err_msg in user_info_form.errors.values():
+            flash(f'Error: {err_msg}', category='danger')
+        
+    
+    return render_template("admin/admin_users_management.html",show_navbar=False, users=users,user_info_form=user_info_form )
 
 
 

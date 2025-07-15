@@ -36,7 +36,7 @@ Dashboard Users-Management
                             <button type="button" class="btn btn-primary d-none d-md-block" data-bs-toggle="modal" data-bs-target="#CreateUser"><i class="ri-add-line fs-5"></i><span> </span>Add User</button>
                             {% include "admin/create_modal.html" %}
                             <div class="navbar d-md-none ms-auto">
-                            
+                                
                                 <button class="btn btn-light border border-secondary px-2 d-lg-flex"
                                         type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ri-menu-line"></i>
@@ -102,6 +102,7 @@ Dashboard Users-Management
                                     <button id="btn-UsersTreeView" type="button" class="btn btn-sm btn-primary active" data-bs-toggle="tooltip" title="List View">
                                         <i class="ri-menu-line"></i>
                                     </button>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -114,6 +115,8 @@ Dashboard Users-Management
         <section id="UsersManagementKanbanView" class="container">
             <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
                 {% for user in users %}
+                {% include "admin/update_modal_kanban.html" %}
+                {% include "admin/delete_modal.html" %}
                 <div class="col">
                     <div class="card shadow h-100">
                         <div class="card-body">
@@ -141,11 +144,11 @@ Dashboard Users-Management
 
                         <!-- Action Buttons -->
                             <div class="btn-group gap-1 mt-3 mt-md-0">
-                                <a href="#" class="btn btn-transparent-success custom-tooltip btn-sm " data-bs-toggle="tooltip" title="Edit">
-                                <i class="fas fa-pencil-alt"></i>
+                                <a href="#" class="btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
+                                <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
                                 </a>
-                                <a href="#" class="btn btn-transparent-danger custom-tooltip btn-sm " data-bs-toggle="tooltip" title="Delete">
-                                <i class="fas fa-times"></i>
+                                <a href="#" class="btn btn-transparent-danger custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Delete-UserInfo-{{user.id}}" >
+                                <i class="fas fa-times" data-bs-toggle="tooltip" title="Delete"></i>
                                 </a>
                             </div>
                         </div>
@@ -195,8 +198,9 @@ Dashboard Users-Management
                                     <tbody>
 
                                         {% for user in users %}
-                                        {% include "admin/update_modal.html" %}
-                                        <tr align="center" data-bs-toggle="modal" data-bs-target="#Modal-UserInfo-{{user.id}}">
+                                        {% include "admin/update_modal_tree.html" %}
+                                        {% include "admin/delete_modal.html" %}
+                                        <tr align="center" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Tree-{{user.id}}">
                                             <td><input type="checkbox" class="row-check" value="{{ user.id }}"></td>
                                             <td data-pk="{{user.id}}">{{user.firstname}} {{user.lastname}}</td>
                                             <td data-pk="{{user.id}}">{{user.email_address}}</td>
