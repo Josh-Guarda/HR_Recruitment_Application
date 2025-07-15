@@ -77,7 +77,6 @@ class ChangePasswordBeforeLogin(FlaskForm):
 
 
 ### Personal Information Form / Public Dashboard Landing Route ###
-
 class PersonalInfoForm(FlaskForm):
     def validate_mobile_number(self, number_to_check):
         if not number_to_check.data.isdigit():
