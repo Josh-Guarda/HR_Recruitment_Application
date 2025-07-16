@@ -93,7 +93,11 @@ class PersonalInfoForm(FlaskForm):
         number_to_save = Users.query.filter_by(phone_number=number_to_check.data).first()
         if number_to_save and number_to_save.id !=current_user.id:
             raise ValidationError('Phone number already exists.')
-        
+    
+    # user_id = HiddenField(label='UserId')
+    user_id = StringField(label='ID')
+    
+    
     avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])
     firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
     lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])

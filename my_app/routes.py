@@ -1,6 +1,7 @@
 from my_app import app,db
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from my_app import  MUNICIPALITY_DATA, PROVINCE_DATA,mail,Message,generate_reset_token,verify_reset_token
+from my_app.helper import set_form_choices
 from flask import render_template, redirect, url_for, flash,request,session
 from my_app.models import Jobs,Users
 from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ChangePasswordFormInSecurity,ForgotPassword,ChangePasswordBeforeLogin
@@ -168,82 +169,84 @@ def admin_dashboard():
     return render_template("admin/admin_dashboard.html",show_navbar=False)
 
 
-@app.route('/admin-users-management/')
+# @app.route('/admin-users-management/',methods=["GET","POST"])
+# @login_required
+# def admin_dashboard_manage_users():
+#     user_info_form = PersonalInfoForm()
+#     users = Users.query.all()
+    
+#     if request.method == 'POST':
+#         user_id = request.form.get('user_id')
+#         print(f"[POST] Updating user: {user_id}")
+    
+#     return render_template("admin/admin_users_management.html", show_navbar=False, users=users, user_info_form=user_info_form)
+
+
+
+
+@app.route('/admin-users-management/', methods=["GET", "POST"])
 @login_required
 def admin_dashboard_manage_users():
-    users=Users.query.all()
     user_info_form = PersonalInfoForm()
-
-   
-    # Province always preloaded
-    user_info_form.prov_id.choices = [('', '-- Select Province --')] + sorted(
-        [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
-        key=lambda x: x[1].lower()
-    )
-
-    # Only set muni/brgy choices if form has values or user has saved data
-    selected_prov = user_info_form.prov_id.data 
-    selected_muni = user_info_form.munci_id.data
+    users = Users.query.all()
+    forms_per_user = {}
     
-    if selected_prov:
-        user_info_form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
-            [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
-            key=lambda x: x[1].lower()
-        )
-    else:
-        user_info_form.munci_id.choices = [('', '-- Select Municipality --')]
+    # Check if it's a POST
+    if request.method == 'POST':
+        # Which user ID was submitted? Use a hidden field or explicit name
+        submitted_user_id = request.form.get("user_id")
+        if submitted_user_id:
+            user = Users.query.get(int(submitted_user_id))
+            form = PersonalInfoForm(request.form)
+            form.user_id.data = submitted_user_id
 
-    if selected_muni:
-        user_info_form.brgy_id.choices = [('', '-- Select Barangay --')] + sorted(
-            [(b['brgyCode'], b['brgyDesc']) for b in BARANGAY_DATA if b['citymunCode'] == selected_muni],
-            key=lambda x: x[1].lower()
-        )
-    else:
-        user_info_form.brgy_id.choices = [('', '-- Select Barangay --')]
-        
-        
-    
-    # Personal Information UPDATE HANDLER
-    if user_info_form.update.data and user_info_form.validate_on_submit():
-        if user_info_form.cancel.data:
-            flash('Update Canceled.', category='danger')
-            return redirect(url_for('public_dashboard'))
-    
-        
-        current_user.firstname = user_info_form.firstname.data
-        current_user.lastname = user_info_form.lastname.data
-        current_user.email_address = user_info_form.email_address.data
-        current_user.mobile_number = user_info_form.mobile_number.data
-        current_user.phone_number = user_info_form.phone_number.data
-        current_user.address_1 = user_info_form.address_1.data
-        current_user.address_2 = user_info_form.address_2.data
-        current_user.prov_id = user_info_form.prov_id.data
-        current_user.munci_id = user_info_form.munci_id.data
-        current_user.brgy_id = user_info_form.brgy_id.data
-        current_user.zipcode = user_info_form.zipcode.data
+            # Set choices based on POST data
+            set_form_choices(form)  # see helper below
 
-        # Avatar logic
-        if user_info_form.avatar.data:
-            avatar_file = user_info_form.avatar.data
-            filename = secure_filename(avatar_file.filename)
-            avatar_name = str(uuid.uuid4()) + "_" + filename
-            upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
-            try:
-                avatar_file.save(upload_path)
-                current_user.profile_picture = avatar_name
-            except FileNotFoundError:
-                flash('Avatar upload directory not found!', category='danger')
+            print(f"user extracted:{user}")
 
-        db.session.commit()
-        flash('Your profile has been updated!', category='success')
+
+
+
+    #         if form.update.data and form.validate():
+    #             # Update the selected user
+    #             user.firstname = form.firstname.data
+    #             user.lastname = form.lastname.data
+    #             user.address_1 = form.address_1.data
+    #             user.prov_id = form.prov_id.data
+    #             user.munci_id = form.munci_id.data
+    #             user.brgy_id = form.brgy_id.data
+    #             user.zipcode = form.zipcode.data
+    #             # more fields...
+
+    #             db.session.commit()
+    #             flash('User updated successfully.', 'success')
+    #             return redirect(url_for('admin_dashboard_manage_users'))
+
+    #         forms_per_user[user.id] = form
+
+    # # GET request or fallback after POST
+    # for user in users:
+    #     form = PersonalInfoForm()
+    #     form.process(obj=user)
+    #     form.user_id.data = user.id
+    #     set_form_choices(form, user)  # Pre-fill choices based on user's data
+    #     forms_per_user[user.id] = form
+        
         
 
-    if user_info_form.errors:
-        for err_msg in user_info_form.errors.values():
-            flash(f'Error: {err_msg}', category='danger')
-        
-    
-    return render_template("admin/admin_users_management.html",show_navbar=False, users=users,user_info_form=user_info_form )
+    return render_template("admin/admin_users_management.html", users=users, forms_per_user=forms_per_user, user_info_form=user_info_form)
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -8,12 +8,13 @@
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">{{user.firstname|capitalize}}`s Information</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">{{user.firstname|capitalize}}`s Profile</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form method="POST" enctype="multipart/form-data">
-            {{user_info_form.hidden_tag() }}
+            {{user_info_form.hidden_tag()}}
+            <input type="hidden" name="user_id" value="{{ user.id }}">
             <div class="container d-none d-sm-block">
                 <div class="avatar pb-5 ">
                     <div id="avatar-container">
@@ -102,10 +103,10 @@
                 </div>
             </div>
 
-            <!--<div class="d-flex flex-column-sm align-items-center justify-content-center gap-2 mb-3 w-100">
+            <div class="d-flex flex-column-sm align-items-center justify-content-center gap-2 mb-3 w-100">
                 {{user_info_form.update(class="btn btn-sm btn-outline-success text-success px-5")}}
                 {{user_info_form.cancel (class="btn btn-sm btn-outline-danger text-danger px-5")}}
-            </div>-->
+            </div>
         </form>
         
       </div>
