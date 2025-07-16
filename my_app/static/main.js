@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
     offcanvasEl.addEventListener('show.bs.offcanvas', function () {
         document.body.classList.add('sidebar-open');
     });
-
+    
     offcanvasEl.addEventListener('hidden.bs.offcanvas', function () {
         document.body.classList.remove('sidebar-open');
     });
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnJob = document.getElementById("btn-application");
     const sectionPersonal = document.getElementById("section-personal");
     const sectionPersonalNav= document.getElementById("profile-nav");
-
+    const sectionChangePass = document.getElementById("section-change-password");
     const sectionJob = document.getElementById("section-job");
     
     btnPersonal.addEventListener("click", function () {
@@ -241,6 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sectionPersonal.classList.remove("d-none");
         sectionPersonalNav.classList.remove("d-none");
         sectionJob.classList.add("d-none");
+        sectionChangePass.classList.add("d-none");
     });
 
     btnJob.addEventListener("click", function () {
@@ -314,11 +315,4 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     });
-
-
-
-
-
-
-
 });
