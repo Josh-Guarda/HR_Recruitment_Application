@@ -1,9 +1,6 @@
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
     
     
-    
-    
-    
 def set_form_choices(form, user=None):
     form.prov_id.choices = [('', '-- Select Province --')] + sorted(
         [(p['provCode'], p['provDesc']) for p in PROVINCE_DATA],
@@ -12,7 +9,7 @@ def set_form_choices(form, user=None):
 
     selected_prov = form.prov_id.data or (user.prov_id if user else None)
     selected_muni = form.munci_id.data or (user.munci_id if user else None)
-
+    
     if selected_prov:
         form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
             [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],

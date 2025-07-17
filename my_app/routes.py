@@ -187,68 +187,49 @@ def admin_dashboard():
 @app.route('/admin-users-management/', methods=["GET", "POST"])
 @login_required
 def admin_dashboard_manage_users():
-    user_info_form = PersonalInfoForm()
     users = Users.query.all()
-    forms_per_user = {}
+    user_info_form = PersonalInfoForm()
+
+    
+    
+     # Province always preloaded
+    user_info_form.prov_id.choices = [('', '-- Select Province --')] + sorted(
+        [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
+        key=lambda x: x[1].lower()
+    )
+
+    # Only set muni/brgy choices if form has values or user has saved data
+    selected_prov = user_info_form.prov_id.data 
+    selected_muni = user_info_form.munci_id.data
+    
+    if not selected_prov:
+        user_info_form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
+            [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
+            key=lambda x: x[1].lower()
+        )
+    else:
+        user_info_form.munci_id.choices = [('', '-- Select Municipality --')]
+
+    if selected_muni:
+        user_info_form.brgy_id.choices = [('', '-- Select Barangay --')] + sorted(
+            [(b['brgyCode'], b['brgyDesc']) for b in BARANGAY_DATA if b['citymunCode'] == selected_muni],
+            key=lambda x: x[1].lower()
+        )
+    else:
+        user_info_form.brgy_id.choices = [('', '-- Select Barangay --')]
+    
+    
+    
     
     # Check if it's a POST
     if request.method == 'POST':
-        # Which user ID was submitted? Use a hidden field or explicit name
-        submitted_user_id = request.form.get("user_id")
-        if submitted_user_id:
-            user = Users.query.get(int(submitted_user_id))
-            form = PersonalInfoForm(request.form)
-            form.user_id.data = submitted_user_id
+        extracted_user_id = request.form.get("user_id")
+        uid = Users.query.filter_by(id=extracted_user_id).first()
+        print(f"I get:{uid}")
+    
 
-            # Set choices based on POST data
-            set_form_choices(form)  # see helper below
-
-            print(f"user extracted:{user}")
-
-
-
-
-    #         if form.update.data and form.validate():
-    #             # Update the selected user
-    #             user.firstname = form.firstname.data
-    #             user.lastname = form.lastname.data
-    #             user.address_1 = form.address_1.data
-    #             user.prov_id = form.prov_id.data
-    #             user.munci_id = form.munci_id.data
-    #             user.brgy_id = form.brgy_id.data
-    #             user.zipcode = form.zipcode.data
-    #             # more fields...
-
-    #             db.session.commit()
-    #             flash('User updated successfully.', 'success')
-    #             return redirect(url_for('admin_dashboard_manage_users'))
-
-    #         forms_per_user[user.id] = form
-
-    # # GET request or fallback after POST
-    # for user in users:
-    #     form = PersonalInfoForm()
-    #     form.process(obj=user)
-    #     form.user_id.data = user.id
-    #     set_form_choices(form, user)  # Pre-fill choices based on user's data
-    #     forms_per_user[user.id] = form
         
-        
-
-    return render_template("admin/admin_users_management.html", users=users, forms_per_user=forms_per_user, user_info_form=user_info_form)
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return render_template("admin/admin_users_management.html", users=users, user_info_form=user_info_form)
 
 
 

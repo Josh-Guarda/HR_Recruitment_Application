@@ -144,12 +144,28 @@ Dashboard Users-Management
 
                         <!-- Action Buttons -->
                             <div class="btn-group gap-1 mt-3 mt-md-0">
-                                <a href="{{ url_for('admin_dashboard_manage_users',user_id=user.id)}}" class="btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
+                                <a href="{{ url_for('admin_dashboard_manage_users',user_id=user.id)}}" class="btn-edit-user btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
                                 <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
                                 </a>
                                 <a href="#" class="btn btn-transparent-danger custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Delete-UserInfo-{{user.id}}" >
                                 <i class="fas fa-times" data-bs-toggle="tooltip" title="Delete"></i>
                                 </a>
+
+                                <!--<a href="{{ url_for('admin_dashboard_manage_users',user_id=user.id)}}" class="btn-edit-user btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-user-id="{{ user.id }}" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
+                                <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
+                                </a>
+                                <a href="#" class="btn btn-transparent-danger custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Delete-UserInfo-{{user.id}}" >
+                                <i class="fas fa-times" data-bs-toggle="tooltip" title="Delete"></i>
+                                </a>-->
+
+                                <!--<button type="button" class="btn btn-edit-user btn-transparent-success custom-tooltip btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-user-id="{{ user.id }}"
+                                        data-bs-target="#Update-UserInfo-Kanban-{{ user.id }}">
+                                    <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
+                                </button>-->
+
+
                             </div>
                         </div>
                         <!-- Social Icons -->
