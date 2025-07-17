@@ -94,10 +94,7 @@ class PersonalInfoForm(FlaskForm):
         if number_to_save and number_to_save.id !=current_user.id:
             raise ValidationError('Phone number already exists.')
     
-    # user_id = HiddenField(label='UserId')
-    user_id = StringField(label='ID')
-    
-    
+    user_id = HiddenField(label='UserId')
     avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])
     firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
     lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])
@@ -113,7 +110,7 @@ class PersonalInfoForm(FlaskForm):
     mobile_number = StringField(label='Mobile Number', validators=[Length(min=11,max=11), DataRequired()])
     phone_number=StringField(label='Landline Number', validators=[Length(min=8,max=8)],default=('00000000'))
     
-    update=SubmitField(label='Save',name='update_profile')
+    update=SubmitField(label='Save')
     cancel=SubmitField(label='Cancel')
     
     

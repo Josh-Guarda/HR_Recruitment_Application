@@ -1,7 +1,7 @@
 
 
 
-// GLOBAL FUNCTIONALITY
+//**** GLOBAL FUNCTIONALITY ****//
 document.addEventListener("DOMContentLoaded", function () {
 
     // TOAST MESSAGE
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-// DASHBOARDS SCRIPTS/
+// ****DASHBOARDS SCRIPTS ****//
 
 // ADMIN OFF-Canvass Sidebar Menu
 document.addEventListener('DOMContentLoaded', function () {
@@ -47,16 +47,18 @@ document.addEventListener('DOMContentLoaded', function () {
     offcanvasEl.addEventListener('hidden.bs.offcanvas', function () {
         document.body.classList.remove('sidebar-open');
     });
-
-
 });
 
 
 
-// ADMIN DASHBOARD SCRIPTS 
+
+
+//**** ADMIN DASHBOARD SCRIPTS ****//
 document.addEventListener("DOMContentLoaded", function () {
     
-    // USERS MANAGEMENT
+    //*****/ USERS MANAGEMENT ****//
+
+    // SWITCH VIEW OF KANBAN AND TREEVIEW SCRIPT
     const btnUsersTreeView = document.getElementById("btn-UsersTreeView");
     const btnUsersKanbanView = document.getElementById("btn-UsersKanbanView");
     const sectionUsersTreeView= document.getElementById("UsersManagementTreeView");
@@ -75,6 +77,22 @@ document.addEventListener("DOMContentLoaded", function () {
         sectionKanbanView.classList.remove("d-none");
         sectionUsersTreeView.classList.add("d-none");
     });
+
+
+
+    // ADMIN KANBAN SCRIPTS
+    document.querySelectorAll('.btn-edit-user').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const userId = btn.getAttribute('data-user-id');
+            console.log("User ID:", userId);
+            // You can even trigger an AJAX call here to fetch user data
+        });
+    });
+
+
+
+
+    // ADMIN TREEVIEW SCRIPTS
 
     $(document).ready(function(){
     var dataTable = $('#users_data').DataTable({
@@ -225,9 +243,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-// PUBLIC USER DASHBOARD SCRIPTS:
-// Toggle Controller for public dashboard profile settings and My Application button group
+
+
+
+
+
+
+
+
+
+
+//**** PUBLIC USER DASHBOARD SCRIPTS: ****//
+
 document.addEventListener("DOMContentLoaded", function () {
+    //Toggle Controller for public dashboard profile settings and My Application button group
     const btnPersonal = document.getElementById("btn-personal");
     const btnJob = document.getElementById("btn-application");
     const sectionPersonal = document.getElementById("section-personal");
