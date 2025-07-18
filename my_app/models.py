@@ -42,10 +42,10 @@ class Users(db.Model,UserMixin):
     id = db.Column(db.Integer(),primary_key=True)
     firstname=db.Column(db.String(length=30),nullable=False)
     lastname=db.Column(db.String(length=30),nullable=False)
-    email_address=db.Column(db.String(length=50),nullable=False,unique=True)
+    email_address=db.Column(db.String(length=51),nullable=False)
     password_hash=db.Column(db.String(length=30),nullable=False)
     
-    address_1 = db.Column(db.String(length=100),nullable=True)
+    address_1 = db.Column(db.String(length=120),nullable=True)
     address_2 = db.Column(db.String(length=100),nullable=True)
     zipcode = db.Column(db.Integer(),nullable=True)
     

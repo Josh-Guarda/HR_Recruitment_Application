@@ -1,7 +1,7 @@
 from my_app import app,db
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from my_app import  MUNICIPALITY_DATA, PROVINCE_DATA,mail,Message,generate_reset_token,verify_reset_token
-# from my_app.helper import set_form_choices
+from my_app.helper import set_form_choices
 from flask import render_template, redirect, url_for, flash,request,session
 from my_app.models import Jobs,Users
 from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ChangePasswordFormInSecurity,ForgotPassword,ChangePasswordBeforeLogin
@@ -175,47 +175,60 @@ def admin_dashboard():
 @login_required
 def admin_dashboard_manage_users():
     users = Users.query.all()
-    
     user_forms = []
-    
     for user in users:
         form = PersonalInfoForm(obj=user)
+        
+        set_form_choices(form,user)
+        
+        
+        
+        #UPDATE HANDLER
+        if form.update.data and form.validate_on_submit():
+            if form.cancel.data:
+                flash(f'{user.firstname}`s profile has Canceled.', category='danger')
+                return redirect(url_for('admin_dashboard_manage_users'))
+            
+            user.firstname = form.firstname.data
+            user.lastname = form.lastname.data
+            user.email_address = form.email_address.data
+            user.mobile_number = form.mobile_number.data
+            user.phone_number = form.phone_number.data
+            user.address_1 = form.address_1.data
+            user.address_2 = form.address_2.data
+            user.prov_id = form.prov_id.data
+            user.munci_id = form.munci_id.data
+            user.brgy_id = form.brgy_id.data
+            user.zipcode = form.zipcode.data
 
-        # Set province choices
-        form.prov_id.choices = [('', '-- Select Province --')] + sorted(
-            [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
-            key=lambda x: x[1].lower()
-        )
+            # Avatar logic
+            if form.avatar.data:
+                print('merong avatar')
+                avatar_file = form.avatar.data
+                filename = secure_filename(avatar_file.filename)
+                avatar_name = str(uuid.uuid4()) + "_" + filename
+                upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
+                try:
+                    avatar_file.save(upload_path)
+                    current_user.profile_picture = avatar_name
+                except FileNotFoundError:
+                    flash('Avatar upload directory not found!', category='danger')
 
-        # Set municipality choices if province selected
-        selected_prov = form.prov_id.data or user.prov_id
-        if selected_prov:
-            form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
-                [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
-                key=lambda x: x[1].lower()
-            )
-        else:
-            form.munci_id.choices = [('', '-- Select Municipality --')]
 
-        # Set barangay choices if municipality selected
-        selected_muni = form.munci_id.data or user.munci_id
-        if selected_muni:
-            form.brgy_id.choices = [('', '-- Select Barangay --')] + sorted(
-                [(b['brgyCode'], b['brgyDesc']) for b in BARANGAY_DATA if b['citymunCode'] == selected_muni],
-                key=lambda x: x[1].lower()
-            )
-        else:
-            form.brgy_id.choices = [('', '-- Select Barangay --')]
+            db.session.commit()
+            
+            
+            flash(f"{user.firstname}'s profile has been updated!", category='success')
+            return redirect(url_for('admin_dashboard_manage_users'))
 
-        # Store both user and form together
+        if form.errors:
+            for err_msg in form.errors.values():
+                flash(f'Error: {err_msg}', category='danger')
+        
+        
         user_forms.append((user, form))
-
-
-    
-    return render_template(
-        'admin/admin_users_management.html',
-        user_forms=user_forms
-    )
+        
+    return render_template('admin/admin_users_management.html',user_forms=user_forms)
 
 
 
@@ -235,46 +248,24 @@ def internal_dashboard():
 
 
 # Public ROUTES
-@app.route('/public/', methods=["GET", "POST"])
+@app.route('/public/<int:user_id>', methods=["GET", "POST"])
 @login_required
-def public_dashboard():
-    form = PersonalInfoForm(obj=current_user)
+def public_dashboard(user_id):
+    user = Users.query.get(user_id)
+    
+    form = PersonalInfoForm(obj=user)
     change_pw_form= ChangePasswordFormInSecurity()
     
-    # Province always preloaded
-    form.prov_id.choices = [('', '-- Select Province --')] + sorted(
-        [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
-        key=lambda x: x[1].lower()
-    )
+    print(f"province:{user.prov_id}")
+    #Set the FIELD SELECTION CHOICES FROM HELPER.PY
+    set_form_choices(form, user)
 
-    # Only set muni/brgy choices if form has values or user has saved data
-    selected_prov = form.prov_id.data or current_user.prov_id
-    selected_muni = form.munci_id.data or current_user.munci_id
-    
-    if selected_prov:
-        form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
-            [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
-            key=lambda x: x[1].lower()
-        )
-    else:
-        form.munci_id.choices = [('', '-- Select Municipality --')]
-
-    if selected_muni:
-        form.brgy_id.choices = [('', '-- Select Barangay --')] + sorted(
-            [(b['brgyCode'], b['brgyDesc']) for b in BARANGAY_DATA if b['citymunCode'] == selected_muni],
-            key=lambda x: x[1].lower()
-        )
-    else:
-        form.brgy_id.choices = [('', '-- Select Barangay --')]
-    
-    
-    
     
     # Submit HANDLERS
     # Change Password Request HANDLER
     if change_pw_form.submit.data and change_pw_form.validate_on_submit():
         # if change_pw_form.current_password.data != current_user.password:
-        if not current_user.check_password_correction(change_pw_form.current_password.data):
+        if not user.check_password_correction(change_pw_form.current_password.data):
             flash('Password is Incorrect', category='danger')
             
         else:
@@ -288,7 +279,7 @@ def public_dashboard():
                 flash(f'Password changed Successfully!', category='success')
                 current_user.password = new_password
                 db.session.commit()
-                return redirect(url_for('public_dashboard'))
+                return redirect(url_for('public_dashboard',user_id = current_user.id))
 
     if change_pw_form.errors:
         for err_msg in change_pw_form.errors.values():
@@ -303,17 +294,17 @@ def public_dashboard():
             flash('Update Canceled.', category='danger')
             return redirect(url_for('public_dashboard'))
         
-        current_user.firstname = form.firstname.data
-        current_user.lastname = form.lastname.data
-        current_user.email_address = form.email_address.data
-        current_user.mobile_number = form.mobile_number.data
-        current_user.phone_number = form.phone_number.data
-        current_user.address_1 = form.address_1.data
-        current_user.address_2 = form.address_2.data
-        current_user.prov_id = form.prov_id.data
-        current_user.munci_id = form.munci_id.data
-        current_user.brgy_id = form.brgy_id.data
-        current_user.zipcode = form.zipcode.data
+        user.firstname = form.firstname.data
+        user.lastname = form.lastname.data
+        user.email_address = form.email_address.data
+        user.mobile_number = form.mobile_number.data
+        user.phone_number = form.phone_number.data
+        user.address_1 = form.address_1.data
+        user.address_2 = form.address_2.data
+        user.prov_id = form.prov_id.data
+        user.munci_id = form.munci_id.data
+        user.brgy_id = form.brgy_id.data
+        user.zipcode = form.zipcode.data
 
         # Avatar logic
         if form.avatar.data:
@@ -329,7 +320,7 @@ def public_dashboard():
 
         db.session.commit()
         flash('Your profile has been updated!', category='success')
-        return redirect(url_for('public_dashboard'))
+        return redirect(url_for('public_dashboard',user_id = current_user.id))
 
     if form.errors:
         for err_msg in form.errors.values():
