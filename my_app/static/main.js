@@ -318,6 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // BARANGAY SHOW AS INPUT WITH DYNAMIC SELECTION
     document.getElementById("prov_id").addEventListener("change", function () {
+
     const provCode = this.value;
     fetch(`/get_municipalities?prov_code=${provCode}`)
         .then(res => res.json())

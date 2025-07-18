@@ -83,7 +83,7 @@
                 
                     <ul class="nav nav-pills flex-sm-column flex-row flex-nowrap flex-shrink-1 flex-sm-grow-0 flex-grow-1 mb-sm-auto mb-0 justify-content-center align-items-center align-items-sm-start" id="menu">
                         <li>
-                            <a href="{{ url_for('public_dashboard')}}" class="nav-link px-sm-0 text-dark px-2">
+                            <a href="{{ url_for('public_dashboard',user_id = current_user.id)}}" class="nav-link px-sm-0 text-dark px-2">
                                 <i class="fs-5 bi-house"></i><span class="ms-1 d-none d-sm-inline">My Profile</span></a>
                         </li>
                             
@@ -203,7 +203,7 @@
 
                                     <div class="col text-center">
                                         {{ form.prov_id.label(class="mb-1") }}
-                                        {{ form.prov_id(id="prov_id", class="form-control text-center") }}
+                                        {{ form.prov_id(id="prov_id", class="form-control text-center", value=current_user.prov_id) }}
                                     </div>
 
                                     <div class="col text-center">

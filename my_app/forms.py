@@ -81,9 +81,9 @@ class PersonalInfoForm(FlaskForm):
     def validate_mobile_number(self, number_to_check):
         if not number_to_check.data.isdigit():
             raise ValidationError('Only numbers are allowed.')
-
+        
         number_to_save = Users.query.filter_by(mobile_number=number_to_check.data).first()
-        if number_to_save and number_to_save.id !=current_user.id:
+        if number_to_save != number_to_save:
             raise ValidationError('Mobile number already exists.')
         
     def validate_phone_number(self, number_to_check):
@@ -91,8 +91,10 @@ class PersonalInfoForm(FlaskForm):
             raise ValidationError('Only numbers are allowed.')
 
         number_to_save = Users.query.filter_by(phone_number=number_to_check.data).first()
-        if number_to_save and number_to_save.id !=current_user.id:
+        if number_to_save != number_to_save:
             raise ValidationError('Phone number already exists.')
+    
+    
     
     user_id = HiddenField(label='UserId')
     avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])

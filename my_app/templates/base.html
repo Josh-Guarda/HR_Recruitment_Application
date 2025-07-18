@@ -75,7 +75,7 @@
                   </button>
                   
                   {% else %}
-                  <button type="button" id="nav-btn" class="btn btn-light fw-normal btn-md lead" onclick="location.href='{{ url_for('public_dashboard') }}'">
+                  <button type="button" id="nav-btn" class="btn btn-light fw-normal btn-md lead" onclick="location.href='{{ url_for('public_dashboard',user_id = current_user.id) }}'">
                     My Account
                   </button>
 
