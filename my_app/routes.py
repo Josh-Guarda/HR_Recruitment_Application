@@ -1,7 +1,7 @@
 from my_app import app,db
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from my_app import  MUNICIPALITY_DATA, PROVINCE_DATA,mail,Message,generate_reset_token,verify_reset_token
-from my_app.helper import set_form_choices
+# from my_app.helper import set_form_choices
 from flask import render_template, redirect, url_for, flash,request,session
 from my_app.models import Jobs,Users
 from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ChangePasswordFormInSecurity,ForgotPassword,ChangePasswordBeforeLogin
@@ -169,68 +169,53 @@ def admin_dashboard():
     return render_template("admin/admin_dashboard.html",show_navbar=False)
 
 
-# @app.route('/admin-users-management/',methods=["GET","POST"])
-# @login_required
-# def admin_dashboard_manage_users():
-#     user_info_form = PersonalInfoForm()
-#     users = Users.query.all()
-    
-#     if request.method == 'POST':
-#         user_id = request.form.get('user_id')
-#         print(f"[POST] Updating user: {user_id}")
-    
-#     return render_template("admin/admin_users_management.html", show_navbar=False, users=users, user_info_form=user_info_form)
-
-
 
 
 @app.route('/admin-users-management/', methods=["GET", "POST"])
 @login_required
 def admin_dashboard_manage_users():
     users = Users.query.all()
-    user_info_form = PersonalInfoForm()
+    
+    user_forms = []
+    
+    for user in users:
+        form = PersonalInfoForm(obj=user)
+
+        # Set province choices
+        form.prov_id.choices = [('', '-- Select Province --')] + sorted(
+            [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
+            key=lambda x: x[1].lower()
+        )
+
+        # Set municipality choices if province selected
+        selected_prov = form.prov_id.data or user.prov_id
+        if selected_prov:
+            form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
+                [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
+                key=lambda x: x[1].lower()
+            )
+        else:
+            form.munci_id.choices = [('', '-- Select Municipality --')]
+
+        # Set barangay choices if municipality selected
+        selected_muni = form.munci_id.data or user.munci_id
+        if selected_muni:
+            form.brgy_id.choices = [('', '-- Select Barangay --')] + sorted(
+                [(b['brgyCode'], b['brgyDesc']) for b in BARANGAY_DATA if b['citymunCode'] == selected_muni],
+                key=lambda x: x[1].lower()
+            )
+        else:
+            form.brgy_id.choices = [('', '-- Select Barangay --')]
+
+        # Store both user and form together
+        user_forms.append((user, form))
+
 
     
-    
-     # Province always preloaded
-    user_info_form.prov_id.choices = [('', '-- Select Province --')] + sorted(
-        [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
-        key=lambda x: x[1].lower()
+    return render_template(
+        'admin/admin_users_management.html',
+        user_forms=user_forms
     )
-
-    # Only set muni/brgy choices if form has values or user has saved data
-    selected_prov = user_info_form.prov_id.data 
-    selected_muni = user_info_form.munci_id.data
-    
-    if not selected_prov:
-        user_info_form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
-            [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
-            key=lambda x: x[1].lower()
-        )
-    else:
-        user_info_form.munci_id.choices = [('', '-- Select Municipality --')]
-
-    if selected_muni:
-        user_info_form.brgy_id.choices = [('', '-- Select Barangay --')] + sorted(
-            [(b['brgyCode'], b['brgyDesc']) for b in BARANGAY_DATA if b['citymunCode'] == selected_muni],
-            key=lambda x: x[1].lower()
-        )
-    else:
-        user_info_form.brgy_id.choices = [('', '-- Select Barangay --')]
-    
-    
-    
-    
-    # Check if it's a POST
-    if request.method == 'POST':
-        extracted_user_id = request.form.get("user_id")
-        uid = Users.query.filter_by(id=extracted_user_id).first()
-        print(f"I get:{uid}")
-    
-
-        
-    return render_template("admin/admin_users_management.html", users=users, user_info_form=user_info_form)
-
 
 
 

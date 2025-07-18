@@ -81,13 +81,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ADMIN KANBAN SCRIPTS
-    document.querySelectorAll('.btn-edit-user').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const userId = btn.getAttribute('data-user-id');
-            console.log("User ID:", userId);
-            // You can even trigger an AJAX call here to fetch user data
-        });
-    });
+    // document.querySelectorAll('.btn-edit-user').forEach(btn => {
+    //     btn.addEventListener('click', () => {
+    //         const userId = btn.getAttribute('data-user-id');
+    //         console.log("User ID:", userId);
+    //         // You can even trigger an AJAX call here to fetch user data
+    //     });
+    // });
+
 
 
 

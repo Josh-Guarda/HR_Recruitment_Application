@@ -114,9 +114,10 @@ Dashboard Users-Management
 
         <section id="UsersManagementKanbanView" class="container">
             <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
-                {% for user in users %}
+                {% for user, user_info_form in user_forms %}
+                {% include "admin/update_modal_kanban.html" with context %}
+
                 {% include "admin/update_modal_kanban.html" %}
-                {% include "admin/delete_modal.html" %}
                 <div class="col">
                     <div class="card shadow h-100">
                         <div class="card-body">
@@ -132,7 +133,7 @@ Dashboard Users-Management
                                     class="rounded-circle me-3 p-1"
                                     style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
                                     width="64" height="60">
-
+                                    
                                     <div class="px-2">
                                     <h5 class="mb-1" >{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
                                     <p class="text-muted mb-0" >{{ user.email_address }}</p>
@@ -144,12 +145,12 @@ Dashboard Users-Management
 
                         <!-- Action Buttons -->
                             <div class="btn-group gap-1 mt-3 mt-md-0">
-                                <a href="{{ url_for('admin_dashboard_manage_users',user_id=user.id)}}" class="btn-edit-user btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
+                                <!--<a href="/admin-users-management/update/user_id={{user.id}}" class="btn-edit-user btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
                                 <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
                                 </a>
                                 <a href="#" class="btn btn-transparent-danger custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Delete-UserInfo-{{user.id}}" >
                                 <i class="fas fa-times" data-bs-toggle="tooltip" title="Delete"></i>
-                                </a>
+                                </a>-->
 
                                 <!--<a href="{{ url_for('admin_dashboard_manage_users',user_id=user.id)}}" class="btn-edit-user btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-user-id="{{ user.id }}" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
                                 <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
@@ -158,12 +159,12 @@ Dashboard Users-Management
                                 <i class="fas fa-times" data-bs-toggle="tooltip" title="Delete"></i>
                                 </a>-->
 
-                                <!--<button type="button" class="btn btn-edit-user btn-transparent-success custom-tooltip btn-sm"
+                                <button type="button" class="btn btn-edit-user btn-transparent-success custom-tooltip btn-sm"
                                         data-bs-toggle="modal"
                                         data-user-id="{{ user.id }}"
                                         data-bs-target="#Update-UserInfo-Kanban-{{ user.id }}">
                                     <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
-                                </button>-->
+                                </button>
 
 
                             </div>

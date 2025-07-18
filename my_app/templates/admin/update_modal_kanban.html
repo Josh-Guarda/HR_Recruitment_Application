@@ -15,7 +15,7 @@
         <form method="POST" enctype="multipart/form-data">
             {{user_info_form.hidden_tag()}}
             <input type="hidden" name="user_id" value="{{ user.id }}">
-            {{user_info_form.user_id(value=user.id)}}
+            <!--{{user_info_form.user_id(value=user.id)}}-->
             <div class="container d-none d-sm-block">
                 <div class="avatar pb-5 ">
                     <div id="avatar-container">
@@ -64,9 +64,9 @@
 
                         <div class="col text-center">
                             {{ user_info_form.prov_id.label(class="mb-1") }}
-                            {{ user_info_form.prov_id(id="prov_id", class="form-control text-center", value=user.prov_id) }}
+                            {{ user_info_form.prov_id(id="prov_id", class="form-control text-center", value=user.prov_id)}}
                         </div>
-
+                        
                         <div class="col text-center">
                             {{ user_info_form.munci_id.label(class="mb-1") }}
                             {{ user_info_form.munci_id(id="munci_id", class="form-control text-center", value=user.munci_id) }}
