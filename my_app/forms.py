@@ -95,7 +95,6 @@ class PersonalInfoForm(FlaskForm):
             raise ValidationError('Phone number already exists.')
     
     
-    
     user_id = HiddenField(label='UserId')
     avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])
     firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
@@ -103,9 +102,9 @@ class PersonalInfoForm(FlaskForm):
     address_1 =  StringField(label='Address 1', validators=[Length(min=6,max=50)])
     address_2 =  StringField(label='Address 2', validators=[Length(min=6,max=50)])
     
-    brgy_id =  SelectField(label='Barangay')
-    munci_id =  SelectField(label='Municipality')
-    prov_id =  SelectField(label='Province')
+    brgy_id = SelectField(label='Barangay', coerce=str)
+    munci_id = SelectField(label='Municipality', coerce=str)
+    prov_id = SelectField(label='Province', coerce=str)
     zipcode = StringField(label='ZipCode', validators=[Length(min=4,max=4)])
     
     email_address=StringField(label='Email', validators=[Email(), DataRequired()])

@@ -317,33 +317,87 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // BARANGAY SHOW AS INPUT WITH DYNAMIC SELECTION
-    document.getElementById("prov_id").addEventListener("change", function () {
+    // document.getElementById("prov_id").addEventListener("change", function () {
 
-    const provCode = this.value;
-    fetch(`/get_municipalities?prov_code=${provCode}`)
-        .then(res => res.json())
-        .then(data => {
-            const muniSelect = document.getElementById("munci_id");
-            muniSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
-            data.data.forEach(muni => {
-                muniSelect.innerHTML += `<option value="${muni.code}">${muni.name}</option>`;
-            });
+    // const provCode = this.value;
+    // fetch(`/get_municipalities?prov_code=${provCode}`)
+    //     .then(res => res.json())
+    //     .then(data => {
+    //         const muniSelect = document.getElementById("munci_id");
+    //         muniSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
+    //         data.data.forEach(muni => {
+    //             muniSelect.innerHTML += `<option value="${muni.code}">${muni.name}</option>`;
+    //         });
 
-            // Clear barangay
-            document.getElementById("brgy_id").innerHTML = '<option value="">-- Select Barangay --</option>';
-        });
+    //         // Clear barangay
+    //         document.getElementById("brgy_id").innerHTML = '<option value="">-- Select Barangay --</option>';
+    //     });
+    // });
+
+    // document.getElementById("munci_id").addEventListener("change", function () {
+    //     const muniCode = this.value;
+    //     fetch(`/get_barangays?muni_code=${muniCode}`)
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             const brgySelect = document.getElementById("brgy_id");
+    //             brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+    //             data.data.forEach(brgy => {
+    //                 brgySelect.innerHTML += `<option value="${brgy.code}">${brgy.name}</option>`;
+    //         });
+    //     });
+    // });
+
+
+
+
+
+
+    const provSelect = document.getElementById('prov_id');
+    const munciSelect = document.getElementById('munci_id');
+    const brgySelect = document.getElementById('brgy_id');
+    
+    // Function to update municipality dropdown based on province selection
+    provSelect.addEventListener('change', function() {
+        const provCode = this.value;
+        
+        // Clear municipality and barangay dropdowns
+        munciSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
+        brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+        
+        if (provCode) {
+            // Make AJAX request to get municipalities
+            fetch(`/get_municipalities/${provCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(muni => {
+                        const option = document.createElement('option');
+                        option.value = muni.code;
+                        option.textContent = muni.name;
+                        munciSelect.appendChild(option);
+                    });
+                });
+        }
     });
-
-    document.getElementById("munci_id").addEventListener("change", function () {
-        const muniCode = this.value;
-        fetch(`/get_barangays?muni_code=${muniCode}`)
-            .then(res => res.json())
-            .then(data => {
-                const brgySelect = document.getElementById("brgy_id");
-                brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
-                data.data.forEach(brgy => {
-                    brgySelect.innerHTML += `<option value="${brgy.code}">${brgy.name}</option>`;
-            });
-        });
+    
+    // Function to update barangay dropdown based on municipality selection
+    munciSelect.addEventListener('change', function() {
+        const munciCode = this.value;
+        
+        // Clear barangay dropdown
+        brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+        
+        if (munciCode) {
+            // Make AJAX request to get barangays
+            fetch(`/get_barangays/${munciCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(brgy => {
+                        const option = document.createElement('option');
+                        option.value = brgy.code;
+                        option.textContent = brgy.name;
+                        brgySelect.appendChild(option);
+                    });
+                });
+        }
     });
 });
