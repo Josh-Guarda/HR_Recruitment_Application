@@ -317,41 +317,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // BARANGAY SHOW AS INPUT WITH DYNAMIC SELECTION
-    // document.getElementById("prov_id").addEventListener("change", function () {
-
-    // const provCode = this.value;
-    // fetch(`/get_municipalities?prov_code=${provCode}`)
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         const muniSelect = document.getElementById("munci_id");
-    //         muniSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
-    //         data.data.forEach(muni => {
-    //             muniSelect.innerHTML += `<option value="${muni.code}">${muni.name}</option>`;
-    //         });
-
-    //         // Clear barangay
-    //         document.getElementById("brgy_id").innerHTML = '<option value="">-- Select Barangay --</option>';
-    //     });
-    // });
-
-    // document.getElementById("munci_id").addEventListener("change", function () {
-    //     const muniCode = this.value;
-    //     fetch(`/get_barangays?muni_code=${muniCode}`)
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             const brgySelect = document.getElementById("brgy_id");
-    //             brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
-    //             data.data.forEach(brgy => {
-    //                 brgySelect.innerHTML += `<option value="${brgy.code}">${brgy.name}</option>`;
-    //         });
-    //     });
-    // });
-
-
-
-
-
-
     const provSelect = document.getElementById('prov_id');
     const munciSelect = document.getElementById('munci_id');
     const brgySelect = document.getElementById('brgy_id');
