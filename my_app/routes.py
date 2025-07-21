@@ -179,17 +179,32 @@ def admin_dashboard_manage_users():
     user_forms = []
     for user in users:
         form = PersonalInfoForm(obj=user)
+   
+        if request.method == 'GET':
+            # Pre-populate form with user data
+            form.firstname.data = user.firstname
+            form.lastname.data = user.lastname
+            form.address_1.data = user.address_1
+            form.address_2.data = user.address_2
+            form.zipcode.data = user.zipcode
+            form.email_address.data = user.email_address
+            form.mobile_number.data = user.mobile_number
+            form.phone_number.data = user.phone_number
+            
+            # # Set the selected values for dropdowns
+            form.prov_id.data = str(user.prov_id) if user.prov_id else ''
+            form.munci_id.data = str(user.munci_id) if user.munci_id else ''
+            form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
+            set_form_choices(form, user)
+            
         
-        set_form_choices(form,user)
-        
-        
+    else:
+        set_form_choices(form, user)
+                
         
         #UPDATE HANDLER
+
         if form.update.data and form.validate_on_submit():
-            if form.cancel.data:
-                flash(f'{user.firstname}`s profile has Canceled.', category='danger')
-                return redirect(url_for('admin_dashboard_manage_users'))
-            
             user.firstname = form.firstname.data
             user.lastname = form.lastname.data
             user.email_address = form.email_address.data
@@ -204,7 +219,6 @@ def admin_dashboard_manage_users():
 
             # Avatar logic
             if form.avatar.data:
-                print('merong avatar')
                 avatar_file = form.avatar.data
                 filename = secure_filename(avatar_file.filename)
                 avatar_name = str(uuid.uuid4()) + "_" + filename
@@ -221,12 +235,16 @@ def admin_dashboard_manage_users():
             
             flash(f"{user.firstname}'s profile has been updated!", category='success')
             return redirect(url_for('admin_dashboard_manage_users'))
+            
+        if form.cancel.data:
+            flash(f'{user.firstname}`s profile has Canceled.', category='danger')
+            return redirect(url_for('admin_dashboard_manage_users'))
 
         if form.errors:
             for err_msg in form.errors.values():
                 flash(f'Error: {err_msg}', category='danger')
-        
-        
+            
+            
         user_forms.append((user, form))
         
     return render_template('admin/admin_users_management.html',user_forms=user_forms)
@@ -245,123 +263,15 @@ def internal_dashboard():
 
 
 
-# # Public ROUTES
-# @app.route('/public/', methods=["GET", "POST"])
-# @login_required
-# def public_dashboard():
-#     form = PersonalInfoForm(obj=current_user)
-#     change_pw_form= ChangePasswordFormInSecurity()
-
-#     # Province always preloaded
-#     form.prov_id.choices = [('', '-- Select Province --')] + sorted(
-#         [(prov['provCode'], prov['provDesc']) for prov in PROVINCE_DATA],
-#         key=lambda x: x[1].lower()
-#     )
-
-#     # Only set muni/brgy choices if form has values or user has saved data
-#     selected_prov = form.prov_id.data or current_user.prov_id
-#     selected_muni = form.munci_id.data or current_user.munci_id
-
-#     if selected_prov:
-#         form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
-#             [(m['citymunCode'], m['citymunDesc']) for m in MUNICIPALITY_DATA if m['provCode'] == selected_prov],
-#             key=lambda x: x[1].lower()
-#         )
-#     else:
-#         form.munci_id.choices = [('', '-- Select Municipality --')]
-
-#     if selected_muni:
-#         form.brgy_id.choices = [('', '-- Select Barangay --')] + sorted(
-#             [(b['brgyCode'], b['brgyDesc']) for b in BARANGAY_DATA if b['citymunCode'] == selected_muni],
-#             key=lambda x: x[1].lower()
-#         )
-#     else:
-#         form.brgy_id.choices = [('', '-- Select Barangay --')]
-
-
-
-
-#     # Submit HANDLERS
-#     # Change Password Request HANDLER
-#     if change_pw_form.submit.data and change_pw_form.validate_on_submit():
-#         # if change_pw_form.current_password.data != current_user.password:
-#         if not current_user.check_password_correction(change_pw_form.current_password.data):
-#             flash('Password is Incorrect', category='danger')
-
-#         else:
-#             new_password = change_pw_form.password.data
-#             confirm_password = change_pw_form.password2.data
-
-#             if new_password != confirm_password:
-#                 flash('New passwords do not match with Confirm Password!',category='danger')
-
-#             else:
-#                 flash(f'Password changed Successfully!', category='success')
-#                 current_user.password = new_password
-#                 db.session.commit()
-#                 return redirect(url_for('public_dashboard'))
-
-#     if change_pw_form.errors:
-#         for err_msg in change_pw_form.errors.values():
-#             flash(f'Error: {err_msg}', category='danger')
-
-
-
-
-#     # Personal Information UPDATE HANDLER
-#     if form.update.data and form.validate_on_submit():
-#         current_user.firstname = form.firstname.data
-#         current_user.lastname = form.lastname.data
-#         current_user.email_address = form.email_address.data
-#         current_user.mobile_number = form.mobile_number.data
-#         current_user.phone_number = form.phone_number.data
-#         current_user.address_1 = form.address_1.data
-#         current_user.address_2 = form.address_2.data
-#         current_user.prov_id = form.prov_id.data
-#         current_user.munci_id = form.munci_id.data
-#         current_user.brgy_id = form.brgy_id.data
-#         current_user.zipcode = form.zipcode.data
-
-#         # Avatar logic
-#         if form.avatar.data:
-#             avatar_file = form.avatar.data
-#             filename = secure_filename(avatar_file.filename)
-#             avatar_name = str(uuid.uuid4()) + "_" + filename
-#             upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
-#             try:
-#                 avatar_file.save(upload_path)
-#                 current_user.profile_picture = avatar_name
-#             except FileNotFoundError:
-#                 flash('Avatar upload directory not found!', category='danger')
-
-#         db.session.commit()
-#         flash('Your profile has been updated!', category='success')
-#         return redirect(url_for('public_dashboard'))
-    
-#     if form.cancel.data:
-#             flash('Update Canceled.', category='danger')
-#             return redirect(url_for('public_dashboard'))
-
-#     if form.errors:
-#         for err_msg in form.errors.values():
-#             flash(f'Error: {err_msg}', category='danger')
-
-#     if current_user.user_type.name != "public":
-#         return redirect(url_for("home_page"))
-
-#     return render_template('public/public_dashboard.html', show_navbar=False, form=form, change_pw_form=change_pw_form)
-
-
-
+# Public ROUTES
 @app.route('/public/<int:user_id>', methods=["GET", "POST"])
 @login_required
 def public_dashboard(user_id):
-    # user = Users.query.get(user_id)
-    change_pw_form = ChangePasswordFormInSecurity()
     form = PersonalInfoForm(obj=current_user)
+    change_pw_form= ChangePasswordFormInSecurity()
+
     
     if request.method == 'GET':
-        set_form_choices(form, current_user)
         # Pre-populate form with user data
         if current_user:
             form.firstname.data = current_user.firstname
@@ -377,92 +287,94 @@ def public_dashboard(user_id):
             form.prov_id.data = str(current_user.prov_id) if current_user.prov_id else ''
             form.munci_id.data = str(current_user.munci_id) if current_user.munci_id else ''
             form.brgy_id.data = str(current_user.brgy_id) if current_user.brgy_id else ''
+            set_form_choices(form, current_user)
+            
         
-        
-    else: 
+    else:
         set_form_choices(form, current_user)
-            
-    if request.method == 'POST':
         
-        if form.update.data and form.validate_on_submit():
-            current_user.firstname = form.firstname.data
-            current_user.lastname = form.lastname.data
-            current_user.email_address = form.email_address.data
-            current_user.mobile_number = form.mobile_number.data
-            current_user.phone_number = form.phone_number.data
-            current_user.address_1 = form.address_1.data
-            current_user.address_2 = form.address_2.data
-            current_user.zipcode = form.zipcode.data
-            if form.prov_id.data:
-                current_user.prov_id = int(form.prov_id.data)
-            else:
-                current_user.prov_id = None
-                
-            if form.munci_id.data:
-                current_user.munci_id = int(form.munci_id.data)
-            else:
-                current_user.munci_id = None
-                
-            if form.brgy_id.data:
-                current_user.brgy_id = int(form.brgy_id.data)
-            else:
-                current_user.brgy_id = None
-            
-            
-            # Avatar logic
-            if form.avatar.data:
-                avatar_file = form.avatar.data
-                filename = secure_filename(avatar_file.filename)
-                avatar_name = str(uuid.uuid4()) + "_" + filename
-                upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
-                try:
-                    avatar_file.save(upload_path)
-                    current_user.profile_picture = avatar_name
-                except FileNotFoundError:
-                    flash('Avatar upload directory not found!', category='danger')
+        
+        
+        
+        
+    # Submit HANDLERS
+    
+    # Change Password Request HANDLER
+    if change_pw_form.submit.data and change_pw_form.validate_on_submit():
+        # if change_pw_form.current_password.data != current_user.password:
+        if not current_user.check_password_correction(change_pw_form.current_password.data):
+            flash('Password is Incorrect', category='danger')
 
-            print(f"Form values - prov: {form.prov_id.data}, munci: {form.munci_id.data}, brgy: {form.brgy_id.data}")
-            print(f"Type of prov_id: {type(form.prov_id.data)}")
-            
-            print(f"After save - prov: {current_user.prov_id}, munci: {current_user.munci_id}, brgy: {current_user.brgy_id}")
-            db.session.commit()
-            flash('Your profile has been updated!', category='success')
-            return redirect(url_for('public_dashboard',user_id=current_user.id))
-        
-        if form.cancel.data:
-                flash('Update Canceled.', category='danger')
+        else:
+            new_password = change_pw_form.password.data
+            confirm_password = change_pw_form.password2.data
+
+            if new_password != confirm_password:
+                flash('New passwords do not match with Confirm Password!',category='danger')
+
+            else:
+                flash(f'Password changed Successfully!', category='success')
+                current_user.password = new_password
+                db.session.commit()
                 return redirect(url_for('public_dashboard'))
 
-        if form.errors:
-            for err_msg in form.errors.values():
-                flash(f'Error: {err_msg}', category='danger')
+    if change_pw_form.errors:
+        for err_msg in change_pw_form.errors.values():
+            flash(f'Error: {err_msg}', category='danger')
+
+
+
+    # Personal Information UPDATE HANDLER
+    if form.update.data and form.validate_on_submit():
+        
+        current_user.firstname = form.firstname.data
+        current_user.lastname = form.lastname.data
+        current_user.email_address = form.email_address.data
+        current_user.mobile_number = form.mobile_number.data
+        current_user.phone_number = form.phone_number.data
+        current_user.address_1 = form.address_1.data
+        current_user.address_2 = form.address_2.data
+        current_user.prov_id = form.prov_id.data
+        current_user.munci_id = form.munci_id.data
+        current_user.brgy_id = form.brgy_id.data
+        current_user.zipcode = form.zipcode.data
+
+        # Avatar logic
+        if form.avatar.data:
+            avatar_file = form.avatar.data
+            filename = secure_filename(avatar_file.filename)
+            avatar_name = str(uuid.uuid4()) + "_" + filename
+            upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
+            try:
+                avatar_file.save(upload_path)
+                current_user.profile_picture = avatar_name
+            except FileNotFoundError:
+                flash('Avatar upload directory not found!', category='danger')
+
+        
+        # print(f"Form values - prov: {form.prov_id.data}, munci: {form.munci_id.data}, brgy: {form.brgy_id.data}")
+        # print(f"Type of prov_id: {type(form.prov_id.data)}")
+        # print(f"After save - prov: {current_user.prov_id}, munci: {current_user.munci_id}, brgy: {current_user.brgy_id}")
+        db.session.commit()
+        flash('Your profile has been updated!', category='success')
+        
+        return redirect(url_for('public_dashboard',user_id=current_user.id))
+    
+    if form.cancel.data:
+            flash('Update Canceled.', category='danger')
+            return redirect(url_for('public_dashboard',user_id=current_user.id))
+
+    if form.errors:
+        for err_msg in form.errors.values():
+            flash(f'Error: {err_msg}', category='danger')
 
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))
 
-        
     return render_template('public/public_dashboard.html', show_navbar=False, form=form, change_pw_form=change_pw_form)
 
 
 
-# @app.route('/get_municipalities')
-# def get_municipalities():
-#     prov_code = request.args.get('prov_code')
-#     results = [
-#         {'code': muni['citymunCode'], 'name': muni['citymunDesc']}
-#         for muni in MUNICIPALITY_DATA if muni['provCode'] == prov_code
-#     ]
-#     return {'data': results}
-
-
-# @app.route('/get_barangays')
-# def get_barangays():
-#     muni_code = request.args.get('muni_code')
-#     results = [
-#         {'code': brgy['brgyCode'], 'name': brgy['brgyDesc']}
-#         for brgy in BARANGAY_DATA if brgy['citymunCode'] == muni_code
-#     ]
-#     return {'data': results}
 
 
 @app.route('/get_municipalities/<prov_code>')
@@ -472,6 +384,8 @@ def get_municipalities(prov_code):
          for m in MUNICIPALITY_DATA if str(m['provCode']) == prov_code],
         key=lambda x: x['name'].lower()
     )
+    
+    print(f"myprov{prov_code}")
     return jsonify(municipalities)
 
 @app.route('/get_barangays/<munci_code>')
@@ -486,13 +400,14 @@ def get_barangays(munci_code):
 
 
 
+
+
 @app.route('/logout')
 def logout_page():
     logout_user()
     session.clear()  # Clear all session data
     flash('You have been logged out!"', category= 'primary')
     return redirect(url_for('home_page'))
-
 
 
 

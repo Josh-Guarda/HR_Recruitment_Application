@@ -47,7 +47,10 @@ class Users(db.Model,UserMixin):
     
     address_1 = db.Column(db.String(length=120),nullable=True)
     address_2 = db.Column(db.String(length=100),nullable=True)
-    zipcode = db.Column(db.Integer(),nullable=True)
+    brgy_id = db.Column(db.String(),nullable=True)
+    munci_id = db.Column(db.String(),nullable=True)
+    prov_id = db.Column(db.String(),nullable=True)
+    zipcode = db.Column(db.String(),nullable=True)
     
     mobile_number = db.Column(db.String(length=11),nullable=True)
     phone_number = db.Column(db.String(length=8),nullable=True)
@@ -58,19 +61,10 @@ class Users(db.Model,UserMixin):
     department = db.relationship('Department')
     
     
-    
-    
     user_type_id = db.Column(db.Integer(),db.ForeignKey('usertype.id'))
     user_type = db.relationship('Usertype')
     
-    brgy_id = db.Column(db.Integer(),db.ForeignKey('barangay.id'))
-    barangay = db.relationship('Barangay')
     
-    munci_id = db.Column(db.Integer(),db.ForeignKey('municipality.id'))
-    municipality = db.relationship('Municipality')
-    
-    prov_id = db.Column(db.Integer(),db.ForeignKey('province.id'))
-    province= db.relationship('Province')
     
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)
@@ -91,34 +85,8 @@ class Users(db.Model,UserMixin):
         return bcrpt.check_password_hash(self.password_hash,attempted_password)
             
 
-class Barangay(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(length=50), nullable=True)
-
-    municipality_id = db.Column(db.Integer(), db.ForeignKey('municipality.id'))
-    users = db.relationship('Users', backref='desig_barangay', lazy=True)
-
-
-class Municipality(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(length=50), nullable=True)
-
-    prov_id = db.Column(db.Integer(), db.ForeignKey('province.id'))
-    barangays = db.relationship('Barangay', backref='municipality', lazy=True)
-    users = db.relationship('Users', backref='desig_municipality', lazy=True)
 
     
-
-class Province(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(length=50), nullable=True)
-
-    municipalities = db.relationship('Municipality', backref='province', lazy=True)
-    users = db.relationship('Users', backref='desig_province', lazy=True)
-
-
-
-
 
 
 
