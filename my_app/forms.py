@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField,HiddenField,SelectField,SearchField
 from flask_login import current_user
-from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError
+from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError,Optional
 from my_app.models import Users,Usertype
 from flask_wtf.file import FileField,FileAllowed
 
@@ -99,17 +99,17 @@ class PersonalInfoForm(FlaskForm):
     avatar= FileField('image', validators=[FileAllowed(['jpg','jpeg','png'], 'Images only!')])
     firstname = StringField(label='First Name', validators=[Length(min=3,max=30), DataRequired()])
     lastname = StringField(label='Last Name', validators=[Length(min=3,max=30), DataRequired()])
-    address_1 =  StringField(label='Address 1', validators=[Length(min=6,max=50)])
-    address_2 =  StringField(label='Address 2', validators=[Length(min=6,max=50)])
+    address_1 =  StringField(label='Address 1', validators=[Length(min=6,max=50), Optional()])
+    address_2 =  StringField(label='Address 2', validators=[Length(min=6,max=50), Optional()])
     
     brgy_id = SelectField(label='Barangay', coerce=str)
     munci_id = SelectField(label='Municipality', coerce=str)
     prov_id = SelectField(label='Province', coerce=str)
-    zipcode = StringField(label='ZipCode', validators=[Length(min=4,max=4)])
+    zipcode = StringField(label='ZipCode', validators=[Length(min=4,max=4) ,Optional()])
     
     email_address=StringField(label='Email', validators=[Email(), DataRequired()])
     mobile_number = StringField(label='Mobile Number', validators=[Length(min=11,max=11), DataRequired()])
-    phone_number=StringField(label='Landline Number', validators=[Length(min=8,max=8)],default=('00000000'))
+    phone_number=StringField(label='Landline Number', validators=[Length(min=8,max=8), Optional()])
     
     update=SubmitField(label='Save')
     cancel=SubmitField(label='Cancel')

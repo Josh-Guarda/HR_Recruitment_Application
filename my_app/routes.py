@@ -179,33 +179,32 @@ def admin_dashboard_manage_users():
     user_forms = []
     for user in users:
         form = PersonalInfoForm(obj=user)
-   
-        if request.method == 'GET':
-            # Pre-populate form with user data
-            form.firstname.data = user.firstname
-            form.lastname.data = user.lastname
-            form.address_1.data = user.address_1
-            form.address_2.data = user.address_2
-            form.zipcode.data = user.zipcode
-            form.email_address.data = user.email_address
-            form.mobile_number.data = user.mobile_number
-            form.phone_number.data = user.phone_number
+        set_form_choices(form, user)
+    #     if request.method == 'GET':
+    #         # Pre-populate form with user data
+    #         form.firstname.data = user.firstname
+    #         form.lastname.data = user.lastname
+    #         form.address_1.data = user.address_1
+    #         form.address_2.data = user.address_2
+    #         form.zipcode.data = user.zipcode
+    #         form.email_address.data = user.email_address
+    #         form.mobile_number.data = user.mobile_number
+    #         form.phone_number.data = user.phone_number
             
-            # # Set the selected values for dropdowns
-            form.prov_id.data = str(user.prov_id) if user.prov_id else ''
-            form.munci_id.data = str(user.munci_id) if user.munci_id else ''
-            form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
-            set_form_choices(form, user)
+    #         # # Set the selected values for dropdowns
+    #         form.prov_id.data = str(user.prov_id) if user.prov_id else ''
+    #         form.munci_id.data = str(user.munci_id) if user.munci_id else ''
+    #         form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
+    #         set_form_choices(form, user)
             
         
-    else:
-        set_form_choices(form, user)
+    # else:
+        # set_form_choices(form, user)
                 
         
         #UPDATE HANDLER
-
         if form.update.data and form.validate_on_submit():
-            user.firstname = form.firstname.data
+            user.firstname = form.firstname.data 
             user.lastname = form.lastname.data
             user.email_address = form.email_address.data
             user.mobile_number = form.mobile_number.data
@@ -260,6 +259,63 @@ def internal_dashboard():
     if current_user.user_type.name != "internal":
         return redirect(url_for("home_page"))
     return render_template('internal/internal_dashboard.html',show_navbar=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -324,9 +380,10 @@ def public_dashboard(user_id):
 
 
 
+
     # Personal Information UPDATE HANDLER
     if form.update.data and form.validate_on_submit():
-        
+    # if request.method=="POST":    
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.email_address = form.email_address.data
@@ -337,7 +394,7 @@ def public_dashboard(user_id):
         current_user.prov_id = form.prov_id.data
         current_user.munci_id = form.munci_id.data
         current_user.brgy_id = form.brgy_id.data
-        current_user.zipcode = form.zipcode.data
+        current_user.zipcode = form.zipcode.data 
 
         # Avatar logic
         if form.avatar.data:
@@ -366,7 +423,7 @@ def public_dashboard(user_id):
 
     if form.errors:
         for err_msg in form.errors.values():
-            flash(f'Error: {err_msg}', category='danger')
+            flash(f'Error encounter in {form}: {err_msg}', category='danger')
 
     if current_user.user_type.name != "public":
         return redirect(url_for("home_page"))
