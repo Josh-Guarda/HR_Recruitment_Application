@@ -13,12 +13,13 @@
       </div>
       <div class="modal-body">
         <form method="POST" enctype="multipart/form-data">
-            {{user_info_form.hidden_tag()}}
             <input type="hidden" name="user_id" value="{{ user.id }}">
             <!--{{user_info_form.user_id(value=user.id)}}-->
             <div class="container d-none d-sm-block">
                 <div class="avatar pb-5 ">
                     <div id="avatar-container">
+                        
+
                         <img id="avatar-preview" src="
                             {% if user.profile_picture %}
                             {{ url_for('static', filename='uploads/avatars/'~ user.profile_picture)}}
@@ -38,11 +39,11 @@
             <div class="row row-cols-1 row-cols-lg-2 mb-3 text-muted">
                 <div class="col text-center">
                     {{ user_info_form.firstname.label(class="mb-1")}}
-                    {{ user_info_form.firstname(class="form-control", placeholder="Juan", value=user.firstname) }}
+                    {{ user_info_form.firstname(id="fname_{{user.id}}",class="form-control", placeholder="Juan", value=user.firstname) }}
                 </div>
                 <div class="col text-center">
                     {{ user_info_form.lastname.label(class="mb-1") }}
-                    {{ user_info_form.lastname(class="form-control", placeholder="Dela Cruz", value=user.lastname) }}
+                    {{ user_info_form.lastname(id="lname_{{user.id}}",class="form-control", placeholder="Dela Cruz", value=user.lastname) }}
                 </div>
             </div>
             
@@ -53,33 +54,33 @@
                     <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted">
                         <div class="col text-center">
                             {{ user_info_form.address_1.label(class="mb-1") }}
-                            {{ user_info_form.address_1(class="form-control", placeholder="Block # / Lot #", value=user.address_1) }}
+                            {{ user_info_form.address_1(id="address1_{{user.id}}",class="form-control", placeholder="Block # / Lot #", value=user.address_1) }}
                         </div>
                         <div class="col text-center">
                             {{ user_info_form.address_2.label(class="mb-1") }}
-                            {{ user_info_form.address_2(class="form-control", placeholder="Street / Phase ", value=user.address_2) }}
+                            {{ user_info_form.address_2(id="address2_{{user.id}}",class="form-control", placeholder="Street / Phase ", value=user.address_2) }}
                         </div>
                     </div>
                     <div class="row row-cols-1 row-cols-lg-4 mb-5 text-muted">
 
                         <div class="col text-center">
                             {{ user_info_form.prov_id.label(class="mb-1") }}
-                            {{ user_info_form.prov_id(id="prov_id", class="form-control text-center", value=user.prov_id)}}
+                            {{ user_info_form.prov_id(id="prov_id_{{user.id}}", class="form-control text-center", value=user.prov_id)}}
                         </div>
                         
                         <div class="col text-center">
                             {{ user_info_form.munci_id.label(class="mb-1") }}
-                            {{ user_info_form.munci_id(id="munci_id", class="form-control text-center", value=user.munci_id) }}
+                            {{ user_info_form.munci_id(id="munci_id_{{user.id}}", class="form-control text-center", value=user.munci_id) }}
                         </div>
 
                         <div class="col text-center">
                             {{ user_info_form.brgy_id.label(class="mb-1") }}    
-                            {{ user_info_form.brgy_id(id="brgy_id", class="form-control text-center", value=user.brgy_id) }}
+                            {{ user_info_form.brgy_id(id="brgy_id_{{user.id}}", class="form-control text-center", value=user.brgy_id) }}
                         </div>
 
                         <div class="col text-center">
                             {{ user_info_form.zipcode.label(class="mb-1") }}
-                            {{ user_info_form.zipcode(class="form-control", value=user.zipcode) }}
+                            {{ user_info_form.zipcode(id="zipcode_{{user.id}}",class="form-control", value=user.zipcode) }}
                         </div>
                     </div>
                 </div>
@@ -91,15 +92,15 @@
                     <h6 class="mb-4">Contact Details</h6>
                     <div class="mb-3">
                         {{ user_info_form.email_address.label(class="mb-1") }}
-                        {{ user_info_form.email_address(class="form-control", placeholder="your@email.com", value=user.email_address) }}
+                        {{ user_info_form.email_address(id="email_address_{{user.id}}",class="form-control", placeholder="your@email.com", value=user.email_address) }}
                     </div>
                     <div class="mb-3">
                         {{ user_info_form.mobile_number.label(class="mb-1") }}
-                        {{ user_info_form.mobile_number(class="form-control", placeholder="+63*", value=user.mobile_number) }}
+                        {{ user_info_form.mobile_number(id="mobile_number_{{user.id}}",class="form-control", placeholder="+63*", value=user.mobile_number) }}
                     </div>
                     <div>
                         {{ user_info_form.phone_number.label(class="mb-1") }}
-                        {{ user_info_form.phone_number(class="form-control", placeholder="0000-0000", value=user.phone_number) }}
+                        {{ user_info_form.phone_number(id="phone_number_{{user.id}}",class="form-control", placeholder="0000-0000", value=user.phone_number) }}
                     </div>
                 </div>
             </div>

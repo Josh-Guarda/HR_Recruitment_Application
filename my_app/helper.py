@@ -3,6 +3,8 @@ from wtforms.validators import ValidationError
     
 
 def set_form_choices(form, user):
+    
+    print(f"Fetch user: {user}")
     # Set province choices
     form.prov_id.choices = [('', '-- Select Province --')] + sorted(
         [(str(p['provCode']), p['provDesc']) for p in PROVINCE_DATA],
