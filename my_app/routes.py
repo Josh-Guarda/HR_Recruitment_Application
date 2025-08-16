@@ -179,27 +179,28 @@ def admin_dashboard_manage_users():
     user_forms = []
     for user in users:
         form = PersonalInfoForm(obj=user)
-        set_form_choices(form, user)
-    #     if request.method == 'GET':
-    #         # Pre-populate form with user data
-    #         form.firstname.data = user.firstname
-    #         form.lastname.data = user.lastname
-    #         form.address_1.data = user.address_1
-    #         form.address_2.data = user.address_2
-    #         form.zipcode.data = user.zipcode
-    #         form.email_address.data = user.email_address
-    #         form.mobile_number.data = user.mobile_number
-    #         form.phone_number.data = user.phone_number
-            
-    #         # # Set the selected values for dropdowns
-    #         form.prov_id.data = str(user.prov_id) if user.prov_id else ''
-    #         form.munci_id.data = str(user.munci_id) if user.munci_id else ''
-    #         form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
-    #         set_form_choices(form, user)
-            
-        
-    # else:
         # set_form_choices(form, user)
+        if request.method == 'GET':
+            # Pre-populate form with user data
+            form.firstname.data = user.firstname
+            form.lastname.data = user.lastname
+            form.address_1.data = user.address_1
+            form.address_2.data = user.address_2
+            form.zipcode.data = user.zipcode
+            form.email_address.data = user.email_address
+            form.mobile_number.data = user.mobile_number
+            form.phone_number.data = user.phone_number
+            
+            
+            # Set the selected values for dropdowns
+            form.prov_id.data = str(user.prov_id) if user.prov_id else ''
+            form.munci_id.data = str(user.munci_id) if user.munci_id else ''
+            form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
+            set_form_choices(form, user)
+            
+        else:
+            set_form_choices(form, current_user)
+    
                 
         
         #UPDATE HANDLER
@@ -242,7 +243,7 @@ def admin_dashboard_manage_users():
         if form.errors:
             for err_msg in form.errors.values():
                 flash(f'Error: {err_msg}', category='danger')
-            
+                
             
         user_forms.append((user, form))
         
@@ -339,7 +340,8 @@ def public_dashboard(user_id):
             form.mobile_number.data = current_user.mobile_number
             form.phone_number.data = current_user.phone_number
             
-            # # Set the selected values for dropdowns
+            # Set the selected values for dropdowns
+            
             form.prov_id.data = str(current_user.prov_id) if current_user.prov_id else ''
             form.munci_id.data = str(current_user.munci_id) if current_user.munci_id else ''
             form.brgy_id.data = str(current_user.brgy_id) if current_user.brgy_id else ''
@@ -348,9 +350,6 @@ def public_dashboard(user_id):
         
     else:
         set_form_choices(form, current_user)
-        
-        
-        
         
         
     # Submit HANDLERS

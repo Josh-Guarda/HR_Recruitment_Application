@@ -115,8 +115,6 @@ Dashboard Users-Management
         <section id="UsersManagementKanbanView" class="container">
             <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
                 {% for user, user_info_form in user_forms %}
-                {% include "admin/update_modal_kanban.html" with context %}
-                        
                 {% include "admin/update_modal_kanban.html" %}
                 <div class="col">
                     <div class="card shadow h-100">
@@ -165,12 +163,12 @@ Dashboard Users-Management
                                         data-bs-target="#Update-UserInfo-Kanban-{{ user.id }}">
                                     <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
                                 </button>
-
+                                
 
                             </div>
                         </div>
                         <!-- Social Icons -->
-                        <ul class="list-inline mb-0">
+                        <!--<ul class="list-inline mb-0">
                             <li class="list-inline-item">
                                 <a href="#" data-bs-toggle="tooltip" title="Facebook"><i class="fab fa-facebook"></i></a>
                             </li>
@@ -186,7 +184,7 @@ Dashboard Users-Management
                             <li class="list-inline-item">
                                 <a href="#" data-bs-toggle="tooltip" title="Message"><i class="fas fa-envelope"></i></a>
                             </li>
-                        </ul>
+                        </ul>-->
                         </div>
                     </div>
                 </div>  

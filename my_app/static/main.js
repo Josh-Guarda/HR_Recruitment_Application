@@ -315,16 +315,18 @@ document.addEventListener("DOMContentLoaded", function () {
         profilePicture.src = URL.createObjectURL(inputPicture.files[0]);
     }
 
-
+    
     // BARANGAY SHOW AS INPUT WITH DYNAMIC SELECTION
     const provSelect = document.getElementById('prov_id');
     const munciSelect = document.getElementById('munci_id');
     const brgySelect = document.getElementById('brgy_id');
     
+    console.log(provSelect.value)
     // Function to update municipality dropdown based on province selection
     provSelect.addEventListener('change', function() {
         const provCode = this.value;
         
+        console.log('Trace here')
         // Clear municipality and barangay dropdowns
         munciSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
         brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
