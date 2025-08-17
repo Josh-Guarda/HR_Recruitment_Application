@@ -114,84 +114,69 @@ Dashboard Users-Management
         
         <section id="UsersManagementKanbanView" class="container">
             <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
-                {% for user, user_info_form in user_forms %}
-                {% include "admin/update_modal_kanban.html" %}
-                <div class="col">
-                    <div class="card shadow h-100">
-                        <div class="card-body">
-                            <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                <!-- User Info -->
-                                <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
-                                    <img src="{{
-                                    url_for('static', filename='uploads/avatars/' + user.profile_picture)
-                                    if user.profile_picture
-                                    else url_for('static', filename='builtin/icons/person.png')
-                                    }}"
-                                    onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
-                                    class="rounded-circle me-3 p-1"
-                                    style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
-                                    width="64" height="60">
-                                    
-                                    <div class="px-2">
-                                    <h5 class="mb-1" >{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
-                                    <p class="text-muted mb-0" >{{ user.email_address }}</p>
-                                    <p class="text-muted mb-0">
-                                        <span class="badge border rounded-pill bg-light text-dark">{{ user.user_type|capitalize }}</span>
-                                    </p>
+                {% for user in users %}
+                    <div class="col">
+                        <div class="card shadow h-100">
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                    <!-- User Info -->
+                                    <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
+                                        <img src="{{
+                                        url_for('static', filename='uploads/avatars/' + user.profile_picture)
+                                        if user.profile_picture
+                                        else url_for('static', filename='builtin/icons/person.png')
+                                        }}"
+                                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
+                                        class="rounded-circle me-3 p-1"
+                                        style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
+                                        width="64" height="60">
+                                        
+                                        <div class="px-2">
+                                            <h5 class="mb-1">{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
+                                            <p class="text-muted mb-0">{{ user.email_address }}</p>
+                                            <p class="text-muted mb-0">
+                                                <span class="badge border rounded-pill bg-light text-dark">{{ user.user_type|capitalize }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="btn-group gap-1 mt-3 mt-md-0">
+                                        <button type="button" class="btn btn-success" onclick="openUserModal({{user.id}})">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-
-                        <!-- Action Buttons -->
-                            <div class="btn-group gap-1 mt-3 mt-md-0">
-                                <!--<a href="/admin-users-management/update/user_id={{user.id}}" class="btn-edit-user btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
-                                <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
-                                </a>
-                                <a href="#" class="btn btn-transparent-danger custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Delete-UserInfo-{{user.id}}" >
-                                <i class="fas fa-times" data-bs-toggle="tooltip" title="Delete"></i>
-                                </a>-->
-
-                                <!--<a href="{{ url_for('admin_dashboard_manage_users',user_id=user.id)}}" class="btn-edit-user btn btn-transparent-success custom-tooltip btn-sm" data-bs-toggle="modal" data-user-id="{{ user.id }}" data-bs-target="#Update-UserInfo-Kanban-{{user.id}}">
-                                <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
-                                </a>
-                                <a href="#" class="btn btn-transparent-danger custom-tooltip btn-sm" data-bs-toggle="modal" data-bs-target="#Delete-UserInfo-{{user.id}}" >
-                                <i class="fas fa-times" data-bs-toggle="tooltip" title="Delete"></i>
-                                </a>-->
-
-                                <button type="button" class="btn btn-edit-user btn-transparent-success custom-tooltip btn-sm"
-                                        data-bs-toggle="modal"
-                                        data-user-id="{{ user.id }}"
-                                        data-bs-target="#Update-UserInfo-Kanban-{{ user.id }}">
-                                    <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" title="Edit"></i>
-                                </button>
-                                
-
+                        </div>
+                    </div>  
+                {% endfor %}
+                <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="userEditModalLabel">Edit User Profile</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                            <div class="modal-body">
+                                <div id="modalContent">
+                                    <div class="text-center py-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Loading user data...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
-                        <!-- Social Icons -->
-                        <!--<ul class="list-inline mb-0">
-                            <li class="list-inline-item">
-                                <a href="#" data-bs-toggle="tooltip" title="Facebook"><i class="fab fa-facebook"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" data-bs-toggle="tooltip" title="Twitter"><i class="fab fa-twitter"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" data-bs-toggle="tooltip" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" data-bs-toggle="tooltip" title="Skype"><i class="fab fa-skype"></i></a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#" data-bs-toggle="tooltip" title="Message"><i class="fas fa-envelope"></i></a>
-                            </li>
-                        </ul>-->
-                        </div>
                     </div>
-                </div>  
-                {% endfor %}
+                </div>
             </div>
         </section>
-
+        <!--
         <section id="UsersManagementTreeView" class="container d-none">
             <div class="pt-2 pb-5">
                     <div class="panel panel-default">
@@ -212,7 +197,7 @@ Dashboard Users-Management
                                     </thead>
                                     <tbody>
 
-                                        {% for user in users %}
+                                        {% for user, user_info_form in user_forms %}
                                         {% include "admin/update_modal_tree.html" %}
                                         {% include "admin/delete_modal.html" %}
                                         <tr align="center" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Tree-{{user.id}}">
@@ -242,7 +227,7 @@ Dashboard Users-Management
                 </div>
                 <br />
                 <br />
-        </section>
+        </section> -->
     </div>
 </section>
 
