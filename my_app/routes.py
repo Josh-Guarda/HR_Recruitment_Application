@@ -172,82 +172,118 @@ def admin_dashboard():
 
 
 
-@app.route('/admin-users-management/', methods=["GET", "POST"])
-@login_required
-def admin_dashboard_manage_users():
-    users = Users.query.all()
-    user_forms = []
-    for user in users:
-        form = PersonalInfoForm(obj=user)
-        # set_form_choices(form, user)
-        if request.method == 'GET':
-            # Pre-populate form with user data
-            form.firstname.data = user.firstname
-            form.lastname.data = user.lastname
-            form.address_1.data = user.address_1
-            form.address_2.data = user.address_2
-            form.zipcode.data = user.zipcode
-            form.email_address.data = user.email_address
-            form.mobile_number.data = user.mobile_number
-            form.phone_number.data = user.phone_number
+# @app.route('/admin-users-management/', methods=["GET", "POST"])
+# @login_required
+# def admin_dashboard_manage_users():
+#     users = Users.query.all()
+#     user_forms = []
+#     for user in users:
+#         form = PersonalInfoForm(obj=user)
+#         # set_form_choices(form, user)
+#         if request.method == 'GET':
+#             # Pre-populate form with user data
+#             form.firstname.data = user.firstname
+#             form.lastname.data = user.lastname
+#             form.address_1.data = user.address_1
+#             form.address_2.data = user.address_2
+#             form.zipcode.data = user.zipcode
+#             form.email_address.data = user.email_address
+#             form.mobile_number.data = user.mobile_number
+#             form.phone_number.data = user.phone_number
             
             
-            # Set the selected values for dropdowns
-            form.prov_id.data = str(user.prov_id) if user.prov_id else ''
-            form.munci_id.data = str(user.munci_id) if user.munci_id else ''
-            form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
-            set_form_choices(form, user)
+#             # Set the selected values for dropdowns
+#             form.prov_id.data = str(user.prov_id) if user.prov_id else ''
+#             form.munci_id.data = str(user.munci_id) if user.munci_id else ''
+#             form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
+#             set_form_choices(form, user)
             
-        else:
-            set_form_choices(form, current_user)
+#         else:
+#             set_form_choices(form, current_user)
     
                 
         
-        #UPDATE HANDLER
-        if form.update.data and form.validate_on_submit():
-            user.firstname = form.firstname.data 
-            user.lastname = form.lastname.data
-            user.email_address = form.email_address.data
-            user.mobile_number = form.mobile_number.data
-            user.phone_number = form.phone_number.data
-            user.address_1 = form.address_1.data
-            user.address_2 = form.address_2.data
-            user.prov_id = form.prov_id.data
-            user.munci_id = form.munci_id.data
-            user.brgy_id = form.brgy_id.data
-            user.zipcode = form.zipcode.data
+#         #UPDATE HANDLER
+#         if form.update.data and form.validate_on_submit():
+#             user.firstname = form.firstname.data 
+#             user.lastname = form.lastname.data
+#             user.email_address = form.email_address.data
+#             user.mobile_number = form.mobile_number.data
+#             user.phone_number = form.phone_number.data
+#             user.address_1 = form.address_1.data
+#             user.address_2 = form.address_2.data
+#             user.prov_id = form.prov_id.data
+#             user.munci_id = form.munci_id.data
+#             user.brgy_id = form.brgy_id.data
+#             user.zipcode = form.zipcode.data
 
-            # Avatar logic
-            if form.avatar.data:
-                avatar_file = form.avatar.data
-                filename = secure_filename(avatar_file.filename)
-                avatar_name = str(uuid.uuid4()) + "_" + filename
-                upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
-                try:
-                    avatar_file.save(upload_path)
-                    current_user.profile_picture = avatar_name
-                except FileNotFoundError:
-                    flash('Avatar upload directory not found!', category='danger')
+#             # Avatar logic
+#             if form.avatar.data:
+#                 avatar_file = form.avatar.data
+#                 filename = secure_filename(avatar_file.filename)
+#                 avatar_name = str(uuid.uuid4()) + "_" + filename
+#                 upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
+#                 try:
+#                     avatar_file.save(upload_path)
+#                     current_user.profile_picture = avatar_name
+#                 except FileNotFoundError:
+#                     flash('Avatar upload directory not found!', category='danger')
 
 
-            db.session.commit()
+#             db.session.commit()
             
             
-            flash(f"{user.firstname}'s profile has been updated!", category='success')
-            return redirect(url_for('admin_dashboard_manage_users'))
+#             flash(f"{user.firstname}'s profile has been updated!", category='success')
+#             return redirect(url_for('admin_dashboard_manage_users'))
             
-        if form.cancel.data:
-            flash(f'{user.firstname}`s profile has Canceled.', category='danger')
-            return redirect(url_for('admin_dashboard_manage_users'))
+#         if form.cancel.data:
+#             flash(f'{user.firstname}`s profile has Canceled.', category='danger')
+#             return redirect(url_for('admin_dashboard_manage_users'))
 
-        if form.errors:
-            for err_msg in form.errors.values():
-                flash(f'Error: {err_msg}', category='danger')
+#         if form.errors:
+#             for err_msg in form.errors.values():
+#                 flash(f'Error: {err_msg}', category='danger')
                 
             
-        user_forms.append((user, form))
+#         user_forms.append((user, form))
         
-    return render_template('admin/admin_users_management.html',user_forms=user_forms)
+#     return render_template('admin/admin_users_management.html',user_forms=user_forms)
+
+
+
+
+
+@app.route('/admin-users-management/', methods=["GET"])
+@login_required
+def admin_dashboard_manage_users():
+    users = Users.query.all()
+    # No need to create forms here anymore!
+    return render_template('admin/admin_users_management.html', users=users)
+
+
+@app.route('/admin/get-user-form/<int:user_id>')
+@login_required
+def get_user_form(user_id):
+    user = Users.query.get_or_404(user_id)
+    form = PersonalInfoForm(obj=user)
+    
+    form.firstname.data = user.firstname
+    form.lastname.data = user.lastname
+    form.address_1.data = user.address_1
+    form.address_2.data = user.address_2
+    form.zipcode.data = user.zipcode
+    form.email_address.data = user.email_address
+    form.mobile_number.data = user.mobile_number
+    form.phone_number.data = user.phone_number
+    
+    
+    # Set the selected values for dropdowns
+    form.prov_id.data = str(user.prov_id) if user.prov_id else ''
+    form.munci_id.data = str(user.munci_id) if user.munci_id else ''
+    form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
+    set_form_choices(form, user)
+    
+    return render_template('admin/user_form_partial.html', user=user, form=form)
 
 
 
