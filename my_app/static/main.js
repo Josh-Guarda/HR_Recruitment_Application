@@ -369,115 +369,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+
+
+
+
+
+
     function openUserModal(userId) {
     console.log('Opening modal for user:', userId);
     
     // Show the modal
-    const modal = new bootstrap.Modal(document.getElementById('userEditModal'));
+    const modal = new bootstrap.Modal(document.getElementById(`Update-UserInfo-Kanban`));
     modal.show();
-    
-    // Update modal title
-    document.getElementById('userEditModalLabel').textContent = 'Loading...';
-    
-    // Show loading spinner
-    document.getElementById('modalContent').innerHTML = `
-        <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-2 text-muted">Loading user data...</p>
-        </div>
-    `;
-    
-    // // Load user form via AJAX
-    // fetch(`/admin/get-user-form/${userId}`)
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok');
-    //         }
-    //         return response.text();
-    //     })
-    //     .then(html => {
-    //         document.getElementById('modalContent').innerHTML = html;
-    //         document.getElementById('userEditModalLabel').textContent = 'Edit User Profile';
-            
-    //         // Setup location dropdowns for this user
-    //         setupLocationDropdowns(userId);
-    //     })
-    //     .catch(error => {
-    //         console.error('Error loading user form:', error);
-    //         document.getElementById('modalContent').innerHTML = `
-    //             <div class="alert alert-danger">
-    //                 <h5>Error Loading User Data</h5>
-    //                 <p>There was an error loading the user form. Please try again.</p>
-    //                 <small class="text-muted">Error: ${error.message}</small>
-    //             </div>
-    //         `;
-    //     });
-    // }
-
-    // function setupLocationDropdowns(userId) {
-    //     console.log('Setting up dropdowns for user:', userId);
-        
-    //     const provSelect = document.getElementById(`prov_id_${userId}`);
-    //     const munciSelect = document.getElementById(`munci_id_${userId}`);
-        
-    //     if (provSelect) {
-    //         provSelect.addEventListener('change', function() {
-    //             console.log('Province changed:', this.value);
-    //             updateMunicipalities(userId, this.value);
-    //         });
-    //     }
-        
-    //     if (munciSelect) {
-    //         munciSelect.addEventListener('change', function() {
-    //             console.log('Municipality changed:', this.value);
-    //             updateBarangays(userId, this.value);
-    //         });
-    //     }
-    // }
-
-    // function updateMunicipalities(userId, provCode) {
-    //     const munciSelect = document.getElementById(`munci_id_${userId}`);
-    //     const brgySelect = document.getElementById(`brgy_id_${userId}`);
-        
-    //     // Clear dropdowns
-    //     munciSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
-    //     brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
-        
-    //     if (provCode) {
-    //         fetch(`/get_municipalities/${provCode}`)
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 console.log('Municipalities loaded:', data.length);
-    //                 data.forEach(muni => {
-    //                     const option = document.createElement('option');
-    //                     option.value = muni.code;
-    //                     option.textContent = muni.name;
-    //                     munciSelect.appendChild(option);
-    //                 });
-    //             })
-    //             .catch(error => console.error('Error:', error));
-    //     }
-    // }
-
-    // function updateBarangays(userId, munciCode) {
-    //     const brgySelect = document.getElementById(`brgy_id_${userId}`);
-        
-    //     brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
-        
-    //     if (munciCode) {
-    //         fetch(`/get_barangays/${munciCode}`)
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 console.log('Barangays loaded:', data.length);
-    //                 data.forEach(brgy => {
-    //                     const option = document.createElement('option');
-    //                     option.value = brgy.code;
-    //                     option.textContent = brgy.name;
-    //                     brgySelect.appendChild(option);
-    //                 });
-    //             })
-    //             .catch(error => console.error('Error:', error));
-    //     }
     }

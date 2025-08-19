@@ -261,7 +261,7 @@ def admin_dashboard_manage_users():
     return render_template('admin/admin_users_management.html', users=users)
 
 
-@app.route('/admin/get-user-form/<int:user_id>')
+@app.route('/admin/get-user-form/<int:user_id>', methods=["GET","POST"])
 @login_required
 def get_user_form(user_id):
     user = Users.query.get_or_404(user_id)
@@ -283,7 +283,11 @@ def get_user_form(user_id):
     form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
     set_form_choices(form, user)
     
+    
     return render_template('admin/user_form_partial.html', user=user, form=form)
+
+
+
 
 
 
