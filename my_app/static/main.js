@@ -370,15 +370,47 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
-
-
-    function openUserModal(userId) {
-    console.log('Opening modal for user:', userId);
     
-    // Show the modal
-    const modal = new bootstrap.Modal(document.getElementById(`Update-UserInfo-Kanban`));
-    modal.show();
+    function openUserModal(userId) {
+        console.log('Opening modal for user:', userId);
+
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById(`userEditModal`));
+        modal.show();
+
+        // (Optional: load user data dynamically here)
+        loadUserData(userId);
+        
     }
+
+function loadUserData(userId) {
+    const modalBody = document.getElementById("modal-body-content");
+    
+    modalBody.innerHTML = `<p class="text-muted">Loading...</p>`;
+
+    fetch(`/admin/get-user-form/${userId}`)
+        .then(response => response.json())
+        .then(user => {
+            modalBody.innerHTML = `
+                <form>
+                    <div class="mb-3">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" value="${user.firstname}">
+                    </div>
+                    <div class="mb-3">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" value="${user.lastname}">
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" value="${user.email_address}">
+                    </div>
+                    <!-- etc... -->
+                </form>
+            `;
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            modalBody.innerHTML = `<p class="text-danger">Failed to load user data.</p>`;
+        });
+}

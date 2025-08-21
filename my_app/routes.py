@@ -253,7 +253,7 @@ def admin_dashboard():
 
 
 
-@app.route('/admin-users-management/', methods=["GET"])
+@app.route('/admin-users-management/', methods=["GET","POST"])
 @login_required
 def admin_dashboard_manage_users():
     users = Users.query.all()
@@ -261,30 +261,29 @@ def admin_dashboard_manage_users():
     return render_template('admin/admin_users_management.html', users=users)
 
 
-@app.route('/admin/get-user-form/<int:user_id>', methods=["GET","POST"])
+from flask import jsonify
+
+@app.route('/admin/get-user-form/<int:user_id>')
 @login_required
 def get_user_form(user_id):
     user = Users.query.get_or_404(user_id)
-    form = PersonalInfoForm(obj=user)
     
-    form.firstname.data = user.firstname
-    form.lastname.data = user.lastname
-    form.address_1.data = user.address_1
-    form.address_2.data = user.address_2
-    form.zipcode.data = user.zipcode
-    form.email_address.data = user.email_address
-    form.mobile_number.data = user.mobile_number
-    form.phone_number.data = user.phone_number
-    
-    
-    # Set the selected values for dropdowns
-    form.prov_id.data = str(user.prov_id) if user.prov_id else ''
-    form.munci_id.data = str(user.munci_id) if user.munci_id else ''
-    form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
-    set_form_choices(form, user)
-    
-    
-    return render_template('admin/user_form_partial.html', user=user, form=form)
+    user_data = {
+        "firstname": user.firstname,
+        "lastname": user.lastname,
+        "address_1": user.address_1,
+        "address_2": user.address_2,
+        "zipcode": user.zipcode,
+        "email_address": user.email_address,
+        "mobile_number": user.mobile_number,
+        "phone_number": user.phone_number,
+        "prov_id": user.prov_id,
+        "munci_id": user.munci_id,
+        "brgy_id": user.brgy_id
+    }
+
+    return jsonify(user_data)
+
 
 
 

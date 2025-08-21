@@ -84,9 +84,16 @@ Dashboard Users-Management
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
                                     <button type="button" class="btn btn-sm btn-primary">
                                         <i class="ri-filter-line fs-5"></i>
-                                        <span class="ms-2">Filter By</span>
+                                        <span class="ms-2">Filter</span>
                                     </button>
-                                    
+                                    <button type="button" class="btn btn-sm btn-primary">
+                                        <i class="ri-stack-line fs-5"></i>
+                                        <span class="ms-2">Group By</span>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary">
+                                        <i class="ri-file-line fs-5"></i>
+                                        <span class="ms-2">Import</span>
+                                    </button>
                                 </div>
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
                                     <button id="btn-UsersKanbanView" type="button" class="btn btn-sm btn-primary " data-bs-toggle="tooltip" title="Kanban View">
@@ -106,10 +113,8 @@ Dashboard Users-Management
         
         
         <section id="UsersManagementKanbanView" class="container">
-            
             <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
                 {% for user in users %}
-                {% include "admin/update_modal_kanban.html" %}
                     <div class="col">
                         <div class="card shadow h-100">
                             <div class="card-body">
@@ -133,25 +138,50 @@ Dashboard Users-Management
                                                 <span class="badge border rounded-pill bg-light text-dark">{{ user.user_type|capitalize }}</span>
                                             </p>
                                         </div>
-                                    </div>
+                                    </div>   
 
                                     <!-- Action Buttons -->
                                     <div class="btn-group gap-1 mt-3 mt-md-0">
-                                        <!--<button type="button" class="btn btn-success" onclick="openUserModal({{user.id}})">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>-->
-
-                                        <button type="button" class="btn btn-success" onclick="openUserModal({{user.id}})">
+                                        <button type="button" class="userinfo btn btn-success" onclick="openUserModal({{user.id}})">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
-
+                                        <!--<button type="button" class="userinfo btn btn-success" data-id='{{user.id}}'>
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>-->
+                                        
+                                            
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>  
                 {% endfor %}
-                
+                <!-- Beep Sound in Modals -->
+                <audio id="modal-beep" src="{{ url_for('static',filename='builtin/sound/beep-sound-software.wav') }}"></audio>
+                <!-- Modal -->
+                <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="userEditModalLabel">Edit User Profile</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                            <div class="modal-body">
+                                <div id="modalContent">
+                                    <div class="text-center py-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Loading user data...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <!--
