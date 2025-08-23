@@ -159,7 +159,7 @@ Dashboard Users-Management
                 <!-- Beep Sound in Modals -->
                 <audio id="modal-beep" src="{{ url_for('static',filename='builtin/sound/beep-sound-software.wav') }}"></audio>
                 <!-- Modal -->
-                <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel" aria-hidden="true">
+                <div class="modal fade" id="userEditModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="userEditModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-xl modal-dialog-centered">
                         <div class="modal-content">
                                 <div class="modal-header">
@@ -182,6 +182,10 @@ Dashboard Users-Management
                         </div>
                     </div>
                 </div>
+
+
+                
+
             </div>
         </section>
         <!--

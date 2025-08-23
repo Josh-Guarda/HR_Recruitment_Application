@@ -11,7 +11,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
 import os
-
+# from flask import jsonify
 
 
 
@@ -253,7 +253,7 @@ def admin_dashboard():
 
 
 
-@app.route('/admin-users-management/', methods=["GET","POST"])
+@app.route('/admin-users-management/', methods=["GET"])
 @login_required
 def admin_dashboard_manage_users():
     users = Users.query.all()
@@ -261,14 +261,13 @@ def admin_dashboard_manage_users():
     return render_template('admin/admin_users_management.html', users=users)
 
 
-from flask import jsonify
-
-@app.route('/admin/get-user-form/<int:user_id>')
+@app.route('/admin/get-user-form/<int:user_id>', methods=["GET","POST"])
 @login_required
 def get_user_form(user_id):
-    user = Users.query.get_or_404(user_id)
     
+    user = Users.query.get_or_404(user_id)
     user_data = {
+        "profile_pic": user.profile_picture,
         "firstname": user.firstname,
         "lastname": user.lastname,
         "address_1": user.address_1,
@@ -281,7 +280,7 @@ def get_user_form(user_id):
         "munci_id": user.munci_id,
         "brgy_id": user.brgy_id
     }
-
+    
     return jsonify(user_data)
 
 

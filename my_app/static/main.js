@@ -370,18 +370,34 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-    
-    function openUserModal(userId) {
-        console.log('Opening modal for user:', userId);
+document.addEventListener('click', function (event) {
+    const modal = document.getElementById('userEditModal');
+    const modalContent = modal.querySelector('.modal-content');
+    const isModalVisible = modal.classList.contains('show');
 
-        // Show the modal
-        const modal = new bootstrap.Modal(document.getElementById(`userEditModal`));
-        modal.show();
-
-        // (Optional: load user data dynamically here)
-        loadUserData(userId);
-        
+    if (isModalVisible && !modalContent.contains(event.target)) {
+      const beep = document.getElementById('modal-beep');
+      beep.currentTime = 0;
+      beep.play();
     }
+  });
+
+
+
+
+    
+function openUserModal(userId) {
+    // console.log('Opening modal for user:', userId);
+
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById(`userEditModal`));
+    modal.show();
+
+    // (Optional: load user data dynamically here)
+    loadUserData(userId);
+    
+    
+}
 
 function loadUserData(userId) {
     const modalBody = document.getElementById("modal-body-content");
@@ -389,28 +405,13 @@ function loadUserData(userId) {
     modalBody.innerHTML = `<p class="text-muted">Loading...</p>`;
 
     fetch(`/admin/get-user-form/${userId}`)
+
         .then(response => response.json())
         .then(user => {
-            modalBody.innerHTML = `
-                <form>
-                    <div class="mb-3">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" value="${user.firstname}">
-                    </div>
-                    <div class="mb-3">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" value="${user.lastname}">
-                    </div>
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input type="email" class="form-control" value="${user.email_address}">
-                    </div>
-                    <!-- etc... -->
-                </form>
-            `;
+            console.log(user)
         })
         .catch(error => {
             console.error('Error fetching user data:', error);
-            modalBody.innerHTML = `<p class="text-danger">Failed to load user data.</p>`;
+            
         });
 }
