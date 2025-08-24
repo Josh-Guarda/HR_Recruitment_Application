@@ -18,10 +18,10 @@ UPLOAD_FOLDER = 'C:/Users/JoshuaPC/Desktop/FLASK_RECRUITMENT/my_app/static/uploa
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-#Directory of JSON FILES
-Barangay_JSON='my_app/static/json/ref_brgy.json'
-Municipality_JSON='my_app/static/json/ref_city_mun.json'
-Province_JSON='my_app/static/json/ref_province.json'
+# #Directory of JSON FILES
+# Barangay_JSON='my_app/static/json/ref_brgy.json'
+# Municipality_JSON='my_app/static/json/ref_city_mun.json'
+# Province_JSON='my_app/static/json/ref_province.json'
 
 #OPEN JSON file to extract RECORDS (THIS will be called to routes.py)
 with open('my_app/static/json/ref_brgy.json', encoding='utf-8') as f:

@@ -1,6 +1,6 @@
 from my_app import app,db
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
-from my_app import  MUNICIPALITY_DATA, PROVINCE_DATA,mail,Message,generate_reset_token,verify_reset_token
+from my_app import mail,Message,generate_reset_token,verify_reset_token
 # from my_app.helper import set_form_province,set_form_municipality,set_form_barangay
 from my_app.helper import set_form_choices
 from flask import render_template, redirect, url_for, flash,request,session, jsonify
@@ -11,7 +11,6 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
 import os
-# from flask import jsonify
 
 
 
@@ -253,6 +252,11 @@ def admin_dashboard():
 
 
 
+
+
+
+
+
 @app.route('/admin-users-management/', methods=["GET"])
 @login_required
 def admin_dashboard_manage_users():
@@ -261,25 +265,56 @@ def admin_dashboard_manage_users():
     return render_template('admin/admin_users_management.html', users=users)
 
 
-@app.route('/admin/get-user-form/<int:user_id>', methods=["GET","POST"])
+@app.route('/admin-get-users/', methods=["GET","POST","PATCH","Delete"])
 @login_required
+def admin_get_users():
+    users = Users.query.all()
+    
+    
+    for user in users:
+        user_data = { 
+                "id": user.id,
+                "profile_pic": user.profile_picture,
+                "firstname": user.firstname,
+                "lastname": user.lastname,
+                "address_1": user.address_1,
+                "address_2": user.address_2,
+                "zipcode": user.zipcode,
+                "email_address": user.email_address,
+                "mobile_number": user.mobile_number,
+                "phone_number": user.phone_number,
+                "prov_id": user.prov_id,
+                "munci_id": user.munci_id,
+                "brgy_id": user.brgy_id
+                }
+    
+    
+    return jsonify(user_data)
+
+   
+
+
+@app.route('/admin/get-user-form/<int:user_id>', methods=["GET","POST","PATCH","Delete"])
+# @login_required
 def get_user_form(user_id):
     
     user = Users.query.get_or_404(user_id)
-    user_data = {
-        "profile_pic": user.profile_picture,
-        "firstname": user.firstname,
-        "lastname": user.lastname,
-        "address_1": user.address_1,
-        "address_2": user.address_2,
-        "zipcode": user.zipcode,
-        "email_address": user.email_address,
-        "mobile_number": user.mobile_number,
-        "phone_number": user.phone_number,
-        "prov_id": user.prov_id,
-        "munci_id": user.munci_id,
-        "brgy_id": user.brgy_id
-    }
+    user_data = { 
+                "id": user.id,
+                "profile_pic": user.profile_picture,
+                "firstname": user.firstname,
+                "lastname": user.lastname,
+                "address_1": user.address_1,
+                "address_2": user.address_2,
+                "zipcode": user.zipcode,
+                "email_address": user.email_address,
+                "mobile_number": user.mobile_number,
+                "phone_number": user.phone_number,
+                "prov_id": user.prov_id,
+                "munci_id": user.munci_id,
+                "brgy_id": user.brgy_id
+                }
+    
     
     return jsonify(user_data)
 
