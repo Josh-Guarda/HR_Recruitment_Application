@@ -265,31 +265,57 @@ def admin_dashboard_manage_users():
     return render_template('admin/admin_users_management.html', users=users)
 
 
-@app.route('/admin-get-users/', methods=["GET","POST","PATCH","Delete"])
-@login_required
-def admin_get_users():
-    users = Users.query.all()
-    
-    
-    for user in users:
-        user_data = { 
-                "id": user.id,
-                "profile_pic": user.profile_picture,
-                "firstname": user.firstname,
-                "lastname": user.lastname,
-                "address_1": user.address_1,
-                "address_2": user.address_2,
-                "zipcode": user.zipcode,
-                "email_address": user.email_address,
-                "mobile_number": user.mobile_number,
-                "phone_number": user.phone_number,
-                "prov_id": user.prov_id,
-                "munci_id": user.munci_id,
-                "brgy_id": user.brgy_id
-                }
-    
-    
-    return jsonify(user_data)
+
+# @app.route('/get-user-form/', methods=["GET"])
+# # @login_required
+# def admin_get_users():
+#     user_id = request.args.get("id", type=int)  # check if ?id= is passed
+
+#     if user_id:  # if specific ID is requested
+#         user = Users.query.get_or_404(user_id)
+#         user_data = {
+#             "id": user.id,
+#             "profile_pic": user.profile_picture,
+#             "firstname": user.firstname,
+#             "lastname": user.lastname,
+#             "department": user.department_id,
+#             "user_type": user.user_type_id,
+#             "address_1": user.address_1,
+#             "address_2": user.address_2,
+#             "zipcode": user.zipcode,
+#             "email_address": user.email_address,
+#             "mobile_number": user.mobile_number,
+#             "phone_number": user.phone_number,
+#             "prov_id": user.prov_id,
+#             "munci_id": user.munci_id,
+#             "brgy_id": user.brgy_id,
+#         }
+#         return jsonify(user_data)
+
+#     # otherwise return all users
+#     users = Users.query.all()
+#     users_list = []
+#     for user in users:
+#         users_list.append({
+#             "id": user.id,
+#             "profile_pic": user.profile_picture,
+#             "firstname": user.firstname,
+#             "lastname": user.lastname,
+#             "department": user.department_id,
+#             "user_type": user.user_type_id,
+#             "address_1": user.address_1,
+#             "address_2": user.address_2,
+#             "zipcode": user.zipcode,
+#             "email_address": user.email_address,
+#             "mobile_number": user.mobile_number,
+#             "phone_number": user.phone_number,
+#             "prov_id": user.prov_id,
+#             "munci_id": user.munci_id,
+#             "brgy_id": user.brgy_id
+#         })
+
+#     return jsonify(users_list)
+
 
    
 
@@ -314,8 +340,6 @@ def get_user_form(user_id):
                 "munci_id": user.munci_id,
                 "brgy_id": user.brgy_id
                 }
-    
-    
     return jsonify(user_data)
 
 
