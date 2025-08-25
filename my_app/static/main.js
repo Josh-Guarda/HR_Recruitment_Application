@@ -326,7 +326,6 @@ document.addEventListener("DOMContentLoaded", function () {
     provSelect.addEventListener('change', function() {
         const provCode = this.value;
         
-        console.log('Trace here')
         // Clear municipality and barangay dropdowns
         munciSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
         brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
@@ -387,7 +386,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
 function openUserModal(userId) {
-    // console.log('Opening modal for user:', userId);
 
     // Update the modal title
     document.getElementById("userEditModalLabel").innerText = `Edit User Profile - ${userId}`;
@@ -397,7 +395,7 @@ function openUserModal(userId) {
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
 
-    // (Optional: load user data dynamically here)
+    // (Optional: load user inside the modal and input data dynamically via user_id)
     loadUserData(userId);
 }
 
@@ -418,9 +416,7 @@ function loadUserData(userId) {
     fetch(`/get-user-form/${userId}`)
         .then(response => response.json())
         .then(data => {
-            console.log("User data loaded:", data);
-
-            // Replace modal body with a form
+            
             contentDiv.innerHTML = `
                 <form id="userEditForm" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="user_id" value="{{ user.id }}">
@@ -452,7 +448,7 @@ function loadUserData(userId) {
                         </div>
                         <div class="col text-center">
                             <label class="form-label">Last Name</label>
-                            <input type="text" name="lastname" class="form-control", placeholder="Dela Cruz", value="${data.lastname}">
+                            <input type="text" name="lastname" class="form-control" placeholder="Dela Cruz" value="${data.lastname}">
                         </div>
                     </div>
                     
@@ -463,36 +459,33 @@ function loadUserData(userId) {
                             <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted">
                                 <div class="col text-center">
                                     <label class="form-label">Address 1</label>
-                                    <input type="text" name="address_1" class="form-control" id="address1_{{user.id}}" , placeholder="Block # / Lot #", value="${data.address_1}">
+                                    <input type="text" name="address_1" class="form-control" id="address1_{{user.id}}" placeholder="Block # / Lot #" value="${data.address_1}">
                                 </div>
                                 <div class="col text-center">
                                     <label class="form-label">Address 2</label>
-                                    <input type="text" name="address_1" class="form-control", id="address2_{{user.id}}" , placeholder="Street / Phase ", value="${data.address_1}">
-                                    
+                                    <input type="text" name="address_1" class="form-control", id="address2_{{user.id}}" placeholder="Street / Phase " value="${data.address_1}">
                                 </div>
                             </div>
                             <div class="row row-cols-1 row-cols-lg-4 mb-5 text-muted">
                                 <div class="col text-center">
                                     <label class="form-label">Province</label>
-                                    <select name="province" , class="form-control", id="prov_id", value=${data.prov_id}"></select>
-
+                                    <select name="province" class="form-control text-center" id="dynamic_prov_id"></select>
                                 </div>
 
                                 <div class="col text-center">
                                     <label class="form-label">Municipality</label>
-                                    <select name="province" , class="form-control", id="munci_id", value=${data.munci_id}"></select>
-
+                                    <select name="province" class="form-control text-center" id="dynamic_munci_id"></select>
                                 </div>
 
                                 <div class="col text-center">
                                     <label class="form-label">Barangay</label>
-                                    <select name="province", class="form-control", id="brgy_id", value=${data.brgy_id}"></select>
+                                    <select name="province" class="form-control text-center" id="dynamic_brgy_id"></select>
 
                                 </div>
                                 
                                 <div class="col text-center">
                                     <label class="form-label">Zipcode</label> 
-                                    <input type="text" class="form-control", id="zipcode", value="${data.zipcode}">
+                                    <input type="text" class="form-control" id="zipcode" value="${data.zipcode}">
                                     
                                 </div>
                                 
@@ -506,31 +499,107 @@ function loadUserData(userId) {
                             <h6 class="mb-4">Contact Details</h6>
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control", id="email_address", placeholder="your@email.com" ,value="${data.email_address}">
-                                {{ user_info_form.email_address(id="email_address_{{user.id}}",class="form-control", placeholder="your@email.com", value=user.email_address) }}
+                                <input type="email" class="form-control" placeholder="your@email.com" value="${data.email_address}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Mobile Number</label>
-                                <input type="text" class="form-control", id="zipcode", value="${data.zipcode}">
-                                {{ user_info_form.mobile_number(id="mobile_number_{{user.id}}",class="form-control", placeholder="+63*", value=user.mobile_number) }}
+                                <input type="text" class="form-control" placeholder="+63*" value="${data.mobile_number}">
                             </div>
                             <div>
                                 <label class="form-label">Phone Number</label>
-                                <input type="text" class="form-control", id="zipcode", value="${data.zipcode}">
-                                {{ user_info_form.phone_number(id="phone_number_{{user.id}}",class="form-control", placeholder="0000-0000", value=user.phone_number) }}
+                                <input type="text" class="form-control" placeholder="0000-0000" value="${data.phone_number}">
                             </div>
                         </div>
                     </div>
 
-                    <div class="d-flex flex-column-sm align-items-center justify-content-center gap-2 mb-3 w-100">
-                        {{user_info_form.update(class="btn btn-sm btn-outline-success text-success px-5")}}
-                        {{user_info_form.cancel (class="btn btn-sm btn-outline-danger text-danger px-5")}}
+                    <div class="my-5">
+                        <input type="submit" value="Save Changes" class="btn btn-md btn-primary px-5 w-100" />
+
                     </div>
                 </form>
             `;
 
+            const provSelect = document.getElementById("dynamic_prov_id");
+            const munciSelect = document.getElementById("dynamic_munci_id");
+            const brgySelect = document.getElementById("dynamic_brgy_id");
+
+            // 1. Load provinces
+            fetch(`/get_provinces`)
+                .then(res => res.json())
+                .then(provinces => {
+                    provSelect.innerHTML = '<option value="">-- Select Province --</option>';
+                    provinces.forEach(prov => {
+                        const option = document.createElement("option");
+                        option.value = prov.code;
+                        option.textContent = prov.name;
+                        provSelect.appendChild(option);
+                    });
+
+                    if (data.prov_id) {
+                        provSelect.value = data.prov_id;
+                        loadMunicipalities(data.prov_id, data.munci_id, data.brgy_id);
+                    }
+                });
+
+            // 2. Province change handler
+            provSelect.addEventListener("change", () => {
+                loadMunicipalities(provSelect.value, null, null);
+            });
+
+            // Helper: Load municipalities
+            function loadMunicipalities(provCode, preselectMuni, preselectBrgy) {
+                munciSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
+                brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+
+                if (!provCode) return;
+
+                fetch(`/get_municipalities/${provCode}`)
+                .then(res => res.json())
+                .then(munis => {
+                    munis.forEach(muni => {
+                        const option = document.createElement("option");
+                        option.value = muni.code;
+                        option.textContent = muni.name;
+                        munciSelect.appendChild(option);
+                    });
+
+                    if (preselectMuni) {
+                        munciSelect.value = preselectMuni;
+                        loadBarangays(preselectMuni, preselectBrgy);
+                    }
+                });
+            }
+
+            // 3. Municipality change handler
+            munciSelect.addEventListener("change", () => {
+                loadBarangays(munciSelect.value, null);
+            });
+
+            // Helper: Load barangays
+            function loadBarangays(munciCode, preselectBrgy) {
+                brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+                if (!munciCode) return;
+
+                fetch(`/get_barangays/${munciCode}`)
+                .then(res => res.json())
+                .then(brgys => {
+                    brgys.forEach(brgy => {
+                        const option = document.createElement("option");
+                        option.value = brgy.code;
+                        option.textContent = brgy.name;
+                        brgySelect.appendChild(option);
+                    });
+
+                    if (preselectBrgy) {
+                        brgySelect.value = preselectBrgy;
+                    }
+                });
+            }
+
+
             // Attach submit handler
             document.getElementById("userEditForm").addEventListener("submit", function(e) {
+                console.log('POGI AKO')
                 e.preventDefault();
 
                 // Collect form data
@@ -559,24 +628,3 @@ function loadUserData(userId) {
 }
 
 
-
-
-
-
-// function loadUserData(userId) {
-//     const modalBody = document.getElementById("modal-body-content");
-    
-//     modalBody.innerHTML = `<p class="text-muted">Loading...</p>`;
-
-
-//     fetch(`/admin/get-user-form/${userId}`)
-
-//         .then(response => response.json())
-//         .then(user => {
-//             console.log(user)
-//         })
-//         .catch(error => {
-//             console.error('Error fetching user data:', error);
-            
-//         });
-//     }

@@ -463,6 +463,14 @@ def public_dashboard(user_id):
 
 
 
+@app.route('/get_provinces')
+def get_provinces():
+    provinces = sorted(
+        [{"code": str(m['provCode']), "name": m['provDesc']} 
+         for m in PROVINCE_DATA],
+        key=lambda x: x['name'].lower()
+    )
+    return jsonify(provinces)
 
 
 @app.route('/get_municipalities/<prov_code>')
@@ -473,7 +481,6 @@ def get_municipalities(prov_code):
         key=lambda x: x['name'].lower()
     )
     
-    print(f"myprov{prov_code}")
     return jsonify(municipalities)
 
 @app.route('/get_barangays/<munci_code>')
