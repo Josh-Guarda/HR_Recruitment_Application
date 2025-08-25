@@ -370,17 +370,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-document.addEventListener('click', function (event) {
-    const modal = document.getElementById('userEditModal');
-    const modalContent = modal.querySelector('.modal-content');
-    const isModalVisible = modal.classList.contains('show');
+// document.addEventListener('click', function (event) {
+//     const modal = document.getElementById('userEditModal');
+//     const modalContent = modal.querySelector('.modal-content');
+//     const isModalVisible = modal.classList.contains('show');
 
-    if (isModalVisible && !modalContent.contains(event.target)) {
-      const beep = document.getElementById('modal-beep');
-      beep.currentTime = 0;
-      beep.play();
-    }
-  });
+//     if (isModalVisible && !modalContent.contains(event.target)) {
+//       const beep = document.getElementById('modal-beep');
+//       beep.currentTime = 0;
+//       beep.play();
+//     }
+//   });
 
 
 
@@ -389,29 +389,194 @@ document.addEventListener('click', function (event) {
 function openUserModal(userId) {
     // console.log('Opening modal for user:', userId);
 
-    // Show the modal
-    const modal = new bootstrap.Modal(document.getElementById(`userEditModal`));
+    // Update the modal title
+    document.getElementById("userEditModalLabel").innerText = `Edit User Profile - ${userId}`;
+
+    // Initialize and show the modal
+    const modalElement = document.getElementById("userEditModal");
+    const modal = new bootstrap.Modal(modalElement);
     modal.show();
 
     // (Optional: load user data dynamically here)
     loadUserData(userId);
-    
-    
 }
+
 
 function loadUserData(userId) {
-    const modalBody = document.getElementById("modal-body-content");
-    
-    modalBody.innerHTML = `<p class="text-muted">Loading...</p>`;
+    const contentDiv = document.getElementById("modalContent");
 
-    fetch(`/admin/get-user-form/${userId}`)
+    // Show loading spinner while fetching
+    contentDiv.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading user data...</p>
+        </div>
+    `;
 
+    fetch(`/get-user-form/${userId}`)
         .then(response => response.json())
-        .then(user => {
-            console.log(user)
+        .then(data => {
+            console.log("User data loaded:", data);
+
+            // Replace modal body with a form
+            contentDiv.innerHTML = `
+                <form id="userEditForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <!--{{user_info_form.user_id(value=user.id)}}-->
+                    <div class="container d-none d-sm-block">
+                        <div class="avatar pb-5 ">
+                            <div id="avatar-container">
+                                
+                                <img id="avatar-preview" src="
+                                    {% if user.profile_picture %}
+                                    {{ url_for('static', filename='uploads/avatars/'~ value="${data.profile_pic})}}
+                                    {% else %}
+                                    {{ url_for('static', filename='builtin/icons/person.png')}}
+                                    {% endif %}" 
+                                    alt="Avatar"
+                                    onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}'">
+                            </div>
+                            <label for="avatar-upload" class="upload-label">
+                                    <span class="upload-icon">+</span>
+                            </label>
+                            <input type="file" id="avatar-upload" name="avatar" accept="image/png,image/jpeg"/>
+                        </div>
+                    </div>
+                    
+                    <div class="row row-cols-1 row-cols-lg-2 mb-3 text-muted">
+                        <div class="col text-center">
+                            <label class="form-label">First Name</label>
+                            <input type="text" name="firstname" placeholder="Juan" class="form-control" value="${data.firstname}">
+                        </div>
+                        <div class="col text-center">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" name="lastname" class="form-control", placeholder="Dela Cruz", value="${data.lastname}">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col text-center text-muted py-5 ps-lg-3">
+                            <h6 class="mb-4">Address Details</h6>
+                            
+                            <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted">
+                                <div class="col text-center">
+                                    <label class="form-label">Address 1</label>
+                                    <input type="text" name="address_1" class="form-control" id="address1_{{user.id}}" , placeholder="Block # / Lot #", value="${data.address_1}">
+                                </div>
+                                <div class="col text-center">
+                                    <label class="form-label">Address 2</label>
+                                    <input type="text" name="address_1" class="form-control", id="address2_{{user.id}}" , placeholder="Street / Phase ", value="${data.address_1}">
+                                    
+                                </div>
+                            </div>
+                            <div class="row row-cols-1 row-cols-lg-4 mb-5 text-muted">
+                                <div class="col text-center">
+                                    <label class="form-label">Province</label>
+                                    <select name="province" , class="form-control", id="prov_id", value=${data.prov_id}"></select>
+
+                                </div>
+
+                                <div class="col text-center">
+                                    <label class="form-label">Municipality</label>
+                                    <select name="province" , class="form-control", id="munci_id", value=${data.munci_id}"></select>
+
+                                </div>
+
+                                <div class="col text-center">
+                                    <label class="form-label">Barangay</label>
+                                    <select name="province", class="form-control", id="brgy_id", value=${data.brgy_id}"></select>
+
+                                </div>
+                                
+                                <div class="col text-center">
+                                    <label class="form-label">Zipcode</label> 
+                                    <input type="text" class="form-control", id="zipcode", value="${data.zipcode}">
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="row">
+                        <div class="col-12 col-lg-6 text-center text-muted py-2 pe-lg-3">
+                            <h6 class="mb-4">Contact Details</h6>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control", id="email_address", placeholder="your@email.com" ,value="${data.email_address}">
+                                {{ user_info_form.email_address(id="email_address_{{user.id}}",class="form-control", placeholder="your@email.com", value=user.email_address) }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Mobile Number</label>
+                                <input type="text" class="form-control", id="zipcode", value="${data.zipcode}">
+                                {{ user_info_form.mobile_number(id="mobile_number_{{user.id}}",class="form-control", placeholder="+63*", value=user.mobile_number) }}
+                            </div>
+                            <div>
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" class="form-control", id="zipcode", value="${data.zipcode}">
+                                {{ user_info_form.phone_number(id="phone_number_{{user.id}}",class="form-control", placeholder="0000-0000", value=user.phone_number) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column-sm align-items-center justify-content-center gap-2 mb-3 w-100">
+                        {{user_info_form.update(class="btn btn-sm btn-outline-success text-success px-5")}}
+                        {{user_info_form.cancel (class="btn btn-sm btn-outline-danger text-danger px-5")}}
+                    </div>
+                </form>
+            `;
+
+            // Attach submit handler
+            document.getElementById("userEditForm").addEventListener("submit", function(e) {
+                e.preventDefault();
+
+                // Collect form data
+                const formData = new FormData(this);
+                const body = {};
+                formData.forEach((value, key) => body[key] = value);
+
+                fetch(`/update-user/${userId}`, {
+                    method: "POST",   // or PATCH
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                })
+                .then(res => res.json())
+                .then(result => {
+                    console.log("Update success:", result);
+                    // Optional: close modal
+                    bootstrap.Modal.getInstance(document.getElementById("userEditModal")).hide();
+                })
+                .catch(err => console.error("Update failed:", err));
+            });
         })
         .catch(error => {
-            console.error('Error fetching user data:', error);
-            
+            console.error("Error fetching user data:", error);
+            contentDiv.innerHTML = `<p class="text-danger">Failed to load user data.</p>`;
         });
 }
+
+
+
+
+
+
+// function loadUserData(userId) {
+//     const modalBody = document.getElementById("modal-body-content");
+    
+//     modalBody.innerHTML = `<p class="text-muted">Loading...</p>`;
+
+
+//     fetch(`/admin/get-user-form/${userId}`)
+
+//         .then(response => response.json())
+//         .then(user => {
+//             console.log(user)
+//         })
+//         .catch(error => {
+//             console.error('Error fetching user data:', error);
+            
+//         });
+//     }
