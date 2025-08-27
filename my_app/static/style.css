@@ -596,7 +596,7 @@ table.dataTable tbody tr:hover {
     font-size: 1.25rem;
 }
 
-.btn-close {
+/* .btn-close {
     filter: brightness(0) invert(1);
     opacity: 0.8;
     transition: opacity 0.2s;
@@ -604,7 +604,7 @@ table.dataTable tbody tr:hover {
 
 .btn-close:hover {
     opacity: 1;
-}
+} */
 
 .modal-body {
     padding: 2rem 1.5rem;

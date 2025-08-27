@@ -190,7 +190,6 @@ def admin_dashboard():
 #             form.mobile_number.data = user.mobile_number
 #             form.phone_number.data = user.phone_number
             
-            
 #             # Set the selected values for dropdowns
 #             form.prov_id.data = str(user.prov_id) if user.prov_id else ''
 #             form.munci_id.data = str(user.munci_id) if user.munci_id else ''
@@ -266,12 +265,11 @@ def admin_dashboard_manage_users():
 
 
 
-@app.route('/get-user-form/<int:user_id>', methods=["GET","POST","PATCH","Delete"])
+@app.route('/get-user-form/<int:user_id>', methods=["GET"])
 # @login_required
 def get_user_form(user_id):
-    
     user = Users.query.get_or_404(user_id)
-    user_data = { 
+    user_data = {
                 "id": user.id,
                 "profile_pic": user.profile_picture,
                 "firstname": user.firstname,
@@ -284,9 +282,37 @@ def get_user_form(user_id):
                 "phone_number": user.phone_number,
                 "prov_id": user.prov_id,
                 "munci_id": user.munci_id,
-                "brgy_id": user.brgy_id
+                "brgy_id": user.brgy_id,
+                "user_type":user.user_type_id
                 }
     return jsonify(user_data)
+
+
+@app.route('/update-user-form/<int:user_id>', methods=["POST","DELETE"])
+def update_user_form(user_id):
+    user = Users.query.filter_by(id=user_id).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    req = request.get_json()
+    
+    
+    if request.method =="POST":
+        print(req)
+        # update fields dynamically
+        for k, v in req.items():
+            if hasattr(user, k):   # only update attributes that exist on the model
+                setattr(user, k, v)
+
+        db.session.commit()
+    
+    
+
+    return jsonify({"message": "User updated successfully"})
+
+
+
+
+
 
 
 
@@ -463,6 +489,8 @@ def public_dashboard(user_id):
 
 
 
+
+
 @app.route('/get_provinces')
 def get_provinces():
     provinces = sorted(
@@ -506,35 +534,3 @@ def logout_page():
 
 
 
-
-@app.route('/debug/address_data/<int:user_id>')
-@login_required
-def debug_address_data(user_id):
-    # if not current_user.is_admin:  # Add appropriate permission check
-    #     return "Not authorized", 403
-        
-    user = Users.query.get(user_id)
-    if not user:
-        return "User not found", 404
-        
-    # Collect debug information
-    debug_info = {
-        "user_id": user.id,
-        "prov_id": {
-            "raw_value": user.prov_id,
-            "as_string": str(user.prov_id) if user.prov_id is not None else None,
-            "exists_in_data": any(str(user.prov_id) == str(p['provCode']) for p in PROVINCE_DATA) if user.prov_id else False
-        },
-        "munci_id": {
-            "raw_value": user.munci_id,
-            "as_string": str(user.munci_id) if user.munci_id is not None else None,
-            "exists_in_data": any(str(user.munci_id) == str(m['citymunCode']) for m in MUNICIPALITY_DATA) if user.munci_id else False
-        },
-        "brgy_id": {
-            "raw_value": user.brgy_id,
-            "as_string": str(user.brgy_id) if user.brgy_id is not None else None,
-            "exists_in_data": any(str(user.brgy_id) == str(b['brgyCode']) for b in BARANGAY_DATA) if user.brgy_id else False
-        }
-    }
-    
-    return jsonify(debug_info)
