@@ -316,4 +316,128 @@
 {% endblock%}
 
 
+{% block javascript %}
+
+    <script>
+        //**** PUBLIC USER DASHBOARD SCRIPTS: ****//
+        document.addEventListener("DOMContentLoaded", function () {
+        //Toggle Controller for public dashboard profile settings and My Application button group
+        const btnPersonal = document.getElementById("btn-personal");
+        const btnJob = document.getElementById("btn-application");
+        const sectionPersonal = document.getElementById("section-personal");
+        const sectionPersonalNav= document.getElementById("profile-nav");
+        const sectionChangePass = document.getElementById("section-change-password");
+        const sectionJob = document.getElementById("section-job");
+        
+        btnPersonal.addEventListener("click", function () {
+            btnPersonal.classList.add("active");
+            btnJob.classList.remove("active");
+            sectionPersonal.classList.remove("d-none");
+            sectionPersonalNav.classList.remove("d-none");
+            sectionJob.classList.add("d-none");
+            sectionChangePass.classList.add("d-none");
+        });
+
+        btnJob.addEventListener("click", function () {
+            btnJob.classList.add("active");
+            btnPersonal.classList.remove("active");
+            
+            sectionJob.classList.remove("d-none");
+            sectionPersonal.classList.add("d-none");
+            sectionPersonalNav.classList.add("d-none");
+        });
+
+
+
+        // SIDEBAR HIDE/SHOW OPTIONS PUBLIC DASHBOARD
+        const btnDocuments =document.getElementById('Documents')
+        const btnSecurityPassword =document.getElementById('SecurityPassword')
+        const sectionDocuments = document.getElementById("section-documents");
+        const sectionSecurityPassword= document.getElementById("section-change-password");
+
+
+        btnDocuments.addEventListener("click", function () {
+            sectionPersonal.classList.add("d-none");  
+            sectionSecurityPassword.classList.add("d-none");
+            sectionDocuments.classList.remove("d-none");
+        });
+
+        btnSecurityPassword.addEventListener("click", function () {
+            sectionPersonal.classList.add("d-none");
+            sectionSecurityPassword.classList.remove("d-none");
+            sectionDocuments.classList.add("d-none");
+        });
+
+
+
+
+        // LOAD AVATAR to CONTAINER WHEN UPLOADED
+        let profilePicture= document.getElementById('avatar-preview');
+        let inputPicture = document.getElementById('avatar-upload');
+
+        inputPicture.onchange=function() {
+            profilePicture.src = URL.createObjectURL(inputPicture.files[0]);
+        }
+
+        
+        // BARANGAY SHOW AS INPUT WITH DYNAMIC SELECTION
+        const provSelect = document.getElementById('prov_id');
+        const munciSelect = document.getElementById('munci_id');
+        const brgySelect = document.getElementById('brgy_id');
+        
+        console.log(provSelect.value)
+        // Function to update municipality dropdown based on province selection
+        provSelect.addEventListener('change', function() {
+            const provCode = this.value;
+            
+            // Clear municipality and barangay dropdowns
+            munciSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
+            brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+            
+            if (provCode) {
+                // Make AJAX request to get municipalities
+                fetch(`/get_municipalities/${provCode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(muni => {
+                            const option = document.createElement('option');
+                            option.value = muni.code;
+                            option.textContent = muni.name;
+                            munciSelect.appendChild(option);
+                        });
+                    });
+            }
+        });
+        
+        // Function to update barangay dropdown based on municipality selection
+        munciSelect.addEventListener('change', function() {
+            const munciCode = this.value;
+            
+            // Clear barangay dropdown
+            brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+            
+            if (munciCode) {
+                // Make AJAX request to get barangays
+                fetch(`/get_barangays/${munciCode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(brgy => {
+                            const option = document.createElement('option');
+                            option.value = brgy.code;
+                            option.textContent = brgy.name;
+                            brgySelect.appendChild(option);
+                        });
+                    });
+            }
+        });
+    });
+</script>
+
+{% endblock javascript %}
+
+
+
+
+
+
                 

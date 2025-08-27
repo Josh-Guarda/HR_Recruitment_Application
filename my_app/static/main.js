@@ -244,149 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-//**** PUBLIC USER DASHBOARD SCRIPTS: ****//
-
-document.addEventListener("DOMContentLoaded", function () {
-    //Toggle Controller for public dashboard profile settings and My Application button group
-    const btnPersonal = document.getElementById("btn-personal");
-    const btnJob = document.getElementById("btn-application");
-    const sectionPersonal = document.getElementById("section-personal");
-    const sectionPersonalNav= document.getElementById("profile-nav");
-    const sectionChangePass = document.getElementById("section-change-password");
-    const sectionJob = document.getElementById("section-job");
-    
-    btnPersonal.addEventListener("click", function () {
-        btnPersonal.classList.add("active");
-        btnJob.classList.remove("active");
-        sectionPersonal.classList.remove("d-none");
-        sectionPersonalNav.classList.remove("d-none");
-        sectionJob.classList.add("d-none");
-        sectionChangePass.classList.add("d-none");
-    });
-
-    btnJob.addEventListener("click", function () {
-        btnJob.classList.add("active");
-        btnPersonal.classList.remove("active");
-        
-        sectionJob.classList.remove("d-none");
-        sectionPersonal.classList.add("d-none");
-        sectionPersonalNav.classList.add("d-none");
-    });
-
-
-
-    // SIDEBAR HIDE/SHOW OPTIONS PUBLIC DASHBOARD
-    const btnDocuments =document.getElementById('Documents')
-    const btnSecurityPassword =document.getElementById('SecurityPassword')
-    const sectionDocuments = document.getElementById("section-documents");
-    const sectionSecurityPassword= document.getElementById("section-change-password");
-
-
-    btnDocuments.addEventListener("click", function () {
-        sectionPersonal.classList.add("d-none");  
-        sectionSecurityPassword.classList.add("d-none");
-        sectionDocuments.classList.remove("d-none");
-    });
-
-    btnSecurityPassword.addEventListener("click", function () {
-        sectionPersonal.classList.add("d-none");
-        sectionSecurityPassword.classList.remove("d-none");
-        sectionDocuments.classList.add("d-none");
-    });
-
-
-
-
-    // LOAD AVATAR to CONTAINER WHEN UPLOADED
-    let profilePicture= document.getElementById('avatar-preview');
-    let inputPicture = document.getElementById('avatar-upload');
-
-    inputPicture.onchange=function() {
-        profilePicture.src = URL.createObjectURL(inputPicture.files[0]);
-    }
-
-    
-    // BARANGAY SHOW AS INPUT WITH DYNAMIC SELECTION
-    const provSelect = document.getElementById('prov_id');
-    const munciSelect = document.getElementById('munci_id');
-    const brgySelect = document.getElementById('brgy_id');
-    
-    console.log(provSelect.value)
-    // Function to update municipality dropdown based on province selection
-    provSelect.addEventListener('change', function() {
-        const provCode = this.value;
-        
-        // Clear municipality and barangay dropdowns
-        munciSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
-        brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
-        
-        if (provCode) {
-            // Make AJAX request to get municipalities
-            fetch(`/get_municipalities/${provCode}`)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(muni => {
-                        const option = document.createElement('option');
-                        option.value = muni.code;
-                        option.textContent = muni.name;
-                        munciSelect.appendChild(option);
-                    });
-                });
-        }
-    });
-    
-    // Function to update barangay dropdown based on municipality selection
-    munciSelect.addEventListener('change', function() {
-        const munciCode = this.value;
-        
-        // Clear barangay dropdown
-        brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
-        
-        if (munciCode) {
-            // Make AJAX request to get barangays
-            fetch(`/get_barangays/${munciCode}`)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(brgy => {
-                        const option = document.createElement('option');
-                        option.value = brgy.code;
-                        option.textContent = brgy.name;
-                        brgySelect.appendChild(option);
-                    });
-                });
-        }
-    });
-});
-
-
-// document.addEventListener('click', function (event) {
-//     const modal = document.getElementById('userEditModal');
-//     const modalContent = modal.querySelector('.modal-content');
-//     const isModalVisible = modal.classList.contains('show');
-
-//     if (isModalVisible && !modalContent.contains(event.target)) {
-//       const beep = document.getElementById('modal-beep');
-//       beep.currentTime = 0;
-//       beep.play();
-//     }
-//   });
-
-
-
-
-    
 function openUserModal(userId) {
-
     // Update the modal title
     document.getElementById("userEditModalLabel").innerText = `Edit User Profile - ${userId}`;
 
@@ -416,23 +274,19 @@ function loadUserData(userId) {
     fetch(`/get-user-form/${userId}`)
         .then(response => response.json())
         .then(data => {
-            
+
+            console.log(`Fetched User: ${data.id}`)
+            console.log(data)
+
             contentDiv.innerHTML = `
                 <form id="userEditForm" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="user_id" value="{{ user.id }}">
-                    <!--{{user_info_form.user_id(value=user.id)}}-->
+                    <input type="hidden" name="user_id"  value="${data.id}">
                     <div class="container d-none d-sm-block">
                         <div class="avatar pb-5 ">
                             <div id="avatar-container">
+                                <input type="image" name="avatar" id="avatar-preview"/>
                                 
-                                <img id="avatar-preview" src="
-                                    {% if user.profile_picture %}
-                                    {{ url_for('static', filename='uploads/avatars/'~ value="${data.profile_pic})}}
-                                    {% else %}
-                                    {{ url_for('static', filename='builtin/icons/person.png')}}
-                                    {% endif %}" 
-                                    alt="Avatar"
-                                    onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}'">
+
                             </div>
                             <label for="avatar-upload" class="upload-label">
                                     <span class="upload-icon">+</span>
@@ -463,29 +317,29 @@ function loadUserData(userId) {
                                 </div>
                                 <div class="col text-center">
                                     <label class="form-label">Address 2</label>
-                                    <input type="text" name="address_1" class="form-control", id="address2_{{user.id}}" placeholder="Street / Phase " value="${data.address_1}">
+                                    <input type="text" name="address_2" class="form-control", id="address2_{{user.id}}" placeholder="Street / Phase " value="${data.address_2}">
                                 </div>
                             </div>
                             <div class="row row-cols-1 row-cols-lg-4 mb-5 text-muted">
                                 <div class="col text-center">
                                     <label class="form-label">Province</label>
-                                    <select name="province" class="form-control text-center" id="dynamic_prov_id"></select>
+                                    <select name="prov_id" class="form-control text-center" id="dynamic_prov_id"></select>
                                 </div>
 
                                 <div class="col text-center">
                                     <label class="form-label">Municipality</label>
-                                    <select name="province" class="form-control text-center" id="dynamic_munci_id"></select>
+                                    <select name="munci_id" class="form-control text-center" id="dynamic_munci_id"></select>
                                 </div>
-
+                                
                                 <div class="col text-center">
                                     <label class="form-label">Barangay</label>
-                                    <select name="province" class="form-control text-center" id="dynamic_brgy_id"></select>
+                                    <select name="brgy_id" class="form-control text-center" id="dynamic_brgy_id"></select>
 
                                 </div>
                                 
                                 <div class="col text-center">
                                     <label class="form-label">Zipcode</label> 
-                                    <input type="text" class="form-control" id="zipcode" value="${data.zipcode}">
+                                    <input type="text" name="zipcode" class="form-control" id="zipcode" value="${data.zipcode}">
                                     
                                 </div>
                                 
@@ -499,15 +353,15 @@ function loadUserData(userId) {
                             <h6 class="mb-4">Contact Details</h6>
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" placeholder="your@email.com" value="${data.email_address}">
+                                <input type="email" name="email_address" class="form-control" placeholder="your@email.com" value="${data.email_address}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Mobile Number</label>
-                                <input type="text" class="form-control" placeholder="+63*" value="${data.mobile_number}">
+                                <input type="text" name="mobile_number" class="form-control" placeholder="+63*" value="${data.mobile_number}">
                             </div>
                             <div>
                                 <label class="form-label">Phone Number</label>
-                                <input type="text" class="form-control" placeholder="0000-0000" value="${data.phone_number}">
+                                <input type="text" name="phone_number" class="form-control" placeholder="0000-0000" value="${data.phone_number}">
                             </div>
                         </div>
                     </div>
@@ -518,6 +372,20 @@ function loadUserData(userId) {
                     </div>
                 </form>
             `;
+
+            // Avatar Picture Loading and Update 
+            let profilePicture = document.getElementById('avatar-preview');
+            // set initial src
+            profilePicture.src = data.profile_pic
+                ? `/static/uploads/avatars/${data.profile_pic}`
+                : `/static/builtin/icons/person.png`;
+            let inputPicture = document.getElementById('avatar-upload');
+
+            inputPicture.onchange = function () {
+                if (inputPicture.files && inputPicture.files[0]) {
+                    profilePicture.src = URL.createObjectURL(inputPicture.files[0]);
+                }
+            };
 
             const provSelect = document.getElementById("dynamic_prov_id");
             const munciSelect = document.getElementById("dynamic_munci_id");
@@ -602,12 +470,13 @@ function loadUserData(userId) {
                 console.log('POGI AKO')
                 e.preventDefault();
 
+
                 // Collect form data
                 const formData = new FormData(this);
                 const body = {};
                 formData.forEach((value, key) => body[key] = value);
-
-                fetch(`/update-user/${userId}`, {
+                console.log(body)
+                fetch(`/update-user-form/${userId}`, {
                     method: "POST",   // or PATCH
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body)
@@ -628,3 +497,16 @@ function loadUserData(userId) {
 }
 
 
+
+
+document.addEventListener('click', function (event) {
+    const modal = document.getElementById('userEditModal');
+    const modalContent = modal.querySelector('.modal-content');
+    const isModalVisible = modal.classList.contains('show');
+
+    if (isModalVisible && !modalContent.contains(event.target)) {
+      const beep = document.getElementById('modal-beep');
+      beep.currentTime = 0;
+      beep.play();
+    }
+  });

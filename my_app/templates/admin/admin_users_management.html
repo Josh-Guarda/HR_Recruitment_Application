@@ -137,11 +137,6 @@ Dashboard Users-Management
                                         <button type="button" class="userinfo btn btn-success" onclick="openUserModal({{user.id}})">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
-                                        <!--<button type="button" class="userinfo btn btn-success" data-id='{{user.id}}'>
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>-->
-                                        
-                                            
                                     </div>
                                 </div>
                             </div>
@@ -154,10 +149,11 @@ Dashboard Users-Management
                 <div class="modal fade" id="userEditModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="userEditModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-xl modal-dialog-centered">
                         <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="userEditModalLabel">Edit User Profile</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="userEditModalLabel">Edit User Profile</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            
                             <div class="modal-body">
                                 <div id="modalContent">
                                     <div class="text-center py-5">
@@ -168,19 +164,12 @@ Dashboard Users-Management
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
                         </div>
                     </div>
                 </div>
-
-
-                
-
             </div>
         </section>
-        <!--
+        
         <section id="UsersManagementTreeView" class="container d-none">
             <div class="pt-2 pb-5">
                     <div class="panel panel-default">
@@ -201,10 +190,8 @@ Dashboard Users-Management
                                     </thead>
                                     <tbody>
 
-                                        {% for user, user_info_form in user_forms %}
-                                        {% include "admin/update_modal_tree.html" %}
-                                        {% include "admin/delete_modal.html" %}
-                                        <tr align="center" data-bs-toggle="modal" data-bs-target="#Update-UserInfo-Tree-{{user.id}}">
+                                        {% for user in users %}
+                                        <tr align="center">
                                             <td><input type="checkbox" class="row-check" value="{{ user.id }}"></td>
                                             <td data-pk="{{user.id}}">{{user.firstname}} {{user.lastname}}</td>
                                             <td data-pk="{{user.id}}">{{user.email_address}}</td>
@@ -231,7 +218,7 @@ Dashboard Users-Management
                 </div>
                 <br />
                 <br />
-        </section> -->
+        </section> 
     </div>
 </section>
 
