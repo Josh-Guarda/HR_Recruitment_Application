@@ -271,7 +271,7 @@ def get_user_form(user_id):
     user = Users.query.get_or_404(user_id)
     user_data = {
                 "id": user.id,
-                "profile_pic": user.profile_picture,
+                "profile_picture": user.profile_picture,
                 "firstname": user.firstname,
                 "lastname": user.lastname,
                 "address_1": user.address_1,
@@ -288,27 +288,36 @@ def get_user_form(user_id):
     return jsonify(user_data)
 
 
-@app.route('/update-user-form/<int:user_id>', methods=["POST","DELETE"])
+@app.route('/update-user-form/<int:user_id>', methods=["POST"])
 def update_user_form(user_id):
     user = Users.query.filter_by(id=user_id).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
-    req = request.get_json()
-    
+
     
     if request.method =="POST":
-        print(req)
-        # update fields dynamically
-        for k, v in req.items():
-            if hasattr(user, k):   # only update attributes that exist on the model
+        # Handle form fields (non-file)
+        for k, v in request.form.items():
+            if hasattr(user, k):
                 setattr(user, k, v)
 
+        # Handle file upload
+        if 'profile_picture' in request.files:
+            avatar_file = request.files['profile_picture']
+            if avatar_file.filename != '':
+                filename = secure_filename(avatar_file.filename)
+                avatar_name = str(uuid.uuid4()) + "_" + filename
+                upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
+                avatar_file.save(upload_path)
+                user.profile_picture = avatar_name  # save filename to DB
+
         db.session.commit()
+        flash(f"{user.firstname}'s profile has been updated!", category='success')
+            
+            
+        
     
-    
-
     return jsonify({"message": "User updated successfully"})
-
 
 
 

@@ -284,14 +284,16 @@ function loadUserData(userId) {
                     <div class="container d-none d-sm-block">
                         <div class="avatar pb-5 ">
                             <div id="avatar-container">
-                                <input type="image" name="avatar" id="avatar-preview"/>
+                                <img id="avatar-preview" alt="Profile Picture"
+                                    src="/static/builtin/icons/person.png" 
+                                    style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;"/>
                                 
 
                             </div>
                             <label for="avatar-upload" class="upload-label">
                                     <span class="upload-icon">+</span>
                             </label>
-                            <input type="file" id="avatar-upload" name="avatar" accept="image/png,image/jpeg"/>
+                            <input type="file" id="avatar-upload" name="profile_picture" accept="image/png,image/jpeg"/>
                         </div>
                     </div>
                     
@@ -342,7 +344,6 @@ function loadUserData(userId) {
                                     <input type="text" name="zipcode" class="form-control" id="zipcode" value="${data.zipcode}">
                                     
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -376,8 +377,8 @@ function loadUserData(userId) {
             // Avatar Picture Loading and Update 
             let profilePicture = document.getElementById('avatar-preview');
             // set initial src
-            profilePicture.src = data.profile_pic
-                ? `/static/uploads/avatars/${data.profile_pic}`
+            profilePicture.src = data.profile_picture
+                ? `/static/uploads/avatars/${data.profile_picture}`
                 : `/static/builtin/icons/person.png`;
             let inputPicture = document.getElementById('avatar-upload');
 
@@ -466,25 +467,41 @@ function loadUserData(userId) {
 
 
             // Attach submit handler
+            // document.getElementById("userEditForm").addEventListener("submit", function(e) {
+            //     console.log('POGI AKO')
+            //     e.preventDefault();
+
+
+            //     // Collect form data
+            //     const formData = new FormData(this);
+            //     const body = {};
+            //     formData.forEach((value, key) => body[key] = value);
+            //     console.log(body)
+            //     fetch(`/update-user-form/${userId}`, {
+            //         method: "POST",   // or PATCH
+            //         headers: { "Content-Type": "application/json" },
+            //         body: JSON.stringify(body)
+            //     })
+            //     .then(res => res.json())
+            //     .then(result => {
+            //         console.log("Update success:", result);
+            //         // Optional: close modal
+            //         bootstrap.Modal.getInstance(document.getElementById("userEditModal")).hide();
+            //     })
+            //     .catch(err => console.error("Update failed:", err));
+            // });
+
+
             document.getElementById("userEditForm").addEventListener("submit", function(e) {
-                console.log('POGI AKO')
                 e.preventDefault();
-
-
-                // Collect form data
                 const formData = new FormData(this);
-                const body = {};
-                formData.forEach((value, key) => body[key] = value);
-                console.log(body)
                 fetch(`/update-user-form/${userId}`, {
-                    method: "POST",   // or PATCH
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(body)
+                    method: "POST",
+                    body: formData
                 })
                 .then(res => res.json())
                 .then(result => {
                     console.log("Update success:", result);
-                    // Optional: close modal
                     bootstrap.Modal.getInstance(document.getElementById("userEditModal")).hide();
                 })
                 .catch(err => console.error("Update failed:", err));
