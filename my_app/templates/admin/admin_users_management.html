@@ -113,7 +113,8 @@ Dashboard Users-Management
                                 <div class="d-flex flex-wrap align-items-center justify-content-between">
                                     <!-- User Info -->
                                     <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
-                                        <img src="{{
+                                        <img id="user-avatar-{{ user.id }}"
+                                        src="{{
                                         url_for('static', filename='uploads/avatars/' + user.profile_picture)
                                         if user.profile_picture
                                         else url_for('static', filename='builtin/icons/person.png')
@@ -124,18 +125,25 @@ Dashboard Users-Management
                                         width="64" height="60">
                                         
                                         <div class="px-2">
-                                            <h5 class="mb-1">{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
-                                            <p class="text-muted mb-0">{{ user.email_address }}</p>
-                                            <p class="text-muted mb-0">
-                                                <span class="badge border rounded-pill bg-light text-dark">{{ user.user_type|capitalize }}</span>
+                                            <h5 class="mb-1" id="user-name-{{ user.id }}">{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
+                                            <p class="text-muted mb-0" id="user-email-{{ user.id }}">{{ user.email_address }}</p>
+                                            <p class="text-muted mb-0" id="user-type-{{ user.id }}">
+                                                <span class="badge border rounded-pill bg-light text-dark" 
+                                                    data-user-type-id="{{ user.user_type_id }}">
+                                                    {{ user.user_type.name|capitalize }}
+                                                </span>
+
                                             </p>
                                         </div>
                                     </div>   
 
                                     <!-- Action Buttons -->
                                     <div class="btn-group gap-1 mt-3 mt-md-0">
-                                        <button type="button" class="userinfo btn btn-success" onclick="openUserModal({{user.id}})">
+                                        <button type="button" class="btn btn-transparent-success" onclick="openUserEditModal({{user.id}})">
                                             <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-transparent-danger" onclick="openUserDeleteModal({{user.id}})">
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -145,7 +153,7 @@ Dashboard Users-Management
                 {% endfor %}
                 <!-- Beep Sound in Modals -->
                 <audio id="modal-beep" src="{{ url_for('static',filename='builtin/sound/beep-sound-software.wav') }}"></audio>
-                <!-- Modal -->
+                <!-- EDIT- MODAL -->
                 <div class="modal fade" id="userEditModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="userEditModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-xl modal-dialog-centered">
                         <div class="modal-content">
@@ -163,6 +171,31 @@ Dashboard Users-Management
                                         <p class="mt-2 text-muted">Loading user data...</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DELETE - MODAL -->
+                <div class="modal fade" id="userDeleteModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="del-modal-modal-header">
+                                <h5 class="modal-title" id="userDeleteModalLabel">Confirm Deletion</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                                <p class="mb-0">Are you sure you want to delete this item?<br>This action cannot be undone.</p>
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn del-modal-btn-secondary" data-bs-dismiss="modal">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </button>
+                                <button type="button" class="btn del-modal-btn-danger" onclick="confirmAction()">
+                                        <i class="fas fa-trash-alt me-2"></i>Delete
+                                    </button>
                             </div>
                         </div>
                     </div>
@@ -226,4 +259,393 @@ Dashboard Users-Management
 
 
 
+{% block javascript %}
+    <script>
+
+        function openUserEditModal(userId) {
+            // Update the modal title
+            document.getElementById("userEditModalLabel").innerText = `Edit User Profile - ${userId}`;
+
+            // Initialize and show the modal
+            const modalElement = document.getElementById("userEditModal");
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+
+            // (Optional: load user inside the modal and input data dynamically via user_id)
+            loadUserData(userId);
+        }
+
+
+        function loadUserData(userId) {
+            const contentDiv = document.getElementById("modalContent");
+
+            // Show loading spinner while fetching
+            contentDiv.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 text-muted">Loading user data...</p>
+                </div>
+            `;
+
+            fetch(`/get-user-form/${userId}`)
                 
+                .then(response => response.json())
+                .then(data => {
+
+                    console.log(`Fetched User: ${data.id}`)
+                    console.log(data)
+
+                    document.getElementById("userEditModalLabel").innerText = `Edit Profile - ${data.firstname +" "+ data.lastname}`;
+                    contentDiv.innerHTML = `
+                        <form id="userEditForm" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="user_id"  value="${data.id}">
+                            <div class="container d-none d-sm-block">
+                                <div class="avatar pb-5 ">
+                                    <div id="avatar-container">
+                                        <img id="avatar-preview" alt="Profile Picture"
+                                            src="/static/builtin/icons/person.png" 
+                                            style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;"/>
+                                        
+
+                                    </div>
+                                    <label for="avatar-upload" class="upload-label">
+                                            <span class="upload-icon">+</span>
+                                    </label>
+                                    <input type="file" id="avatar-upload" name="profile_picture" accept="image/png,image/jpeg"/>
+                                </div>
+                            </div>
+                            
+
+                            <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted w-50">
+                                <div class="col text-center">
+                                    <label class="form-label">User-Type</label>
+                                    <select name="user_type_id" class="form-control text-center" id="userType"></select>
+                                </div>
+                                
+                            </div>
+
+                            <div class="row row-cols-1 row-cols-lg-2 mb-3 text-muted">
+                                <div class="col text-center">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" name="firstname" placeholder="Juan" class="form-control" value="${data.firstname}">
+                                </div>
+                                <div class="col text-center">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" name="lastname" class="form-control" placeholder="Dela Cruz" value="${data.lastname}">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col text-center text-muted py-5 ps-lg-3">
+                                    <h6 class="mb-4">Address Details</h6>
+                                    
+                                    <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted">
+                                        <div class="col text-center">
+                                            <label class="form-label">Address 1</label>
+                                            <input type="text" name="address_1" class="form-control" id="address_1" placeholder="Block # / Lot #" value="${data.address_1}">
+                                        </div>
+                                        <div class="col text-center">
+                                            <label class="form-label">Address 2</label>
+                                            <input type="text" name="address_2" class="form-control", id="address_2" placeholder="Street / Phase " value="${data.address_2}">
+                                        </div>
+                                    </div>
+                                    <div class="row row-cols-1 row-cols-lg-4 mb-5 text-muted">
+                                        <div class="col text-center">
+                                            <label class="form-label">Province</label>
+                                            <select name="prov_id" class="form-control text-center" id="dynamic_prov_id"></select>
+                                        </div>
+
+                                        <div class="col text-center">
+                                            <label class="form-label">Municipality</label>
+                                            <select name="munci_id" class="form-control text-center" id="dynamic_munci_id"></select>
+                                        </div>
+                                        
+                                        <div class="col text-center">
+                                            <label class="form-label">Barangay</label>
+                                            <select name="brgy_id" class="form-control text-center" id="dynamic_brgy_id"></select>
+
+                                        </div>
+                                        
+                                        <div class="col text-center">
+                                            <label class="form-label">Zipcode</label> 
+                                            <input type="text" name="zipcode" class="form-control" id="zipcode" value="${data.zipcode}">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="row">
+                                <div class="col-12 col-lg-6 text-center text-muted py-2 pe-lg-3">
+                                    <h6 class="mb-4">Contact Details</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" name="email_address" class="form-control" placeholder="your@email.com" value="${data.email_address}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Mobile Number</label>
+                                        <input type="Number" name="mobile_number" class="form-control" placeholder="+63*" value="${data.mobile_number}">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="Number" name="phone_number" class="form-control" placeholder="0000-0000" value="${data.phone_number}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="my-5">
+                                <input type="submit" value="Save Changes" class="btn btn-md btn-primary px-5 w-100" />
+
+                            </div>
+                        </form>
+                    `;
+
+                    // Avatar Picture Loading and Update 
+                    let profilePicture = document.getElementById('avatar-preview');
+                    // set initial src
+                    profilePicture.src = data.profile_picture
+                        ? `/static/uploads/avatars/${data.profile_picture}`
+                        : `/static/builtin/icons/person.png`;
+                    let inputPicture = document.getElementById('avatar-upload');
+
+                    inputPicture.onchange = function () {
+                        if (inputPicture.files && inputPicture.files[0]) {
+                            profilePicture.src = URL.createObjectURL(inputPicture.files[0]);
+                        }
+                    };
+
+                    const provSelect = document.getElementById("dynamic_prov_id");
+                    const munciSelect = document.getElementById("dynamic_munci_id");
+                    const brgySelect = document.getElementById("dynamic_brgy_id");
+
+                    // 1. Load provinces
+                    fetch(`/get_provinces`)
+                        .then(res => res.json())
+                        .then(provinces => {
+                            provSelect.innerHTML = '<option value="">-- Select Province --</option>';
+                            provinces.forEach(prov => {
+                                const option = document.createElement("option");
+                                option.value = prov.code;
+                                option.textContent = prov.name;
+                                provSelect.appendChild(option);
+                            });
+
+                            if (data.prov_id) {
+                                provSelect.value = data.prov_id;
+                                loadMunicipalities(data.prov_id, data.munci_id, data.brgy_id);
+                            }
+                        });
+
+                    // 2. Province change handler
+                    provSelect.addEventListener("change", () => {
+                        loadMunicipalities(provSelect.value, null, null);
+                    });
+
+                    // Helper: Load municipalities
+                    function loadMunicipalities(provCode, preselectMuni, preselectBrgy) {
+                        munciSelect.innerHTML = '<option value="">-- Select Municipality --</option>';
+                        brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+
+                        if (!provCode) return;
+
+                        fetch(`/get_municipalities/${provCode}`)
+                        .then(res => res.json())
+                        .then(munis => {
+                            munis.forEach(muni => {
+                                const option = document.createElement("option");
+                                option.value = muni.code;
+                                option.textContent = muni.name;
+                                munciSelect.appendChild(option);
+                            });
+
+                            if (preselectMuni) {
+                                munciSelect.value = preselectMuni;
+                                loadBarangays(preselectMuni, preselectBrgy);
+                            }
+                        });
+                    }
+
+                    // 3. Municipality change handler
+                    munciSelect.addEventListener("change", () => {
+                        loadBarangays(munciSelect.value, null);
+                    });
+
+                    // Helper: Load barangays
+                    function loadBarangays(munciCode, preselectBrgy) {
+                        brgySelect.innerHTML = '<option value="">-- Select Barangay --</option>';
+                        if (!munciCode) return;
+
+                        fetch(`/get_barangays/${munciCode}`)
+                        .then(res => res.json())
+                        .then(brgys => {
+                            brgys.forEach(brgy => {
+                                const option = document.createElement("option");
+                                option.value = brgy.code;
+                                option.textContent = brgy.name;
+                                brgySelect.appendChild(option);
+                            });
+
+                            if (preselectBrgy) {
+                                brgySelect.value = preselectBrgy;
+                            }
+                        });
+                    }
+
+
+                    // Attach submit handler
+                    // document.getElementById("userEditForm").addEventListener("submit", function(e) {
+                    //     console.log('POGI AKO')
+                    //     e.preventDefault();
+
+
+                    //     // Collect form data
+                    //     const formData = new FormData(this);
+                    //     const body = {};
+                    //     formData.forEach((value, key) => body[key] = value);
+                    //     console.log(body)
+                    //     fetch(`/update-user-form/${userId}`, {
+                    //         method: "POST",   // or PATCH
+                    //         headers: { "Content-Type": "application/json" },
+                    //         body: JSON.stringify(body)
+                    //     })
+                    //     .then(res => res.json())
+                    //     .then(result => {
+                    //         console.log("Update success:", result);
+                    //         // Optional: close modal
+                    //         bootstrap.Modal.getInstance(document.getElementById("userEditModal")).hide();
+                    //     })
+                    //     .catch(err => console.error("Update failed:", err));
+                    // });
+
+                    fetch(`/get_user_types`)
+                        .then(res => res.json())
+                        .then(types => {
+                            console.log("User Types:", types);
+
+                            const userTypeSelect = document.getElementById("userType");
+
+                            // Clear any existing options
+                            userTypeSelect.innerHTML = "";
+
+                            // Add a default option
+                            const defaultOption = document.createElement("option");
+                            //defaultOption.value = "";
+                            //defaultOption.textContent = "-- Select User Type --";
+                            //userTypeSelect.appendChild(defaultOption);
+
+                            // Populate options from API
+                            types.forEach(type => {
+                                const option = document.createElement("option");
+                                option.value = type.id;     // store id in value
+                                option.textContent = type.name; // display name
+                               
+                                userTypeSelect.appendChild(option);
+                            });
+                            userTypeSelect.value = data.user_type
+                            
+                        })
+                        .catch(err => console.error("Failed to load user types:", err));
+
+
+
+
+
+                    document.getElementById("userEditForm").addEventListener("submit", function(e) {
+                        e.preventDefault();
+                        const formData = new FormData(this);
+                        fetch(`/update-user-form/${userId}`, {
+                            method: "POST",
+                            body: formData
+                        })
+                        
+                        .then(res => res.json())
+                        .then(result => {
+                            console.log("Update success:", result);
+                            document.querySelector(`#user-name-${userId}`).textContent = `${formData.get("firstname")} ${formData.get("lastname")}`;
+                            document.querySelector(`#user-email-${userId}`).textContent = formData.get("email_address");
+                            
+                            // Update user type by finding the selected option text
+                            const userTypeSelect = document.getElementById("userType");
+                            const selectedOption = userTypeSelect.options[userTypeSelect.selectedIndex];
+                            const userTypeName = selectedOption.textContent;
+
+                            // Capitalize the first letter of each word
+                            const capitalizedName = userTypeName.replace(/\b\w/g, char => char.toUpperCase());
+
+                            // Update ONLY the text inside the span, preserve the badge styling
+                            const userTypeElement = document.querySelector(`#user-type-${userId} span.badge`);
+                            if (userTypeElement) {
+                                userTypeElement.textContent = capitalizedName;
+                            }
+                            // Also update the data attribute if needed
+                            document.querySelector(`#user-type-${userId}`).dataset.userTypeId = formData.get("user_type_id");
+                            
+
+                            
+                            const fileInput = this.querySelector('input[name="profile_picture"]');
+                            if (fileInput && fileInput.files.length > 0) {
+                                const file = fileInput.files[0];
+                                const previewUrl = URL.createObjectURL(file);
+                                document.querySelector(`#user-avatar-${userId}`).src = previewUrl;
+                            }
+                            
+                            bootstrap.Modal.getInstance(document.getElementById("userEditModal")).hide();
+                        })
+                        .catch(err => console.error("Update failed:", err));
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching user data:", error);
+                    contentDiv.innerHTML = `<p class="text-danger">Failed to load user data.</p>`;
+                });
+        }
+
+
+
+        
+        document.addEventListener('click', function (event) {
+            const modal = document.getElementById('userEditModal');
+            const modalContent = modal.querySelector('.modal-content');
+            const isModalVisible = modal.classList.contains('show');
+
+            if (isModalVisible && !modalContent.contains(event.target)) {
+            const beep = document.getElementById('modal-beep');
+            beep.currentTime = 0;
+            beep.play();
+            }
+        });
+
+
+
+
+
+
+        function openUserDeleteModal(userId) {
+            // Update the modal title
+            //document.getElementById("userDeleteModalLabel").innerText = `Edit User Profile - ${userId}`;
+
+            // Initialize and show the modal
+            const modalElement = document.getElementById("userDeleteModal");
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+
+            // (Optional: load user inside the modal and input data dynamically via user_id)
+            
+            loadUserDataDelte(userId);
+        }
+
+      
+
+
+        function callToatsMessage(userId){
+            let toast = document.getElementById("toastMessage")
+        }
+
+
+
+        
+    </script>
+{% endblock javascript %}                

@@ -4,7 +4,7 @@ from my_app import mail,Message,generate_reset_token,verify_reset_token
 # from my_app.helper import set_form_province,set_form_municipality,set_form_barangay
 from my_app.helper import set_form_choices
 from flask import render_template, redirect, url_for, flash,request,session, jsonify
-from my_app.models import Jobs,Users
+from my_app.models import Jobs,Users,Usertype
 from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ChangePasswordFormInSecurity,ForgotPassword,ChangePasswordBeforeLogin
 from flask_login import login_user,current_user,logout_user,login_required
 from datetime import datetime
@@ -130,7 +130,7 @@ def change_password_page(token):
             flash('Your password has been updated!', 'success')
             return redirect(url_for('public_dashboard'))
     
-    return render_template('auth/change_password.html', token=token,change_pw_form=change_pw_form)  # ✅ Pass token to template
+    return render_template('auth/change_password.html', token=token,change_pw_form=change_pw_form)
 
 
 
@@ -170,103 +170,17 @@ def admin_dashboard():
 
 
 
-
-# @app.route('/admin-users-management/', methods=["GET", "POST"])
-# @login_required
-# def admin_dashboard_manage_users():
-#     users = Users.query.all()
-#     user_forms = []
-#     for user in users:
-#         form = PersonalInfoForm(obj=user)
-#         # set_form_choices(form, user)
-#         if request.method == 'GET':
-#             # Pre-populate form with user data
-#             form.firstname.data = user.firstname
-#             form.lastname.data = user.lastname
-#             form.address_1.data = user.address_1
-#             form.address_2.data = user.address_2
-#             form.zipcode.data = user.zipcode
-#             form.email_address.data = user.email_address
-#             form.mobile_number.data = user.mobile_number
-#             form.phone_number.data = user.phone_number
-            
-#             # Set the selected values for dropdowns
-#             form.prov_id.data = str(user.prov_id) if user.prov_id else ''
-#             form.munci_id.data = str(user.munci_id) if user.munci_id else ''
-#             form.brgy_id.data = str(user.brgy_id) if user.brgy_id else ''
-#             set_form_choices(form, user)
-            
-#         else:
-#             set_form_choices(form, current_user)
-    
-                
-        
-#         #UPDATE HANDLER
-#         if form.update.data and form.validate_on_submit():
-#             user.firstname = form.firstname.data 
-#             user.lastname = form.lastname.data
-#             user.email_address = form.email_address.data
-#             user.mobile_number = form.mobile_number.data
-#             user.phone_number = form.phone_number.data
-#             user.address_1 = form.address_1.data
-#             user.address_2 = form.address_2.data
-#             user.prov_id = form.prov_id.data
-#             user.munci_id = form.munci_id.data
-#             user.brgy_id = form.brgy_id.data
-#             user.zipcode = form.zipcode.data
-
-#             # Avatar logic
-#             if form.avatar.data:
-#                 avatar_file = form.avatar.data
-#                 filename = secure_filename(avatar_file.filename)
-#                 avatar_name = str(uuid.uuid4()) + "_" + filename
-#                 upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
-#                 try:
-#                     avatar_file.save(upload_path)
-#                     current_user.profile_picture = avatar_name
-#                 except FileNotFoundError:
-#                     flash('Avatar upload directory not found!', category='danger')
-
-
-#             db.session.commit()
-            
-            
-#             flash(f"{user.firstname}'s profile has been updated!", category='success')
-#             return redirect(url_for('admin_dashboard_manage_users'))
-            
-#         if form.cancel.data:
-#             flash(f'{user.firstname}`s profile has Canceled.', category='danger')
-#             return redirect(url_for('admin_dashboard_manage_users'))
-
-#         if form.errors:
-#             for err_msg in form.errors.values():
-#                 flash(f'Error: {err_msg}', category='danger')
-                
-            
-#         user_forms.append((user, form))
-        
-#     return render_template('admin/admin_users_management.html',user_forms=user_forms)
-
-
-
-
-
-
-
-
 @app.route('/admin-get-users/', methods=["GET"])
 @login_required
 def admin_dashboard_manage_users():
     users = Users.query.all()
-    # No need to create forms here anymore!
-    
+    # No need to create forms here anymore since Edit template is dynamically loaded via User Modal handle via JS.
     return render_template('admin/admin_users_management.html', users=users)
 
 
 
-
 @app.route('/get-user-form/<int:user_id>', methods=["GET"])
-# @login_required
+@login_required
 def get_user_form(user_id):
     user = Users.query.get_or_404(user_id)
     user_data = {
@@ -286,22 +200,34 @@ def get_user_form(user_id):
                 "user_type":user.user_type_id
                 }
     return jsonify(user_data)
+    # return user_id
 
 
 @app.route('/update-user-form/<int:user_id>', methods=["POST"])
+@login_required
 def update_user_form(user_id):
     user = Users.query.filter_by(id=user_id).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
-
     
-    if request.method =="POST":
+    if request.method == "POST":
         # Handle form fields (non-file)
         for k, v in request.form.items():
-            if hasattr(user, k):
+            print({k: v})
+            
+            if k == 'user_type':
+                # Convert to integer and get the actual Usertype object
+                user_type_id = int(v)
+                user_type_obj = Usertype.query.get(user_type_id)
+                if user_type_obj:
+                    user.user_type = user_type_obj  # Set the relationship object
+                else:
+                    print(f"Warning: UserType ID {user_type_id} not found")
+            # Handle other fields normally
+            elif hasattr(user, k):
                 setattr(user, k, v)
 
-        # Handle file upload
+        # Handle file upload (your existing code)
         if 'profile_picture' in request.files:
             avatar_file = request.files['profile_picture']
             if avatar_file.filename != '':
@@ -309,63 +235,14 @@ def update_user_form(user_id):
                 avatar_name = str(uuid.uuid4()) + "_" + filename
                 upload_path = os.path.join(app.config['UPLOAD_FOLDER'], avatar_name)
                 avatar_file.save(upload_path)
-                user.profile_picture = avatar_name  # save filename to DB
+                user.profile_picture = avatar_name
 
         db.session.commit()
-        flash(f"{user.firstname}'s profile has been updated!", category='success')
-            
-            
         
-    
-    return jsonify({"message": "User updated successfully"})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
+        
+        flash(f"{user.firstname}'s profile has been updated!", category='success')
+        return jsonify({"message": "User updated successfully"})
 
 
 
@@ -394,7 +271,6 @@ def public_dashboard(user_id):
     form = PersonalInfoForm(obj=current_user)
     change_pw_form= ChangePasswordFormInSecurity()
 
-    
     if request.method == 'GET':
         # Pre-populate form with user data
         if current_user:
@@ -500,6 +376,23 @@ def public_dashboard(user_id):
 
 
 
+
+@app.route('/get_user_types', methods=["GET"])
+def get_user_type():
+    types = Usertype.query.all()
+    list_types = []
+    for type in types:
+        user_type = {
+            "id" : type.id,
+            "name": type.name
+        }
+        list_types.append(user_type)
+        
+    # print(f"USER_TYPES FOUND{type}")
+    
+    return jsonify(list_types)
+
+
 @app.route('/get_provinces')
 def get_provinces():
     provinces = sorted(
@@ -507,6 +400,8 @@ def get_provinces():
          for m in PROVINCE_DATA],
         key=lambda x: x['name'].lower()
     )
+    
+    # print(f"Generated Provinces{provinces}")
     return jsonify(provinces)
 
 
@@ -517,7 +412,6 @@ def get_municipalities(prov_code):
          for m in MUNICIPALITY_DATA if str(m['provCode']) == prov_code],
         key=lambda x: x['name'].lower()
     )
-    
     return jsonify(municipalities)
 
 @app.route('/get_barangays/<munci_code>')

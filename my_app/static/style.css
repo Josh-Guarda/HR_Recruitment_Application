@@ -201,6 +201,11 @@ body.sidebar-open .main-content {
     }
 
 
+#userType option {
+    text-transform: capitalize;
+}
+
+
 /* Admin Dashboard/Users Management Kanban-View */
 /* .users-management{
   background-color: #24a0ed;
