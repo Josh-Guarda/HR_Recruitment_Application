@@ -14,7 +14,7 @@ def set_form_choices(form, user):
     # Get the selected values, ensuring they're strings
     selected_prov = form.prov_id.data or (str(user.prov_id) if user and user.prov_id else None)
     selected_muni = form.munci_id.data or (str(user.munci_id) if user and user.munci_id else None)
-
+    
     # Set municipality choices based on selected province
     if selected_prov:
         form.munci_id.choices = [('', '-- Select Municipality --')] + sorted(
