@@ -119,6 +119,7 @@
     
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
+      <div id="flash-toast-container">
         {% for category, message in messages %}
           <div id="toastMessage"
               class="toast align-items-center bg-{{ category }} bg-gradient text-light border-0 position-fixed top-0 end-0 m-3"
@@ -135,7 +136,9 @@
             </div>
           </div>
         {% endfor %}
+        </div>
       {% endif %}
+      
     {% endwith %}
 
 

@@ -212,10 +212,12 @@ def update_user_form(user_id):
     
     
     
-    original_user_type = user.user_type_id
-    print(f"ORIGINAL USER TYPE {original_user_type}")
-    current_user_updating_self  = (user.id == current_user.id)
     
+    original_user_type = user.user_type_id
+    current_user_updating_self = (user.id == current_user.id)
+    
+    
+
     
     if request.method == "POST":
         # Handle form fields (non-file)
@@ -248,34 +250,29 @@ def update_user_form(user_id):
         
         #handles Automatically logs out the current_user if he updates his/her user_type_id
         #note: that this feature is only available in ADMIN access:
-         
         if current_user_updating_self and user.user_type_id != original_user_type:
-            logout_user()
             return jsonify({
-                "message": "User update successfully",
-                "flash_message": f"{user.firstname}`s profile has been updated!",
-                "flash_category":'success',
-                "redirect_url": url_for('home_page')
-            })
+                    "success": True,
+                    "message": "User updated successfully",
+                    "toast": {
+                        "message": "Profile updated! Please login again with your new role.",
+                        "category": "success"
+                    },
+                    "redirect": url_for('logout_page')
+                })
         else:
             return jsonify({
-                'message':'User updated successfully',
-                'flash_messsage': f'{user.firstname}`s profile has been updated',
-                'flash_category':'success'
+                "success": True,
+                "message": "User updated successfully",
+                "toast": {
+                    "message": f"{user.firstname}'s profile has been updated!",
+                    "category": "success"
+                }
             })
         
+
         
-        
-        
-        # flash(f"{user.firstname}'s profile has been updated!", category='success')
-        # return jsonify({"message": "User updated successfully"})
-
-
-
-
-
-
-
+    
 
 
 # Internal ROUTES
