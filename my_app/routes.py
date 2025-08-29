@@ -112,7 +112,7 @@ def change_password_page(token):
         return redirect(url_for('login_page'))
 
     if change_pw_form.validate_on_submit():
-        print('TEST')
+        # print('TEST')
         new_password = change_pw_form.password.data
         confirm_password = change_pw_form.password2.data
 
@@ -210,6 +210,15 @@ def update_user_form(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
     
+    
+    
+    
+    original_user_type = user.user_type_id
+    current_user_updating_self = (user.id == current_user.id)
+    
+    
+
+    
     if request.method == "POST":
         # Handle form fields (non-file)
         for k, v in request.form.items():
@@ -239,17 +248,31 @@ def update_user_form(user_id):
 
         db.session.commit()
         
+        #handles Automatically logs out the current_user if he updates his/her user_type_id
+        #note: that this feature is only available in ADMIN access:
+        if current_user_updating_self and user.user_type_id != original_user_type:
+            return jsonify({
+                    "success": True,
+                    "message": "User updated successfully",
+                    "toast": {
+                        "message": "Profile updated! Please login again with your new role.",
+                        "category": "success"
+                    },
+                    "redirect": url_for('logout_page')
+                })
+        else:
+            return jsonify({
+                "success": True,
+                "message": "User updated successfully",
+                "toast": {
+                    "message": f"{user.firstname}'s profile has been updated!",
+                    "category": "success"
+                }
+            })
         
+
         
-        flash(f"{user.firstname}'s profile has been updated!", category='success')
-        return jsonify({"message": "User updated successfully"})
-
-
-
-
-
-
-
+    
 
 
 # Internal ROUTES

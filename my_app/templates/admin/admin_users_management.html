@@ -222,7 +222,7 @@ Dashboard Users-Management
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        
                                         {% for user in users %}
                                         <tr align="center">
                                             <td><input type="checkbox" class="row-check" value="{{ user.id }}"></td>
@@ -563,38 +563,62 @@ Dashboard Users-Management
                         
                         .then(res => res.json())
                         .then(result => {
+
                             console.log("Update success:", result);
-                            document.querySelector(`#user-name-${userId}`).textContent = `${formData.get("firstname")} ${formData.get("lastname")}`;
-                            document.querySelector(`#user-email-${userId}`).textContent = formData.get("email_address");
-                            
-                            // Update user type by finding the selected option text
-                            const userTypeSelect = document.getElementById("userType");
-                            const selectedOption = userTypeSelect.options[userTypeSelect.selectedIndex];
-                            const userTypeName = selectedOption.textContent;
+                            if (result.success) {
 
-                            // Capitalize the first letter of each word
-                            const capitalizedName = userTypeName.replace(/\b\w/g, char => char.toUpperCase());
+                                // CALL DYNAMIC TOAST FUNCTION
+                                // Show toast message
+                                if (result.toast) {
+                                    showDynamicToast(result.toast.message, result.toast.category);
+                                }
+                                
+                                // Check if redirect is needed
+                                if (result.redirect) {
+                                    setTimeout(() => {
+                                        window.location.href = result.redirect;
+                                    }, 500); // Wait .5 seconds to show the message and re-route
 
-                            // Update ONLY the text inside the span, preserve the badge styling
-                            const userTypeElement = document.querySelector(`#user-type-${userId} span.badge`);
-                            if (userTypeElement) {
-                                userTypeElement.textContent = capitalizedName;
-                            }
-                            // Also update the data attribute if needed
-                            document.querySelector(`#user-type-${userId}`).dataset.userTypeId = formData.get("user_type_id");
-                            
+                                }
 
-                            
-                            const fileInput = this.querySelector('input[name="profile_picture"]');
-                            if (fileInput && fileInput.files.length > 0) {
-                                const file = fileInput.files[0];
-                                const previewUrl = URL.createObjectURL(file);
-                                document.querySelector(`#user-avatar-${userId}`).src = previewUrl;
-                            }
-                            
+                                else {
+                                    ///////UPDATE info for usercard in KANBAN VIEW
+                                    //Firtname and LastName
+                                    document.querySelector(`#user-name-${userId}`).textContent = `${formData.get("firstname")} ${formData.get("lastname")}`;
+                                    //email
+                                    document.querySelector(`#user-email-${userId}`).textContent = formData.get("email_address");
+                                    //USER_TYPE_ID
+                                    const userTypeSelect = document.getElementById("userType");
+                                    const selectedOption = userTypeSelect.options[userTypeSelect.selectedIndex];
+                                    const userTypeName = selectedOption.textContent;
+                                    // Capitalize the first letter of each word
+                                    const capitalizedName = userTypeName.replace(/\b\w/g, char => char.toUpperCase());
+
+                                    // Update ONLY the text inside the span, preserve the badge styling
+                                    const userTypeElement = document.querySelector(`#user-type-${userId} span.badge`);
+                                    if (userTypeElement) {
+                                        userTypeElement.textContent = capitalizedName;
+                                    }
+                                    // Also update the data attribute if needed
+                                    document.querySelector(`#user-type-${userId}`).dataset.userTypeId = formData.get("user_type_id");
+                                
+
+                                    //Profile_picture
+                                    const fileInput = this.querySelector('input[name="profile_picture"]');
+                                    if (fileInput && fileInput.files.length > 0) {
+                                        const file = fileInput.files[0];
+                                        const previewUrl = URL.createObjectURL(file);
+                                        document.querySelector(`#user-avatar-${userId}`).src = previewUrl;
+                                    }  
+                                }
+                            //Automatically hide the modal after save
                             bootstrap.Modal.getInstance(document.getElementById("userEditModal")).hide();
+                                
+                            }
+                            
                         })
                         .catch(err => console.error("Update failed:", err));
+                        //showDynamicToast("Error updating user profile", "danger");
                     });
                 })
                 .catch(error => {
@@ -617,6 +641,49 @@ Dashboard Users-Management
             beep.play();
             }
         });
+
+
+
+        function showDynamicToast(message,category='info'){
+            let container = document.getElementById('flash-toast-container');
+            if(!container){
+                container = document.createElement('div');
+                container.id= 'flash-toast-container'
+                document.body.appendChild(container)
+            }
+
+            // Create toast element
+            const toastId = 'toast-' + Date.now();
+            const toastHTML = `
+                                    <div id="${toastId}" 
+                                    class="toast align-items-center bg-${category} bg-gradient text-light border-0 position-fixed top-0 end-0 m-3"
+                                    role="alert"
+                                    aria-live="assertive"
+                                    aria-atomic="true"
+                                    data-bs-autohide="true"
+                                    data-bs-delay="3000">
+                                    <div class="d-flex">
+                                        <div class="toast-body">
+                                            ${message}
+                                        </div>
+                                        <button type="button" class="btn-close me-2 m-auto btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            `;
+
+            // Add toast to container
+            container.insertAdjacentHTML('beforeend', toastHTML);
+            
+            // Show the toast
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            
+            // Remove toast from DOM after it hides
+            toastElement.addEventListener('hidden.bs.toast', () => {
+                toastElement.remove();
+            });
+        }
 
 
 
