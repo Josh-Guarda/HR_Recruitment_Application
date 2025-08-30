@@ -108,43 +108,45 @@ Dashboard Users-Management
             <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
                 {% for user in users %}
                     <div class="col">
-                        <div class="card shadow h-100">
-                            <div class="card-body">
-                                <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                    <!-- User Info -->
-                                    <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
-                                        <img id="user-avatar-{{ user.id }}"
-                                        src="{{
-                                        url_for('static', filename='uploads/avatars/' + user.profile_picture)
-                                        if user.profile_picture
-                                        else url_for('static', filename='builtin/icons/person.png')
-                                        }}"
-                                        onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
-                                        class="rounded-circle me-3 p-1"
-                                        style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
-                                        width="64" height="60">
-                                        
-                                        <div class="px-2">
-                                            <h5 class="mb-1" id="user-name-{{ user.id }}">{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
-                                            <p class="text-muted mb-0" id="user-email-{{ user.id }}">{{ user.email_address }}</p>
-                                            <p class="text-muted mb-0" id="user-type-{{ user.id }}">
-                                                <span class="badge border rounded-pill bg-light text-dark" 
-                                                    data-user-type-id="{{ user.user_type_id }}">
-                                                    {{ user.user_type.name|capitalize }}
-                                                </span>
+                        <div class="col" id="user-card-{{ user.id }}">
+                            <div class="card shadow h-100">
+                                <div class="card-body">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                        <!-- User Info -->
+                                        <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
+                                            <img id="user-avatar-{{ user.id }}"
+                                            src="{{
+                                            url_for('static', filename='uploads/avatars/' + user.profile_picture)
+                                            if user.profile_picture
+                                            else url_for('static', filename='builtin/icons/person.png')
+                                            }}"
+                                            onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
+                                            class="rounded-circle me-3 p-1"
+                                            style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
+                                            width="64" height="60">
+                                            
+                                            <div class="px-2">
+                                                <h5 class="mb-1" id="user-name-{{ user.id }}">{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
+                                                <p class="text-muted mb-0" id="user-email-{{ user.id }}">{{ user.email_address }}</p>
+                                                <p class="text-muted mb-0" id="user-type-{{ user.id }}">
+                                                    <span class="badge border rounded-pill bg-light text-dark" 
+                                                        data-user-type-id="{{ user.user_type_id }}">
+                                                        {{ user.user_type.name|capitalize }}
+                                                    </span>
 
-                                            </p>
+                                                </p>
+                                            </div>
+                                        </div>   
+
+                                        <!-- Action Buttons -->
+                                        <div class="btn-group gap-1 mt-3 mt-md-0">
+                                            <button type="button" class="btn btn-transparent-success" onclick="openUserEditModal({{user.id}})">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-transparent-danger" onclick="openUserDeleteModal({{user.id}})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
-                                    </div>   
-
-                                    <!-- Action Buttons -->
-                                    <div class="btn-group gap-1 mt-3 mt-md-0">
-                                        <button type="button" class="btn btn-transparent-success" onclick="openUserEditModal({{user.id}})">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-transparent-danger" onclick="openUserDeleteModal({{user.id}})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -184,7 +186,7 @@ Dashboard Users-Management
                                 <h5 class="modal-title" id="userDeleteModalLabel">Confirm Deletion</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body text-center">
+                            <div class="modal-body text-center" id ="deleteModalBody">
                                 <i class="fas fa-exclamation-triangle warning-icon"></i>
                                 <p class="mb-0">Are you sure you want to delete this item?<br>This action cannot be undone.</p>
                             </div>
@@ -193,7 +195,7 @@ Dashboard Users-Management
                                 <button type="button" class="btn del-modal-btn-secondary" data-bs-dismiss="modal">
                                         <i class="fas fa-times me-2"></i>Cancel
                                     </button>
-                                <button type="button" class="btn del-modal-btn-danger" onclick="confirmAction()">
+                                <button type="button" class="btn del-modal-btn-danger" id="actionDelete">
                                         <i class="fas fa-trash-alt me-2"></i>Delete
                                     </button>
                             </div>
@@ -495,31 +497,6 @@ Dashboard Users-Management
                     }
 
 
-                    // Attach submit handler
-                    // document.getElementById("userEditForm").addEventListener("submit", function(e) {
-                    //     console.log('POGI AKO')
-                    //     e.preventDefault();
-
-
-                    //     // Collect form data
-                    //     const formData = new FormData(this);
-                    //     const body = {};
-                    //     formData.forEach((value, key) => body[key] = value);
-                    //     console.log(body)
-                    //     fetch(`/update-user-form/${userId}`, {
-                    //         method: "POST",   // or PATCH
-                    //         headers: { "Content-Type": "application/json" },
-                    //         body: JSON.stringify(body)
-                    //     })
-                    //     .then(res => res.json())
-                    //     .then(result => {
-                    //         console.log("Update success:", result);
-                    //         // Optional: close modal
-                    //         bootstrap.Modal.getInstance(document.getElementById("userEditModal")).hide();
-                    //     })
-                    //     .catch(err => console.error("Update failed:", err));
-                    // });
-
                     fetch(`/get_user_types`)
                         .then(res => res.json())
                         .then(types => {
@@ -557,7 +534,7 @@ Dashboard Users-Management
                         e.preventDefault();
                         const formData = new FormData(this);
                         fetch(`/update-user-form/${userId}`, {
-                            method: "POST",
+                            method: "PUT",
                             body: formData
                         })
                         
@@ -655,7 +632,7 @@ Dashboard Users-Management
             // Create toast element
             const toastId = 'toast-' + Date.now();
             const toastHTML = `
-                                    <div id="${toastId}" 
+                                <div id="${toastId}" 
                                     class="toast align-items-center bg-${category} bg-gradient text-light border-0 position-fixed top-0 end-0 m-3"
                                     role="alert"
                                     aria-live="assertive"
@@ -691,27 +668,62 @@ Dashboard Users-Management
 
 
         function openUserDeleteModal(userId) {
-            // Update the modal title
-            //document.getElementById("userDeleteModalLabel").innerText = `Edit User Profile - ${userId}`;
-
             // Initialize and show the modal
             const modalElement = document.getElementById("userDeleteModal");
             const modal = new bootstrap.Modal(modalElement);
             modal.show();
-
-            // (Optional: load user inside the modal and input data dynamically via user_id)
+    
+            loadUserDataDelete(userId);
             
-            loadUserDataDelte(userId);
         }
+
+        function loadUserDataDelete(userId){
+            fetch(`/get-user-form/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                modalBody = document.getElementById('deleteModalBody');
+
+                modalBody.innerHTML = `
+                                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                                <p class="mb-0">Are you sure you want to delete this Account? 
+                                <br>
+                                <span class="text-capitalize"> ${data.firstname} ${data.lastname}</span>
+                                <br>
+                                <br>
+                                <span class="fw-bold">Reminder</span>: This action cannot be undone.</p>
+                                `;
+    
+            })
+
+            document.getElementById('actionDelete').addEventListener('click',function(e){
+                e.preventDefault()
+
+                fetch(`/delete-user-form/${userId}`, {
+                    method: "DELETE"
+                })
+                .then(res => res.json())
+                .then(data =>{
+                    console.log(data)
+                    if (data.success){
+                        if (data.toast){
+                                showDynamicToast(data.toast.message, data.toast.category);
+                        }
+
+                        // Remove the user card from UI after successful deletion
+                        const userCard = document.getElementById(`user-card-${userId}`);
+                        if (userCard) {
+                            userCard.remove();
+                        }
+                    }
+                })
+                bootstrap.Modal.getInstance(document.getElementById("userDeleteModal")).hide();
+            })
+        }
+        
+        
 
       
-
-
-        function callToatsMessage(userId){
-            let toast = document.getElementById("toastMessage")
-        }
-
-
 
         
     </script>
