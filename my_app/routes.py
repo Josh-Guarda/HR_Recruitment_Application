@@ -76,9 +76,8 @@ def forgot_password_page():
     forgot_pw_request=ForgotPassword()
     if forgot_pw_request.validate_on_submit():
         email_address = forgot_pw_request.email_address.data
-        if email_address:
-            print("Email fetched: ",email_address)
-    
+        # if email_address:
+        #     print("Email fetched: ",email_address)
         try:
             # Generate Reset Token
             token = generate_reset_token(email_address)
@@ -180,7 +179,7 @@ def admin_dashboard_manage_users():
 
 
 @app.route('/get-user-form/<int:user_id>', methods=["GET"])
-@login_required
+# @login_required
 def get_user_form(user_id):
     user = Users.query.get_or_404(user_id)
     user_data = {
@@ -201,25 +200,29 @@ def get_user_form(user_id):
                 }
     return jsonify(user_data)
     # return user_id
+    
+    
+    
+@app.route('/')
+    
+    
 
 
-@app.route('/update-user-form/<int:user_id>', methods=["POST"])
-@login_required
+@app.route('/update-user-form/<int:user_id>', methods=["PUT"])
+# @login_required
 def update_user_form(user_id):
     user = Users.query.filter_by(id=user_id).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
     
-    
-    
+    form = request.form
+    print(form)
     
     original_user_type = user.user_type_id
     current_user_updating_self = (user.id == current_user.id)
     
     
-
-    
-    if request.method == "POST":
+    if request.method == "PUT":
         # Handle form fields (non-file)
         for k, v in request.form.items():
             print({k: v})
@@ -271,8 +274,45 @@ def update_user_form(user_id):
             })
         
 
-        
+
+@app.route('/delete-user-form/<int:user_id>',methods=['DELETE'])
+@login_required
+def delete_user(user_id):
+    user = Users.query.filter_by(id=user_id).first()
     
+    # Prevent self-deletion
+    if user.id == current_user.id:
+        return jsonify({
+            "success": False,
+            "message": "Cannot delete your own account",
+            "toast": {
+                "message": "You cannot delete your own account!",
+                "category": "warning"
+            }
+        }), 400
+    
+    if not current_user.user_type.name == 'admin':
+        return jsonify({
+            "success": False,
+            "message": "Insufficient permissions",
+            "toast": {
+                "message": "You don't have permission to delete users!",
+                "category": "danger"
+            }
+        }), 403  # HTTP 403 Forbidden
+        
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({
+                "success": True,
+                "message": "User Deleted successfully",
+                "toast": {
+                    "message": f"{user.firstname.capitalize()}'s profile has been Deleted!",
+                    "category": "danger"
+                }
+            })
+
 
 
 # Internal ROUTES
@@ -374,9 +414,6 @@ def public_dashboard(user_id):
                 flash('Avatar upload directory not found!', category='danger')
 
         
-        # print(f"Form values - prov: {form.prov_id.data}, munci: {form.munci_id.data}, brgy: {form.brgy_id.data}")
-        # print(f"Type of prov_id: {type(form.prov_id.data)}")
-        # print(f"After save - prov: {current_user.prov_id}, munci: {current_user.munci_id}, brgy: {current_user.brgy_id}")
         db.session.commit()
         flash('Your profile has been updated!', category='success')
         
