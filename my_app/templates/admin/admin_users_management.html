@@ -33,10 +33,11 @@ Dashboard Users-Management
                         <!-- Actions section -->
                         <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
                             <!-- Create button -->
-                            <button type="button" class="btn btn-primary d-none d-md-block" data-bs-toggle="modal" data-bs-target="#CreateUser"><i class="ri-add-line fs-5"></i><span> </span>Add User</button>
-                            {% include "admin/create_modal.html" %}
+                            <button type="button" class="btn btn-primary d-none d-md-block" onclick="openUserCreateModal()">
+                                <i class="ri-add-line fs-5"></i><span> </span>Add User
+                            </button>
+                            
                             <div class="navbar d-md-none ms-auto">
-                                
                                 <button class="btn btn-light border border-secondary px-2 d-lg-flex"
                                         type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ri-menu-line"></i>
@@ -52,18 +53,6 @@ Dashboard Users-Management
                                     <a class="dropdown-action-option dropdown-item border-radius-md d-flex align-items-center justify-content-center" href="#">
                                         <img src="{{ url_for('static', filename='builtin/icons/filter.png') }}" width="15">
                                         <span class="ms-2">Filter</span>
-                                    </a>
-                                    </li>
-                                    <li>
-                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex align-items-center justify-content-center" href="javascript:;">
-                                        <img src="{{ url_for('static', filename='builtin/icons/layer.png') }}" width="15">
-                                        <span class="ms-2">Group By</span>
-                                    </a>
-                                    </li>
-                                    <li>
-                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex align-items-center justify-content-center" href="#">
-                                        <img src="{{ url_for('static', filename='builtin/icons/import.png') }}" width="15">
-                                        <span class="ms-2">Import</span>
                                     </a>
                                     </li>
                                     <li>
@@ -102,7 +91,64 @@ Dashboard Users-Management
                 </div>
             </div>
         </div>
-        
+
+
+        <!-- CREATE USER MODAL -->
+        <div class="modal fade" id="userCreateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Create User Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createUserForm" action="" method="POST">
+                            <div class="row">
+                                <div class="col-12 col-lg-6 text-center text-muted py-2 pe-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" name="firstname" placeholder="Juan" required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" name="lastname" class="form-control" required placeholder="Dela Cruz">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-lg-6 text-center text-muted py-2 pe-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">User Account type</label>
+                                        <select name="user_type_id" class="form-control text-center" id="userTypeCreateUser"></select>
+                                    </div>
+
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" name="email_address" class="form-control" required placeholder="your@email.com">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="Password" name="temp_password" class="form-control" required placeholder="Password">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-dark w-100">Generate Random Password</button>
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <div class="modal-footer justify-content-center pt-5">
+                                <input type="submit" class="btn btn-primary" id"actionCreateUser" value="Create User">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                
+                            </div>
+                        </form>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
         
         <section id="UsersManagementKanbanView" class="container">
             <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
@@ -195,7 +241,7 @@ Dashboard Users-Management
                                 <button type="button" class="btn del-modal-btn-secondary" data-bs-dismiss="modal">
                                         <i class="fas fa-times me-2"></i>Cancel
                                     </button>
-                                <button type="button" class="btn del-modal-btn-danger" id="actionDelete">
+                                <button type="button" class="btn del-modal-btn-danger" id="actionDeleteUser">
                                         <i class="fas fa-trash-alt me-2"></i>Delete
                                     </button>
                             </div>
@@ -264,6 +310,53 @@ Dashboard Users-Management
 {% block javascript %}
     <script>
 
+        function openUserCreateModal() {
+            console.log('HELLO AKO AY SOBRANG POGI')
+            // Initialize and show the modal
+            const modalElement = document.getElementById("userCreateModal");
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+
+            // (Optional: load user inside the modal and input data dynamically via user_id)
+            const createUserTypedisplay = document.getElementById("userTypeCreateUser");
+            getGetUserTypes(createUserTypedisplay);
+        }
+        
+        function getGetUserTypes(dropdown,data){
+            fetch(`/get_user_types`)
+                .then(res => res.json())
+                .then(types => {
+
+                    const userTypeSelect = dropdown;
+
+                    // Clear any existing options
+                    userTypeSelect.innerHTML = "";
+                    
+                    // Add a default option
+                    const defaultOption = document.createElement("option");
+                    defaultOption.value = "";
+                    defaultOption.textContent = "-- Select User Type --";
+                    userTypeSelect.appendChild(defaultOption);
+
+                    // Populate options from API
+                    types.forEach(type => {
+                        const option = document.createElement("option");
+                        option.value = type.id;     // store id in value
+                        option.textContent = type.name; // display name
+                    
+                        userTypeSelect.appendChild(option);
+
+                    });
+                    userTypeSelect.value = data.user_type;
+                    
+                })
+                .catch(err => console.error("Failed to load user types:", err))
+        }
+                    
+
+
+
+
         function openUserEditModal(userId) {
             // Update the modal title
             document.getElementById("userEditModalLabel").innerText = `Edit User Profile - ${userId}`;
@@ -323,7 +416,7 @@ Dashboard Users-Management
                             <div class="row row-cols-1 row-cols-lg-2 mb-5 text-muted w-50">
                                 <div class="col text-center">
                                     <label class="form-label">User-Type</label>
-                                    <select name="user_type_id" class="form-control text-center" id="userType"></select>
+                                    <select name="user_type_id" class="form-control text-center" id="userTypeUpdateUser"></select>
                                 </div>
                                 
                             </div>
@@ -496,36 +589,13 @@ Dashboard Users-Management
                         });
                     }
 
+                    const updateUserTypedisplay = document.getElementById("userTypeUpdateUser");
+                    getGetUserTypes(updateUserTypedisplay,data)
 
-                    fetch(`/get_user_types`)
-                        .then(res => res.json())
-                        .then(types => {
-                            console.log("User Types:", types);
 
-                            const userTypeSelect = document.getElementById("userType");
 
-                            // Clear any existing options
-                            userTypeSelect.innerHTML = "";
 
-                            // Add a default option
-                            const defaultOption = document.createElement("option");
-                            //defaultOption.value = "";
-                            //defaultOption.textContent = "-- Select User Type --";
-                            //userTypeSelect.appendChild(defaultOption);
-
-                            // Populate options from API
-                            types.forEach(type => {
-                                const option = document.createElement("option");
-                                option.value = type.id;     // store id in value
-                                option.textContent = type.name; // display name
-                               
-                                userTypeSelect.appendChild(option);
-                            });
-                            userTypeSelect.value = data.user_type
-                            
-                        })
-                        .catch(err => console.error("Failed to load user types:", err));
-
+                        
 
 
 
@@ -565,7 +635,7 @@ Dashboard Users-Management
                                     //email
                                     document.querySelector(`#user-email-${userId}`).textContent = formData.get("email_address");
                                     //USER_TYPE_ID
-                                    const userTypeSelect = document.getElementById("userType");
+                                    const userTypeSelect = document.getElementById("userTypeUpdateUser");
                                     const selectedOption = userTypeSelect.options[userTypeSelect.selectedIndex];
                                     const userTypeName = selectedOption.textContent;
                                     // Capitalize the first letter of each word
@@ -579,6 +649,7 @@ Dashboard Users-Management
                                     // Also update the data attribute if needed
                                     document.querySelector(`#user-type-${userId}`).dataset.userTypeId = formData.get("user_type_id");
                                 
+
 
                                     //Profile_picture
                                     const fileInput = this.querySelector('input[name="profile_picture"]');
@@ -594,7 +665,7 @@ Dashboard Users-Management
                             }
                             
                         })
-                        .catch(err => console.error("Update failed:", err));
+                        .catch(err => console.error("Update failed:", err))
                         //showDynamicToast("Error updating user profile", "danger");
                     });
                 })
@@ -604,21 +675,27 @@ Dashboard Users-Management
                 });
         }
 
-
-
         
+
         document.addEventListener('click', function (event) {
-            const modal = document.getElementById('userEditModal');
-            const modalContent = modal.querySelector('.modal-content');
-            const isModalVisible = modal.classList.contains('show');
-
-            if (isModalVisible && !modalContent.contains(event.target)) {
-            const beep = document.getElementById('modal-beep');
-            beep.currentTime = 0;
-            beep.play();
-            }
+            const modals = [
+                document.getElementById('userEditModal'),
+                document.getElementById('userCreateModal')
+            ];
+            
+            modals.forEach(modal => {
+                if (!modal) return; // Skip if modal doesn't exist
+                
+                const modalContent = modal.querySelector('.modal-content');
+                const isModalVisible = modal.classList.contains('show');
+                
+                if (isModalVisible && !modalContent.contains(event.target)) {
+                    const beep = document.getElementById('modal-beep');
+                    beep.currentTime = 0;
+                    beep.play();
+                }
+            });
         });
-
 
 
         function showDynamicToast(message,category='info'){
@@ -696,7 +773,7 @@ Dashboard Users-Management
     
             })
 
-            document.getElementById('actionDelete').addEventListener('click',function(e){
+            document.getElementById('actionDeleteUser').addEventListener('click',function(e){
                 e.preventDefault()
 
                 fetch(`/delete-user-form/${userId}`, {

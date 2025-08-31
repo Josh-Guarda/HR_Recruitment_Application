@@ -76,9 +76,8 @@ def forgot_password_page():
     forgot_pw_request=ForgotPassword()
     if forgot_pw_request.validate_on_submit():
         email_address = forgot_pw_request.email_address.data
-        if email_address:
-            print("Email fetched: ",email_address)
-    
+        # if email_address:
+        #     print("Email fetched: ",email_address)
         try:
             # Generate Reset Token
             token = generate_reset_token(email_address)
@@ -201,6 +200,12 @@ def get_user_form(user_id):
                 }
     return jsonify(user_data)
     # return user_id
+    
+    
+    
+@app.route('/')
+    
+    
 
 
 @app.route('/update-user-form/<int:user_id>', methods=["PUT"])

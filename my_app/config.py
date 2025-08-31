@@ -1,7 +1,7 @@
 from my_app import app
 
 
-# dummy secrey key so we can use sessions
+# dummy secret key so we can use sessions
 SECRET_KEY = "b5b6981766a5bbbd3c901b1e"
 
 # Create in-memory database

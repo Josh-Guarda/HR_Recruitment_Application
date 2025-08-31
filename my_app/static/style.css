@@ -201,7 +201,7 @@ body.sidebar-open .main-content {
     }
 
 
-#userType option {
+#userTypeCreateUser option, #userTypeUpdateUser option {
     text-transform: capitalize;
 }
 
