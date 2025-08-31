@@ -1,8 +1,7 @@
 from my_app import app,db
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from my_app import mail,Message,generate_reset_token,verify_reset_token
-# from my_app.helper import set_form_province,set_form_municipality,set_form_barangay
-from my_app.helper import set_form_choices
+from my_app.helper import set_form_choices,generate_random
 from flask import render_template, redirect, url_for, flash,request,session, jsonify
 from my_app.models import Jobs,Users,Usertype
 from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ChangePasswordFormInSecurity,ForgotPassword,ChangePasswordBeforeLogin
@@ -203,13 +202,21 @@ def get_user_form(user_id):
     
     
     
-@app.route('/')
+@app.route('/create-user-form',methods=['POST'])
+@login_required
+def create_user_form():
+    
+    form = request.form
+    print(f"Fetch Form {form}")
+    
+    
+    return jsonify({'message':'User Successfully created!'})
     
     
 
 
 @app.route('/update-user-form/<int:user_id>', methods=["PUT"])
-# @login_required
+@login_required
 def update_user_form(user_id):
     user = Users.query.filter_by(id=user_id).first()
     if not user:
@@ -437,6 +444,13 @@ def public_dashboard(user_id):
 
 
 
+@app.route('/create-random-password',methods=['GET'])
+def create_random_pass():
+    generated_pass= generate_random()
+    return jsonify({'random_pw': str(generated_pass)})
+    
+
+
 @app.route('/get_user_types', methods=["GET"])
 def get_user_type():
     types = Usertype.query.all()
@@ -482,9 +496,6 @@ def get_barangays(munci_code):
         key=lambda x: x['name'].lower()
     )
     return jsonify(barangays)
-
-
-
 
 
 

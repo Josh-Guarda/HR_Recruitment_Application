@@ -1,6 +1,8 @@
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from wtforms.validators import ValidationError
-    
+import os
+import secrets
+import string
 
 def set_form_choices(form, user):
     
@@ -34,4 +36,17 @@ def set_form_choices(form, user):
         form.brgy_id.choices = [('', '-- Select Barangay --')]
         
         
-        
+
+
+
+
+#GENERATE RANDOM CHARACTER FOR GENERATE PASSWORD.
+# def generate_random():
+#     size = 6 
+#     return os.urandom(size)
+
+def generate_random():
+    # Generate a more readable password
+    alphabet = string.ascii_letters + string.digits
+    password = ''.join(secrets.choice(alphabet) for i in range(10))
+    return password
