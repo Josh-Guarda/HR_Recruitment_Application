@@ -578,6 +578,29 @@ table.dataTable tbody tr:hover {
 
 /* MODAL CSS */
 
+/* CREATE MODAL */
+.password-container {
+    position: relative;
+}
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 42px;
+    cursor: pointer;
+    color: #6c757d;
+    z-index: 10;
+}
+
+
+
+
+
+
+
+
+
+
+
 /* DELETE MODAL */
 .modal-content {
     border: none;

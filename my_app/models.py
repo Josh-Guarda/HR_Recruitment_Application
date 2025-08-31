@@ -60,11 +60,8 @@ class Users(db.Model,UserMixin):
     department_id =db.Column(db.Integer(),db.ForeignKey('department.id'))
     department = db.relationship('Department')
     
-    
     user_type_id = db.Column(db.Integer(),db.ForeignKey('usertype.id'))
     user_type = db.relationship('Usertype')
-    
-    
     
     creation_date = db.Column(db.Date(),nullable=False)
     write_date =  db.Column(db.Date(),nullable=False)

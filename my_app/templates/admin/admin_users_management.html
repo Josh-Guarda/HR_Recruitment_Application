@@ -127,13 +127,16 @@ Dashboard Users-Management
                                         <input type="email" name="email_address" class="form-control" required placeholder="your@email.com">
                                     </div>
 
-                                    <div class="mb-3">
+                                    <div class="mb-3 password-container">
                                         <label class="form-label">Password</label>
-                                        <input type="Password" name="temp_password" class="form-control" required placeholder="Password">
+                                        <input type="password" name="temp_password" id="tempPassword" class="form-control" required placeholder="Password">
+                                        <span class="password-toggle" id="passwordToggle">
+                                            <i class="fas fa-eye"></i>
+                                        </span>
                                     </div>
 
                                     <div class="mb-3">
-                                        <button type="button" class="btn btn-dark w-100">Generate Random Password</button>
+                                        <button type="button" class="btn btn-dark w-100" id="generateRandomPass">Generate Random Password</button>
                                     </div>
                                 </div>
                             </div>
@@ -309,26 +312,12 @@ Dashboard Users-Management
 
 {% block javascript %}
     <script>
-
-        function openUserCreateModal() {
-            console.log('HELLO AKO AY SOBRANG POGI')
-            // Initialize and show the modal
-            const modalElement = document.getElementById("userCreateModal");
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-
-            // (Optional: load user inside the modal and input data dynamically via user_id)
-            const createUserTypedisplay = document.getElementById("userTypeCreateUser");
-            getGetUserTypes(createUserTypedisplay);
-        }
         
         function getGetUserTypes(dropdown,data){
             fetch(`/get_user_types`)
                 .then(res => res.json())
                 .then(types => {
-
                     const userTypeSelect = dropdown;
-
                     // Clear any existing options
                     userTypeSelect.innerHTML = "";
                     
@@ -352,10 +341,47 @@ Dashboard Users-Management
                 })
                 .catch(err => console.error("Failed to load user types:", err))
         }
+
+
+
+        document.getElementById('generateRandomPass').addEventListener('click', function(e){
+            fetch('/create-random-password')
+            .then(response => response.json())
+            .then(generatedPasswordResponse => {
+                // Set the value of the password input field
+                document.getElementById('tempPassword').value = generatedPasswordResponse.random_pw;
+                
+                // Optional: Show a brief confirmation message
+                const btn = document.getElementById('generateRandomPass');
+                const originalText = btn.textContent;
+                btn.textContent = 'Password Generated!';
+                
+                // Revert button text after 2 seconds
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to generate password. Please try again.');
+            });
+        });
                     
+        
+        function openUserCreateModal() {
+            console.log('HELLO AKO AY SOBRANG POGI')
+            // Initialize and show the modal
+            const modalElement = document.getElementById("userCreateModal");
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
 
+            // (Optional: load user inside the modal and input data dynamically via user_id)
+            const createUserTypedisplay = document.getElementById("userTypeCreateUser");
+            getGetUserTypes(createUserTypedisplay);
 
-
+            
+        }
+        
 
         function openUserEditModal(userId) {
             // Update the modal title
@@ -595,11 +621,6 @@ Dashboard Users-Management
 
 
 
-                        
-
-
-
-
                     document.getElementById("userEditForm").addEventListener("submit", function(e) {
                         e.preventDefault();
                         const formData = new FormData(this);
@@ -677,69 +698,6 @@ Dashboard Users-Management
 
         
 
-        document.addEventListener('click', function (event) {
-            const modals = [
-                document.getElementById('userEditModal'),
-                document.getElementById('userCreateModal')
-            ];
-            
-            modals.forEach(modal => {
-                if (!modal) return; // Skip if modal doesn't exist
-                
-                const modalContent = modal.querySelector('.modal-content');
-                const isModalVisible = modal.classList.contains('show');
-                
-                if (isModalVisible && !modalContent.contains(event.target)) {
-                    const beep = document.getElementById('modal-beep');
-                    beep.currentTime = 0;
-                    beep.play();
-                }
-            });
-        });
-
-
-        function showDynamicToast(message,category='info'){
-            let container = document.getElementById('flash-toast-container');
-            if(!container){
-                container = document.createElement('div');
-                container.id= 'flash-toast-container'
-                document.body.appendChild(container)
-            }
-
-            // Create toast element
-            const toastId = 'toast-' + Date.now();
-            const toastHTML = `
-                                <div id="${toastId}" 
-                                    class="toast align-items-center bg-${category} bg-gradient text-light border-0 position-fixed top-0 end-0 m-3"
-                                    role="alert"
-                                    aria-live="assertive"
-                                    aria-atomic="true"
-                                    data-bs-autohide="true"
-                                    data-bs-delay="3000">
-                                    <div class="d-flex">
-                                        <div class="toast-body">
-                                            ${message}
-                                        </div>
-                                        <button type="button" class="btn-close me-2 m-auto btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                                    </div>
-                                </div>
-                            `;
-
-            // Add toast to container
-            container.insertAdjacentHTML('beforeend', toastHTML);
-            
-            // Show the toast
-            const toastElement = document.getElementById(toastId);
-            const toast = new bootstrap.Toast(toastElement);
-            toast.show();
-            
-            // Remove toast from DOM after it hides
-            toastElement.addEventListener('hidden.bs.toast', () => {
-                toastElement.remove();
-            });
-        }
-
-
 
 
 
@@ -797,10 +755,110 @@ Dashboard Users-Management
                 bootstrap.Modal.getInstance(document.getElementById("userDeleteModal")).hide();
             })
         }
-        
-        
+
+
+
+
+
+
+
+        // Add this script to your page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the modal element
+            const userCreateModal = document.getElementById('userCreateModal');
+            
+            // When the modal is hidden, reset the form
+            userCreateModal.addEventListener('hidden.bs.modal', function () {
+                // Reset the form
+                document.getElementById('createUserForm').reset();
+                
+                // If you want to explicitly set the user type to default
+                const userTypeSelect = document.getElementById('userTypeCreateUser');
+                if (userTypeSelect) {
+                    userTypeSelect.selectedIndex = 0; // Set to first option
+                }
+            });
+        });
+
+
+
+        //ACCOUNT CREATION SHOW AND HIDE GENERATED PASSWORD
+         $(document).ready(function() {
+            // Toggle password visibility
+            $('#passwordToggle').click(function() {
+                const passwordInput = $('#tempPassword');
+                const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+                passwordInput.attr('type', type);
+                
+                // Toggle eye icon
+                $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+            });
+        });
 
       
+        //MODAL BEEP SOUND
+        document.addEventListener('click', function (event) {
+            const modals = [
+                document.getElementById('userEditModal'),
+                document.getElementById('userCreateModal')
+            ];
+            
+            modals.forEach(modal => {
+                if (!modal) return; // Skip if modal doesn't exist
+                
+                const modalContent = modal.querySelector('.modal-content');
+                const isModalVisible = modal.classList.contains('show');
+                
+                if (isModalVisible && !modalContent.contains(event.target)) {
+                    const beep = document.getElementById('modal-beep');
+                    beep.currentTime = 0;
+                    beep.play();
+                }
+            });
+        });
+
+        //DYNAMIC TOAST MESSAGE
+        function showDynamicToast(message,category='info'){
+            let container = document.getElementById('flash-toast-container');
+            if(!container){
+                container = document.createElement('div');
+                container.id= 'flash-toast-container'
+                document.body.appendChild(container)
+            }
+
+            // Create toast element
+            const toastId = 'toast-' + Date.now();
+            const toastHTML = `
+                                <div id="${toastId}" 
+                                    class="toast align-items-center bg-${category} bg-gradient text-light border-0 position-fixed top-0 end-0 m-3"
+                                    role="alert"
+                                    aria-live="assertive"
+                                    aria-atomic="true"
+                                    data-bs-autohide="true"
+                                    data-bs-delay="3000">
+                                    <div class="d-flex">
+                                        <div class="toast-body">
+                                            ${message}
+                                        </div>
+                                        <button type="button" class="btn-close me-2 m-auto btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            `;
+
+            // Add toast to container
+            container.insertAdjacentHTML('beforeend', toastHTML);
+            
+            // Show the toast
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            
+            // Remove toast from DOM after it hides
+            toastElement.addEventListener('hidden.bs.toast', () => {
+                toastElement.remove();
+            });
+        }
+
 
         
     </script>
