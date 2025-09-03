@@ -1,7 +1,6 @@
 from my_app import app,db
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from my_app import mail,Message,generate_reset_token,verify_reset_token
-from my_app.helper import set_form_choices,generate_random
 from flask import render_template, redirect, url_for, flash,request,session, jsonify
 from my_app.models import Jobs,Users,Usertype
 from my_app.forms import RegisterForm,LoginForm,PersonalInfoForm,ChangePasswordFormInSecurity,ForgotPassword,ChangePasswordBeforeLogin
@@ -10,7 +9,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
 import os
-
+from my_app.helper import set_form_choices,generate_random,validate_email_address,validate_mobile_number,validate_phone_number
 
 
 @app.route("/")
@@ -202,18 +201,48 @@ def get_user_form(user_id):
     
     
     
-@app.route('/create-user-form',methods=['POST'])
-@login_required
+@app.route('/create-user-form', methods=['POST'])
 def create_user_form():
-    
-    form = request.form
-    print(f"Fetch Form {form}")
-    
-    
-    return jsonify({'message':'User Successfully created!'})
-    
-    
+    try:
+        # Get form data
+        firstname = request.form.get('firstname')
+        lastname = request.form.get('lastname')
+        user_type_id = request.form.get('user_type_id')
+        email_address = request.form.get('email_address')
+        temp_password = request.form.get('temp_password')
+        
+        print(f"Received: {firstname}, {lastname}, {user_type_id}, {email_address}, {temp_password}")
+        
+        # Validate email first
+        email_error = validate_email_address(email_address)
 
+        if email_error:
+            return jsonify({'message': email_error, 'success': False})
+        
+        
+        # If email is valid, create the user
+        user_to_create = Users(
+            firstname=firstname,
+            lastname=lastname,
+            email_address=email_address,
+            password=temp_password,  # Make sure you hash this password!
+            user_type_id=user_type_id,
+            creation_date=datetime.now().date(),
+            write_date=datetime.now().date()
+        )
+        
+        db.session.add(user_to_create)
+        db.session.commit()
+        return jsonify({'message': 'User Successfully created!', 'success': True})
+            
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({'message': f'Error: {str(e)}', 'success': False}), 500
+    
+    
+    
+    
+    
 
 @app.route('/update-user-form/<int:user_id>', methods=["PUT"])
 @login_required
@@ -444,7 +473,7 @@ def public_dashboard(user_id):
 
 
 
-@app.route('/create-random-password',methods=['GET'])
+@app.route('/create-random-password/',methods=['GET'])
 def create_random_pass():
     generated_pass= generate_random()
     return jsonify({'random_pw': str(generated_pass)})

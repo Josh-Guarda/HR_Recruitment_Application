@@ -1,8 +1,70 @@
 from my_app import BARANGAY_DATA, MUNICIPALITY_DATA, PROVINCE_DATA
 from wtforms.validators import ValidationError
 import os
+from my_app.models import Users
 import secrets
 import string
+
+
+
+
+
+
+
+# def validate_username(self, username_to_check):
+#         user = Users.query.filter_by(username=username_to_check.data).first()
+#         if user:
+#             raise ValidationError('UserName Already exist! Please try different UserName.')
+        
+        
+        
+        
+def validate_email_address(email_address_to_check):
+    # Remove .data since we're passing a string directly
+    email_address = Users.query.filter_by(email_address=email_address_to_check).first()
+    if email_address:
+        return 'Email Already exists! Please try a different Email Address.'
+    return None  # Return None if email is valid
+
+
+def validate_mobile_number(number_to_check):
+        if not number_to_check.data.isdigit():
+            raise ValidationError('Only numbers are allowed.')
+        
+        number_to_save = Users.query.filter_by(mobile_number=number_to_check.data).first()
+        if number_to_save != number_to_save:
+            raise ValidationError('Mobile number already exists.')
+        
+def validate_phone_number(number_to_check):
+    if not number_to_check.data.isdigit():
+        raise ValidationError('Only numbers are allowed.')
+
+    number_to_save = Users.query.filter_by(phone_number=number_to_check.data).first()
+    if number_to_save != number_to_save:
+        raise ValidationError('Phone number already exists.')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def set_form_choices(form, user):
     
