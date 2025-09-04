@@ -194,7 +194,7 @@ def get_user_form(user_id):
                 "prov_id": user.prov_id,
                 "munci_id": user.munci_id,
                 "brgy_id": user.brgy_id,
-                "user_type":user.user_type_id
+                "user_type_id":user.user_type_id
                 }
     return jsonify(user_data)
     # return user_id
@@ -225,7 +225,7 @@ def create_user_form():
             firstname=firstname,
             lastname=lastname,
             email_address=email_address,
-            password=temp_password,  # Make sure you hash this password!
+            password=temp_password,
             user_type_id=user_type_id,
             creation_date=datetime.now().date(),
             write_date=datetime.now().date()
@@ -233,14 +233,18 @@ def create_user_form():
         
         db.session.add(user_to_create)
         db.session.commit()
-        return jsonify({'message': 'User Successfully created!', 'success': True})
-            
+        return jsonify({
+                "success": True,
+                "message": "User updated successfully",
+                "toast": {
+                    "message": f"{firstname}'s profile has been updated!",
+                    "category": "success"
+                }
+        })
+        
+        
     except Exception as e:
-        print(f"Error: {str(e)}")
         return jsonify({'message': f'Error: {str(e)}', 'success': False}), 500
-    
-    
-    
     
     
 
@@ -250,9 +254,6 @@ def update_user_form(user_id):
     user = Users.query.filter_by(id=user_id).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
-    
-    form = request.form
-    print(form)
     
     original_user_type = user.user_type_id
     current_user_updating_self = (user.id == current_user.id)
