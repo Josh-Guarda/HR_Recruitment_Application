@@ -344,8 +344,6 @@ Dashboard Users-Management
         }
 
 
-        
-
 
         document.getElementById('generateRandomPass').addEventListener('click', function(e){
             const button = this;
@@ -406,50 +404,61 @@ Dashboard Users-Management
         });
                     
         
-
+        
         function openUserCreateModal() {
             // Initialize and show the modal
             const modalElement = document.getElementById("userCreateModal");
             const modal = new bootstrap.Modal(modalElement);
             modal.show();
 
-            // (Optional: load user inside the modal and input data dynamically via user_id)
+            // (Load options of user_type_id: load user inside the modal and input data dynamically via user_id)
             const createUserTypedisplay = document.getElementById("userTypeCreateUser");
             getGetUserTypes(createUserTypedisplay);
 
-            // Add event listener to the FORM, not the button
-            document.getElementById('createUserForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                
-                fetch(`/create-user-form`, {
-                    method: "POST",
-                    body: formData
-                })
-                .then(res => res.json())
-                .then(result => {
-                    console.log(result);
-                    if (result.success) {
-                    // Success case - user created
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('userCreateModal'));
-                    modal.hide();
-                    alert('User created successfully!');
-                    // refresh the page to update UI
-		            location.reload();
+        }
+        
+        // Add event listener to the FORM, not the button
+        document.getElementById('createUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch(`/create-user-form`, {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(result => {
+                console.log(result);
+                if (result.success) {
+                // Success case - user created
+                const modal = bootstrap.Modal.getInstance(document.getElementById('userCreateModal'));
+                modal.hide();
+                //showDynamicToast(result.message, result.category);
+                showDynamicToast(result.toast.message, result.toast.category);
+
+                // refresh the page to update UI
+                //location.reload();
+
+                // Wait a bit before reloading to allow toast to show
+                setTimeout(() => {
+                    location.reload();
+                }, 2000); // 2 seconds delay
+            
+                        
                 } 
                 else {
                     // Email validation error (or other business logic error)
                     // Show error message specifically for email validation
                     showError(result.message);
                 }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error creating user. Please try again.');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error creating user. Please try again.');
 
-                });
             });
-        }
+        }); 
+
 
 
         function showError(message) {
@@ -476,7 +485,7 @@ Dashboard Users-Management
                 }
             }, 5000);
         }
-
+        
 
 
 
@@ -607,11 +616,11 @@ Dashboard Users-Management
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Mobile Number</label>
-                                        <input type="Number" name="mobile_number" class="form-control" placeholder="+63*" value="${data.mobile_number}">
+                                        <input type="text" name="mobile_number" class="form-control" placeholder="+63*" value="${data.mobile_number}">
                                     </div>
                                     <div>
                                         <label class="form-label">Phone Number</label>
-                                        <input type="Number" name="phone_number" class="form-control" placeholder="0000-0000" value="${data.phone_number}">
+                                        <input type="text" name="phone_number" class="form-control" placeholder="0000-0000" value="${data.phone_number}">
                                     </div>
                                 </div>
                             </div>
@@ -799,61 +808,74 @@ Dashboard Users-Management
 
 
 
-
-
         function openUserDeleteModal(userId) {
-            // Initialize and show the modal
-            const modalElement = document.getElementById("userDeleteModal");
+            let modalElement = document.getElementById("userDeleteModal");
+            modalElement.setAttribute('data-user-id', userId);
+            
             const modal = new bootstrap.Modal(modalElement);
             modal.show();
-    
-            loadUserDataDelete(userId);
             
+            loadUserDataDelete(userId);
         }
 
         function loadUserDataDelete(userId){
             fetch(`/get-user-form/${userId}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                console.log(data);
                 modalBody = document.getElementById('deleteModalBody');
 
                 modalBody.innerHTML = `
-                                <i class="fas fa-exclamation-triangle warning-icon"></i>
-                                <p class="mb-0">Are you sure you want to delete this Account? 
-                                <br>
-                                <span class="text-capitalize"> ${data.firstname} ${data.lastname}</span>
-                                <br>
-                                <br>
-                                <span class="fw-bold">Reminder</span>: This action cannot be undone.</p>
-                                `;
-    
-            })
-
-            document.getElementById('actionDeleteUser').addEventListener('click',function(e){
-                e.preventDefault()
-
-                fetch(`/delete-user-form/${userId}`, {
-                    method: "DELETE"
-                })
-                .then(res => res.json())
-                .then(data =>{
-                    console.log(data)
-                    if (data.success){
-                        if (data.toast){
-                                showDynamicToast(data.toast.message, data.toast.category);
-                        }
-
-                        // Remove the user card from UI after successful deletion
-                        const userCard = document.getElementById(`user-card-${userId}`);
-                        if (userCard) {
-                            userCard.remove();
-                        }
-                    }
-                })
-                bootstrap.Modal.getInstance(document.getElementById("userDeleteModal")).hide();
-            })
+                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+                    <p class="mb-0">Are you sure you want to delete this Account? 
+                    <br>
+                    <span class="text-capitalize">${data.firstname} ${data.lastname}</span>
+                    <br>
+                    <br>
+                    <span class="fw-bold">Reminder</span>: This action cannot be undone.</p>
+                `;
+            });
         }
+
+        // Add this event listener once (on page load)
+        document.getElementById('actionDeleteUser').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const modalElement = document.getElementById("userDeleteModal");
+            const userId = modalElement.getAttribute('data-user-id');
+            
+            if (userId) {
+                handleUserDeletion(userId);
+            }
+        });
+
+        function handleUserDeletion(userId) {
+            fetch(`/delete-user-form/${userId}`, {
+                method: "DELETE"
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.success){
+                    if (data.toast){
+                        showDynamicToast(data.toast.message, data.toast.category);
+                    }
+
+                    const userCard = document.getElementById(`user-card-${userId}`);
+                    if (userCard) {
+                        userCard.remove();
+                    }
+                }
+            });
+            
+            bootstrap.Modal.getInstance(document.getElementById("userDeleteModal")).hide();
+        }
+
+        
+
+
+
+        
 
 
 
@@ -918,6 +940,8 @@ Dashboard Users-Management
 
         //DYNAMIC TOAST MESSAGE
         function showDynamicToast(message,category='info'){
+ 
+            
             let container = document.getElementById('flash-toast-container');
             if(!container){
                 container = document.createElement('div');
@@ -944,6 +968,7 @@ Dashboard Users-Management
                                 </div>
                             `;
 
+
             // Add toast to container
             container.insertAdjacentHTML('beforeend', toastHTML);
             
@@ -956,6 +981,7 @@ Dashboard Users-Management
             toastElement.addEventListener('hidden.bs.toast', () => {
                 toastElement.remove();
             });
+            
         }
 
 
