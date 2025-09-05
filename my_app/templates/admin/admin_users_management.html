@@ -37,7 +37,8 @@ Dashboard Users-Management
                                 <i class="ri-add-line fs-5"></i><span> </span>Add User
                             </button>
                             
-                            <div class="navbar d-md-none ms-auto">
+                            <!-- HAMBURGER MENU -->
+                            <div class="user-nav-hamburger d-md-none ms-auto">
                                 <button class="btn btn-light border border-secondary px-2 d-lg-flex"
                                         type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ri-menu-line"></i>
@@ -45,7 +46,7 @@ Dashboard Users-Management
                                 
                                 <ul id="dropdown-menu" class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="dropdownMenuButton" style="min-width: 250px;">
                                     <li id="dropdown-item">
-                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#">
+                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" onclick="openUserCreateModal()">
                                         Add User
                                     </a>
                                     </li>
@@ -56,18 +57,18 @@ Dashboard Users-Management
                                     </a>
                                     </li>
                                     <li>
-                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#" data-bs-toggle="tooltip" title="Kanban View">
+                                    <a class="kanban-view dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#" data-bs-toggle="tooltip" title="Kanban View">
                                         <i class="bi bi-kanban"></i>
                                     </a>
                                     </li>
                                     <li>
-                                    <a class="dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#">
+                                    <a class="list-view dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" data-bs-toggle="tooltip" title="List View" href="#">
                                         <i class="ri-menu-line"></i>
                                     </a>
                                     </li>
                                 </ul>
                             </div>
-
+                                
                             <!-- Action buttons for desktop -->
                             <div class="d-none d-md-flex justify-content-between w-50">
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
@@ -77,10 +78,10 @@ Dashboard Users-Management
                                     </button>
                                 </div>
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                    <button id="btn-UsersKanbanView" type="button" class="btn btn-sm btn-primary " data-bs-toggle="tooltip" title="Kanban View">
+                                    <button type="button" class="kanban-view btn btn-sm btn-primary " data-bs-toggle="tooltip" title="Kanban View">
                                         <i class="bi bi-kanban"></i>
                                     </button>
-                                    <button id="btn-UsersTreeView" type="button" class="btn btn-sm btn-primary active" data-bs-toggle="tooltip" title="List View">
+                                    <button type="button" class="list-view btn btn-sm btn-primary active" data-bs-toggle="tooltip" title="List View">
                                         <i class="ri-menu-line"></i>
                                     </button>
                                     
@@ -859,12 +860,20 @@ Dashboard Users-Management
                 if (data.success){
                     if (data.toast){
                         showDynamicToast(data.toast.message, data.toast.category);
+
+
+                        //RELOADING after delay to readjust card positioning
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000); // 2 seconds delay
                     }
 
+                    //REMOVE CARD REAL TIME WITHOUT RELOADING
                     const userCard = document.getElementById(`user-card-${userId}`);
                     if (userCard) {
                         userCard.remove();
                     }
+                
                 }
             });
             
@@ -981,7 +990,6 @@ Dashboard Users-Management
             toastElement.addEventListener('hidden.bs.toast', () => {
                 toastElement.remove();
             });
-            
         }
 
 

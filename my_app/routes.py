@@ -245,7 +245,7 @@ def create_user_form():
         
     except Exception as e:
         return jsonify({'message': f'Error: {str(e)}', 'success': False}), 500
-    
+        
     
 
 @app.route('/update-user-form/<int:user_id>', methods=["PUT"])
