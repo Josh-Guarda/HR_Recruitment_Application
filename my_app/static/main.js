@@ -59,37 +59,34 @@ document.addEventListener("DOMContentLoaded", function () {
     //*****/ USERS MANAGEMENT ****//
 
     // SWITCH VIEW OF KANBAN AND TREEVIEW SCRIPT
-    const btnUsersTreeView = document.getElementById("btn-UsersTreeView");
-    const btnUsersKanbanView = document.getElementById("btn-UsersKanbanView");
-    const sectionUsersTreeView= document.getElementById("UsersManagementTreeView");
+    const btnUsersTreeView = document.querySelectorAll(".list-view");
+    const btnUsersKanbanView = document.querySelectorAll(".kanban-view");
+    const sectionUsersTreeView = document.getElementById("UsersManagementTreeView");
     const sectionKanbanView = document.getElementById("UsersManagementKanbanView");
     
-    btnUsersTreeView.addEventListener("click", function () {
-        btnUsersTreeView.classList.add("active");
-        btnUsersKanbanView.classList.remove("active");
-        sectionUsersTreeView.classList.remove("d-none");
-        sectionKanbanView.classList.add("d-none");
+    // Add event listener to all list-view elements
+    btnUsersTreeView.forEach(btn => {
+        btn.addEventListener("click", function () {
+            // Add active class to all list-view buttons
+            btnUsersTreeView.forEach(item => item.classList.add("active"));
+            // Remove active class from all kanban-view buttons
+            btnUsersKanbanView.forEach(tag => tag.classList.remove("active"));
+            sectionUsersTreeView.classList.remove("d-none");
+            sectionKanbanView.classList.add("d-none");
+        });
     });
 
-    btnUsersKanbanView.addEventListener("click", function () {
-        btnUsersKanbanView.classList.add("active");
-        btnUsersTreeView.classList.remove("active");
-        sectionKanbanView.classList.remove("d-none");
-        sectionUsersTreeView.classList.add("d-none");
+    // Add event listener to all kanban-view elements
+    btnUsersKanbanView.forEach(tag => {
+        tag.addEventListener("click", function () {
+            // Add active class to all kanban-view buttons
+            btnUsersKanbanView.forEach(item => item.classList.add("active"));
+            // Remove active class from all list-view buttons
+            btnUsersTreeView.forEach(item => item.classList.remove("active"));
+            sectionKanbanView.classList.remove("d-none");
+            sectionUsersTreeView.classList.add("d-none");
+        });
     });
-
-
-
-    // ADMIN KANBAN SCRIPTS
-    // document.querySelectorAll('.btn-edit-user').forEach(btn => {
-    //     btn.addEventListener('click', () => {
-    //         const userId = btn.getAttribute('data-user-id');
-    //         console.log("User ID:", userId);
-    //         // You can even trigger an AJAX call here to fetch user data
-    //     });
-    // });
-
-
 
 
 
