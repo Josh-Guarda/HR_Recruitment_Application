@@ -16,7 +16,7 @@ import string
 #         if user:
 #             raise ValidationError('UserName Already exist! Please try different UserName.')
         
-        
+
         
         
 def validate_email_address(email_address_to_check):
@@ -47,7 +47,25 @@ def validate_phone_number(number_to_check):
 
 
 
+# def get_users_search_results(search_term=None):
+#     """
+#     Fetches users from the database, optionally filtering by a search term.
+#     Returns a list of User objects.
+#     """
+#     # Start with a base query
+#     query = Users.query
+    
+#     # Apply filters if a search term is provided
+#     if search_term and search_term.strip() != '':
+#         search_filter = (
+#             (Users.firstname.ilike(f"%{search_term}%")) |
+#             (Users.lastname.ilike(f"%{search_term}%")) |
+#             (Users.email_address.ilike(f"%{search_term}%"))
+#         )   
+#         query = query.filter(search_filter)
 
+#     # Execute the query and return the results
+#     return query.order_by(Users.firstname).all()
 
 
 

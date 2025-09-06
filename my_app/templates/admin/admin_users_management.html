@@ -23,10 +23,18 @@ Dashboard Users-Management
                         <div class="text-center">
                             <h4 class="py-3 text-primary">Users Management</h4>
                             <div class="d-flex">
-                                <input type="text" class="form-control" placeholder="Search">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
+
+                                <form id="searchUserForm" method="POST">
+                                    <input id="searchUserInput" name="search_user" type="text" class="form-control" placeholder="Search">
+                                    <input type="submit" id="btnSearch" value="Search">
+                                    <!--
+                                    <button id="btnSearch" class="btn btn-primary" type="button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                    -->
+                                </form>
+
+                                
                             </div>
                         </div>
 
@@ -51,10 +59,12 @@ Dashboard Users-Management
                                     </a>
                                     </li>
                                     <li>
+                                        <!--
                                     <a class="dropdown-action-option dropdown-item border-radius-md d-flex align-items-center justify-content-center" href="#">
                                         <img src="{{ url_for('static', filename='builtin/icons/filter.png') }}" width="15">
                                         <span class="ms-2">Filter</span>
                                     </a>
+                                    -->
                                     </li>
                                     <li>
                                     <a class="kanban-view dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#" data-bs-toggle="tooltip" title="Kanban View">
@@ -72,10 +82,13 @@ Dashboard Users-Management
                             <!-- Action buttons for desktop -->
                             <div class="d-none d-md-flex justify-content-between w-50">
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
+
+                                    <!--
                                     <button type="button" class="btn btn-sm btn-primary">
                                         <i class="ri-filter-line fs-5"></i>
                                         <span class="ms-2">Filter</span>
                                     </button>
+                                    -->
                                 </div>
                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
                                     <button type="button" class="kanban-view btn btn-sm btn-primary " data-bs-toggle="tooltip" title="Kanban View">
@@ -184,7 +197,6 @@ Dashboard Users-Management
                                                         data-user-type-id="{{ user.user_type_id }}">
                                                         {{ user.user_type.name|capitalize }}
                                                     </span>
-
                                                 </p>
                                             </div>
                                         </div>   
@@ -291,7 +303,7 @@ Dashboard Users-Management
                                                         background-color: {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};
                                                         color:{{ 'white' if user.department and user.department.color else '#4d4a4aff' }};
                                                         ">
-                                                    {{ user.user_type|capitalize }}
+                                                    {{ user.user_type_id|capitalize }}
                                                 </span>
                                             </td>
                                         </tr>
@@ -336,10 +348,8 @@ Dashboard Users-Management
                         option.textContent = type.name; // display name
                     
                         userTypeSelect.appendChild(option);
-
                     });
-                    userTypeSelect.value = data.user_type;
-                    
+                    userTypeSelect.value = data.user_type_id;
                 })
                 .catch(err => console.error("Failed to load user types:", err))
         }
@@ -892,7 +902,9 @@ Dashboard Users-Management
 
 
 
-        // Add this script to your page
+
+
+        // RESET CREATE-MODAL CONTENT 
         document.addEventListener('DOMContentLoaded', function() {
             // Get the modal element
             const userCreateModal = document.getElementById('userCreateModal');
@@ -957,7 +969,7 @@ Dashboard Users-Management
                 container.id= 'flash-toast-container'
                 document.body.appendChild(container)
             }
-
+            
             // Create toast element
             const toastId = 'toast-' + Date.now();
             const toastHTML = `
@@ -991,8 +1003,43 @@ Dashboard Users-Management
                 toastElement.remove();
             });
         }
-
-
         
+        /*
+        //DYNAMIC SEARCH BAR
+        document.getElementById('btnSearch').addEventListener('click',function(e){
+            e.preventDefault()
+
+            searchText = document.getElementById('searchUserInput').value
+            searchEntry = {
+                'searchKey':searchText
+            }
+            console.log(searchEntry)
+            
+            fetch('/admin-get-users',{
+                method:"POST",
+                 headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body:JSON.stringify(searchEntry) 
+            })
+            .then(res =>res.json())
+            .then(result => {
+                console.log(result);
+            })
+            //searchUserInput
+            .catch(err => {
+                console.error('Error:',err)
+            })
+        })
+        */
+
+        document.getElementById('searchUserForm').addEventListener('submit',function(e){
+            //e.preventDefault()
+
+            
+        })
+
+
+
     </script>
 {% endblock javascript %}                

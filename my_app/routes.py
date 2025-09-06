@@ -11,7 +11,7 @@ import uuid
 import os
 from my_app.helper import set_form_choices,generate_random,validate_email_address,validate_mobile_number,validate_phone_number
 
-
+# ,get_users_search_results
 @app.route("/")
 @app.route("/home")
 def home_page():
@@ -38,10 +38,6 @@ def career_page():
 
 @app.route("/register",methods=['GET','POST'])
 def register_page():
-    
-    # TOdo:: Create a separate Create user Interface or Modal that has an option of a usertype for Admin Access. this will serves as dynamic creation of User if 
-    # the user of the app define an internal User
-    
     form = RegisterForm()
     if form.validate_on_submit():
         user_to_create = Users(firstname=form.firstname.data,
@@ -52,7 +48,6 @@ def register_page():
                                creation_date = datetime.now().date(),
                                write_date = datetime.now().date()
                                )
-
         db.session.add(user_to_create)
         db.session.commit()
         login_user(user_to_create)
@@ -167,14 +162,65 @@ def admin_dashboard():
 
 
 
-@app.route('/admin-get-users/', methods=["GET"])
+# @app.route('/admin-get-users', methods=["GET","POST"])
+# @login_required
+# def admin_dashboard_manage_users():
+#     users = Users.query.all()
+#     # No need to create forms here anymore since Edit template is dynamically loaded via User Modal handle via JS.
+    
+    
+#     # Handle the POST request from the fetch call
+#     if request.method == "POST":
+#         response_received = request.get_json()
+#         print(f"JSON PRINTED : {response_received}")
+        
+#         # TODO: Add your logic here! Use the search term.
+#         # For example: search_term = response_received['searchKey']
+#         # users = Users.query.filter(Users.firstname.ilike(f"%{search_term}%")).all()
+        
+#         # Return a JSON response to the fetch call
+#         return jsonify({ 
+#             'message': 'Search successful!', 
+#             'received_data': response_received,
+#             # 'users': [user.serialize() for user in users] # You would add results later
+#         })
+        
+#     # Handle the normal GET request for initially loading the page
+#     if request.method == "GET":
+#         users = Users.query.all()
+#         return render_template('admin/admin_users_management.html', users=users)
+
+
+
+
+@app.route('/admin-get-users', methods=["GET","POST"])
 @login_required
 def admin_dashboard_manage_users():
+        
+    if request.method == "POST":
+        search_user = request.form.get('search_user') # Get search term from form
+        # Start with a base query
+        query = Users.query
+        # Apply filters if a search term is provided
+        if search_user and search_user.strip() != '':
+            search_filter = (
+                (Users.firstname.ilike(f"%{search_user}%")) |
+                (Users.lastname.ilike(f"%{search_user}%")) |
+                (Users.email_address.ilike(f"%{search_user}%"))
+            )   
+            users = query.filter(search_filter).all()
+        else:
+            # If search is empty, get all users
+            users = Users.query.all()
+        return render_template('admin/admin_users_management.html', users=users)
+
+    # Handle GET request (normal page load)
     users = Users.query.all()
-    # No need to create forms here anymore since Edit template is dynamically loaded via User Modal handle via JS.
     return render_template('admin/admin_users_management.html', users=users)
 
 
+
+        
 
 @app.route('/get-user-form/<int:user_id>', methods=["GET"])
 # @login_required
