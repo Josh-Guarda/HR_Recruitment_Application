@@ -180,53 +180,68 @@ Dashboard Users-Management
 
         
         <section id="UsersManagementKanbanView" class="container">
-            <div class="row row-cols-1 row-cols-lg-2 g-4 py-5">
-                {% for user in users %}
-                    <div class="col">
-                        <div class="col" id="user-card-{{ user.id }}">
-                            <div class="card shadow h-100">
-                                <div class="card-body">
-                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                        <!-- User Info -->
-                                        <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
-                                            <img id="user-avatar-{{ user.id }}"
-                                            src="{{
-                                            url_for('static', filename='uploads/avatars/' + user.profile_picture)
-                                            if user.profile_picture
-                                            else url_for('static', filename='builtin/icons/person.png')
-                                            }}"
-                                            onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
-                                            class="rounded-circle me-3 p-1"
-                                            style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
-                                            width="64" height="60">
-                                            
-                                            <div class="px-2">
-                                                <h5 class="mb-1" id="user-name-{{ user.id }}">{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
-                                                <p class="text-muted mb-0" id="user-email-{{ user.id }}">{{ user.email_address }}</p>
-                                                <p class="text-muted mb-0" id="user-type-{{ user.id }}">
-                                                    <span class="badge border rounded-pill bg-light text-dark" 
-                                                        data-user-type-id="{{ user.user_type_id }}">
-                                                        {{ user.user_type.name|capitalize }}
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>   
+            <div id="users-container" class="row row-cols-1 row-cols-lg-2 g-4 py-5">
+                {% if users %}
+                    {% for user in users %}
+                        <div class="col">
+                            <div class="col" id="user-card-{{ user.id }}">
+                                <div class="card shadow h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                            <!-- User Info -->
+                                            <div class="d-flex align-items-center flex-wrap flex-grow-1 min-w-0">
+                                                <img id="user-avatar-{{ user.id }}"
+                                                src="{{
+                                                url_for('static', filename='uploads/avatars/' + user.profile_picture)
+                                                if user.profile_picture
+                                                else url_for('static', filename='builtin/icons/person.png')
+                                                }}"
+                                                onerror="this.onerror=null; this.src='{{ url_for('static', filename='builtin/icons/person.png') }}';"
+                                                class="rounded-circle me-3 p-1"
+                                                style="border: 1px solid {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};"
+                                                width="64" height="60">
+                                                
+                                                <div class="px-2">
+                                                    <h5 class="mb-1" id="user-name-{{ user.id }}">{{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h5>
+                                                    <p class="text-muted mb-0" id="user-email-{{ user.id }}">{{ user.email_address }}</p>
+                                                    <p class="text-muted mb-0" id="user-type-{{ user.id }}">
+                                                        <span class="badge border rounded-pill bg-light text-dark" 
+                                                            data-user-type-id="{{ user.user_type_id }}">
+                                                            {{ user.user_type.name|capitalize }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>   
 
-                                        <!-- Action Buttons -->
-                                        <div class="btn-group gap-1 mt-3 mt-md-0">
-                                            <button type="button" class="btn btn-transparent-success" onclick="openUserEditModal({{user.id}})">
-                                                <i class="fas fa-pencil-alt"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-transparent-danger" onclick="openUserDeleteModal({{user.id}})">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <!-- Action Buttons -->
+                                            <div class="btn-group gap-1 mt-3 mt-md-0">
+                                                <button type="button" class="btn btn-transparent-success" onclick="openUserEditModal({{user.id}})">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-transparent-danger" onclick="openUserDeleteModal({{user.id}})">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>  
+                    {% endfor %}
+                {% else %}
+                    <!-- show empty result if user doesnt exist -->
+                    <div class="col-12">
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="fas fa-search fa-3x text-muted"></i>
+                            </div>
+                            <h5 class="text-muted">No users found</h5>
+                            <p class="text-muted">Input some User or Try adjusting your search terms...</p>
                         </div>
-                    </div>  
-                {% endfor %}
+                    </div>
+                {% endif %}
+                
+
                 <!-- Beep Sound in Modals -->
                 <audio id="modal-beep" src="{{ url_for('static',filename='builtin/sound/beep-sound-software.wav') }}"></audio>
                 <!-- EDIT- MODAL -->
@@ -1015,58 +1030,49 @@ Dashboard Users-Management
             });
         }
         
-        /*
-        //DYNAMIC SEARCH BAR
-        document.getElementById('btnSearch').addEventListener('click',function(e){
-            e.preventDefault()
 
-            searchText = document.getElementById('searchUserInput').value
-            searchEntry = {
-                'searchKey':searchText
-            }
-            console.log(searchEntry)
-            
-            fetch('/admin-get-users',{
-                method:"POST",
-                 headers: {
-                    'Content-Type': 'application/json' 
-                },
-                body:JSON.stringify(searchEntry) 
-            })
-            .then(res =>res.json())
-            .then(result => {
-                console.log(result);
-            })
-            //searchUserInput
-            .catch(err => {
-                console.error('Error:',err)
-            })
-        })
-        */
-        /*
-        document.getElementById('searchUserForm').addEventListener('submit',function(e){
-            //e.preventDefault()
-
-            
-        })
-            */
-
+        //DYNAMIC SEARCH USER AND LOAD USERS 
+        //LOAD USER CONTAINER CARD WITHOUT RELOADING THE PAGE
         document.getElementById('searchUserForm').addEventListener('submit', async function(e) {
-            //e.preventDefault(); // Stop the form from reloading the page
+            e.preventDefault();
             const searchTerm = document.getElementById('searchUserInput').value;
-
-            
             const url = `/admin-get-users?q=${encodeURIComponent(searchTerm)}`;
             
-            // Use fetch to get the HTML from the server
-            const response = await fetch(url);
-            const html = await response.text();
-            
-            // The tricky part: extract just the part of the HTML you need to update (e.g., the table body)
-            // This requires your server to send back *only* the necessary HTML, or your JS to parse it.
-            // A simpler alternative is to have your route support JSON and AJAX, as we discussed before.
-            
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const newUsersContainer = tempDiv.querySelector('#users-container');
+                
+                if (newUsersContainer) {
+                    document.getElementById('users-container').innerHTML = newUsersContainer.innerHTML;
+                } 
+
+                
+
+                
+                window.history.pushState({}, '', url);
+
+                
+            } catch (error) {
+                console.error('Error:', error);
+                // Show error message to user
+                document.getElementById('users-container').innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <h6 class="text-danger">Network Error: Please try again</h6>
+                    </div>
+                `;
+            }
         });
+
+
+
+
+
+
+
 
 
 
