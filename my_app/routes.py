@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 import uuid
 import os
 from my_app.helper import set_form_choices,generate_random,validate_email_address,validate_mobile_number,validate_phone_number
-from sqlalchemy import func
+
 
 
 # ,get_users_search_results
@@ -147,10 +147,8 @@ def login_page():
                 return redirect(url_for('career_page'))
         else:
             flash('Invalid username or password.', category='danger')
-            
-    
+        
     return render_template('auth/login.html',show_navbar=False,form=form)
-
 
 
 
@@ -194,34 +192,6 @@ def admin_dashboard():
 
 
 
-
-# @app.route('/admin-get-users', methods=["GET","POST"])
-# @login_required
-# def admin_dashboard_manage_users():
-        
-#     if request.method == "POST":
-#         search_user = request.form.get('search_user') # Get search term from form
-#         query = Users.query
-#         # Apply filters if a search term is provided
-#         if search_user and search_user.strip() != '':
-#             search_filter = (
-#                 (Users.firstname.ilike(f"%{search_user}%")) |
-#                 (Users.lastname.ilike(f"%{search_user}%")) |
-#                 (Users.email_address.ilike(f"%{search_user}%"))
-#             )   
-#             users = query.filter(search_filter).all()
-#         else:
-#             # If search is empty, get all users
-#             users = Users.query.all()
-#         return render_template('admin/admin_users_management.html', users=users)
-
-#     users = Users.query.all()
-#     return render_template('admin/admin_users_management.html', users=users)
-
-
-
-
-
 @app.route('/admin-get-users',methods=["GET"]) # No need for 'POST' in methods now
 @login_required
 def admin_dashboard_manage_users():
@@ -233,12 +203,15 @@ def admin_dashboard_manage_users():
     # Start with a base query that JOINS the Usertype and USERS table
     query = Users.query.join(Usertype)
     
+    # Create the full name concatenation
+    full_name = Users.firstname + ' ' + Users.lastname
+    
     # Apply filters if a search term is provided
     if search_term:
         search_filter = (
             (Users.firstname.ilike(f"%{search_term}%")) |
             (Users.lastname.ilike(f"%{search_term}%")) |
-            (Users.firstname + Users.lastname.ilike(f"%{search_term}%")) |
+            (full_name.ilike(f"%{search_term}%")) |
             (Users.email_address.ilike(f"%{search_term}%"))|
             (Usertype.name.ilike(f"%{search_term}%"))
         )   
