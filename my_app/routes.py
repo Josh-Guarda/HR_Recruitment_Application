@@ -10,6 +10,8 @@ from werkzeug.utils import secure_filename
 import uuid
 import os
 from my_app.helper import set_form_choices,generate_random,validate_email_address,validate_mobile_number,validate_phone_number
+from sqlalchemy import func
+
 
 # ,get_users_search_results
 @app.route("/")
@@ -193,34 +195,61 @@ def admin_dashboard():
 
 
 
-@app.route('/admin-get-users', methods=["GET","POST"])
+# @app.route('/admin-get-users', methods=["GET","POST"])
+# @login_required
+# def admin_dashboard_manage_users():
+        
+#     if request.method == "POST":
+#         search_user = request.form.get('search_user') # Get search term from form
+#         query = Users.query
+#         # Apply filters if a search term is provided
+#         if search_user and search_user.strip() != '':
+#             search_filter = (
+#                 (Users.firstname.ilike(f"%{search_user}%")) |
+#                 (Users.lastname.ilike(f"%{search_user}%")) |
+#                 (Users.email_address.ilike(f"%{search_user}%"))
+#             )   
+#             users = query.filter(search_filter).all()
+#         else:
+#             # If search is empty, get all users
+#             users = Users.query.all()
+#         return render_template('admin/admin_users_management.html', users=users)
+
+#     users = Users.query.all()
+#     return render_template('admin/admin_users_management.html', users=users)
+
+
+
+
+
+@app.route('/admin-get-users',methods=["GET"]) # No need for 'POST' in methods now
 @login_required
 def admin_dashboard_manage_users():
-        
-    if request.method == "POST":
-        search_user = request.form.get('search_user') # Get search term from form
-        # Start with a base query
-        query = Users.query
-        # Apply filters if a search term is provided
-        if search_user and search_user.strip() != '':
-            search_filter = (
-                (Users.firstname.ilike(f"%{search_user}%")) |
-                (Users.lastname.ilike(f"%{search_user}%")) |
-                (Users.email_address.ilike(f"%{search_user}%"))
-            )   
-            users = query.filter(search_filter).all()
-        else:
-            # If search is empty, get all users
-            users = Users.query.all()
-        return render_template('admin/admin_users_management.html', users=users)
+    # Get the search term from the URL query string (e.g., ?q=john)
+    search_term = request.args.get('q', '').strip()
+    
+    print(f"You Search:{search_term}")
+    
+    # Start with a base query that JOINS the Usertype and USERS table
+    query = Users.query.join(Usertype)
+    
+    # Apply filters if a search term is provided
+    if search_term:
+        search_filter = (
+            (Users.firstname.ilike(f"%{search_term}%")) |
+            (Users.lastname.ilike(f"%{search_term}%")) |
+            (Users.firstname + Users.lastname.ilike(f"%{search_term}%")) |
+            (Users.email_address.ilike(f"%{search_term}%"))|
+            (Usertype.name.ilike(f"%{search_term}%"))
+        )   
+        users = query.filter(search_filter).all()
+    else:
+        users = query.all()
+    
+    return render_template('admin/admin_users_management.html', users=users, search_term=search_term)
 
-    # Handle GET request (normal page load)
-    users = Users.query.all()
-    return render_template('admin/admin_users_management.html', users=users)
 
 
-
-        
 
 @app.route('/get-user-form/<int:user_id>', methods=["GET"])
 # @login_required

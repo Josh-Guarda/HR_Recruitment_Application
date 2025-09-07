@@ -22,20 +22,31 @@ Dashboard Users-Management
                     <div class="card-body p-2">
                         <div class="text-center">
                             <h4 class="py-3 text-primary">Users Management</h4>
-                            <div class="d-flex">
-
+                            
+                                <!--
                                 <form id="searchUserForm" method="POST">
                                     <input id="searchUserInput" name="search_user" type="text" class="form-control" placeholder="Search">
                                     <input type="submit" id="btnSearch" value="Search">
-                                    <!--
+                                    
                                     <button id="btnSearch" class="btn btn-primary" type="button">
                                         <i class="fas fa-search"></i>
                                     </button>
-                                    -->
+                                    
                                 </form>
+                                -->
 
+
+                                <form id="searchUserForm" method="GET" action="{{ url_for('admin_dashboard_manage_users') }}">
+                                    <div class="d-flex">
+                                    <input id="searchUserInput" name="q" type="text" class="form-control" placeholder="Search" value="{{ request.args.get('q', '') }}">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                    </div>
+                                </form>
                                 
-                            </div>
+                                
+                            
                         </div>
 
                         <!-- Actions section -->
@@ -1032,12 +1043,30 @@ Dashboard Users-Management
             })
         })
         */
-
+        /*
         document.getElementById('searchUserForm').addEventListener('submit',function(e){
             //e.preventDefault()
 
             
         })
+            */
+
+        document.getElementById('searchUserForm').addEventListener('submit', async function(e) {
+            //e.preventDefault(); // Stop the form from reloading the page
+            const searchTerm = document.getElementById('searchUserInput').value;
+
+            
+            const url = `/admin-get-users?q=${encodeURIComponent(searchTerm)}`;
+            
+            // Use fetch to get the HTML from the server
+            const response = await fetch(url);
+            const html = await response.text();
+            
+            // The tricky part: extract just the part of the HTML you need to update (e.g., the table body)
+            // This requires your server to send back *only* the necessary HTML, or your JS to parse it.
+            // A simpler alternative is to have your route support JSON and AJAX, as we discussed before.
+            
+        });
 
 
 
