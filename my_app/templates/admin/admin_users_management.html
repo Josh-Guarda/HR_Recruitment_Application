@@ -236,7 +236,7 @@ Dashboard Users-Management
                                 <i class="fas fa-search fa-3x text-muted"></i>
                             </div>
                             <h5 class="text-muted">No users found</h5>
-                            <p class="text-muted">Input some User or Try adjusting your search terms...</p>
+                            <p class="text-muted">Input some User`s or try adjusting your search terms...</p>
                         </div>
                     </div>
                 {% endif %}
@@ -329,7 +329,7 @@ Dashboard Users-Management
                                                         background-color: {{ user.department.color if user.department and user.department.color else '#dcdbdb' }};
                                                         color:{{ 'white' if user.department and user.department.color else '#4d4a4aff' }};
                                                         ">
-                                                    {{ user.user_type_id|capitalize }}
+                                                    {{ user.user_type|capitalize }}
                                                 </span>
                                             </td>
                                         </tr>
@@ -1033,6 +1033,7 @@ Dashboard Users-Management
 
         //DYNAMIC SEARCH USER AND LOAD USERS 
         //LOAD USER CONTAINER CARD WITHOUT RELOADING THE PAGE
+        /*
         document.getElementById('searchUserForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const searchTerm = document.getElementById('searchUserInput').value;
@@ -1066,7 +1067,7 @@ Dashboard Users-Management
                 `;
             }
         });
-
+        */
 
 
 
