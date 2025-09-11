@@ -162,43 +162,48 @@ def admin_dashboard():
 
 
 
-# @app.route('/admin-get-users', methods=["GET","POST"])
+# @app.route('/admin-get-users',methods=["GET"]) # No need for 'POST' in methods now
 # @login_required
 # def admin_dashboard_manage_users():
-#     users = Users.query.all()
-#     # No need to create forms here anymore since Edit template is dynamically loaded via User Modal handle via JS.
+#     # Get the search term from the URL query string (e.g., ?q=john)
+#     search_term = request.args.get('q', '').strip()
     
+#     print(f"You Search:{search_term}")
     
-#     # Handle the POST request from the fetch call
-#     if request.method == "POST":
-#         response_received = request.get_json()
-#         print(f"JSON PRINTED : {response_received}")
-        
-#         # TODO: Add your logic here! Use the search term.
-#         # For example: search_term = response_received['searchKey']
-#         # users = Users.query.filter(Users.firstname.ilike(f"%{search_term}%")).all()
-        
-#         # Return a JSON response to the fetch call
-#         return jsonify({ 
-#             'message': 'Search successful!', 
-#             'received_data': response_received,
-#             # 'users': [user.serialize() for user in users] # You would add results later
-#         })
-        
-#     # Handle the normal GET request for initially loading the page
-#     if request.method == "GET":
-#         users = Users.query.all()
-#         return render_template('admin/admin_users_management.html', users=users)
+#     # Start with a base query that JOINS the Usertype and USERS table
+#     query = Users.query.join(Usertype)
+    
+#     # Create the full name concatenation
+#     full_name = Users.firstname + ' ' + Users.lastname
+    
+#     # Apply filters if a search term is provided
+#     if search_term:
+#         search_filter = (
+#             (Users.firstname.ilike(f"%{search_term}%")) |
+#             (Users.lastname.ilike(f"%{search_term}%")) |
+#             (full_name.ilike(f"%{search_term}%")) |
+#             (Users.email_address.ilike(f"%{search_term}%"))|
+#             (Usertype.name.ilike(f"%{search_term}%"))
+#         )   
+#         users = query.filter(search_filter).all()
+#     else:
+#         users = query.all()
+    
+#     return render_template('admin/admin_users_management.html', users=users, search_term=search_term)
 
 
 
-@app.route('/admin-get-users',methods=["GET"]) # No need for 'POST' in methods now
+
+@app.route('/admin-get-users', methods=["GET"])
 @login_required
 def admin_dashboard_manage_users():
     # Get the search term from the URL query string (e.g., ?q=john)
     search_term = request.args.get('q', '').strip()
     
-    print(f"You Search:{search_term}")
+    # Get the page number from the query string, default to 1
+    page = request.args.get('page', 1, type=int)
+    
+    print(f"You Search: {search_term}, Page: {page}")
     
     # Start with a base query that JOINS the Usertype and USERS table
     query = Users.query.join(Usertype)
@@ -212,14 +217,34 @@ def admin_dashboard_manage_users():
             (Users.firstname.ilike(f"%{search_term}%")) |
             (Users.lastname.ilike(f"%{search_term}%")) |
             (full_name.ilike(f"%{search_term}%")) |
-            (Users.email_address.ilike(f"%{search_term}%"))|
+            (Users.email_address.ilike(f"%{search_term}%")) |
             (Usertype.name.ilike(f"%{search_term}%"))
         )   
-        users = query.filter(search_filter).all()
-    else:
-        users = query.all()
+        query = query.filter(search_filter)
     
-    return render_template('admin/admin_users_management.html', users=users, search_term=search_term)
+    # Paginate the results - 10 users per page
+    users_pagination = query.paginate(page=page, per_page=10, error_out=False)
+    users = users_pagination.items
+    
+    return render_template('admin/admin_users_management.html', 
+                         users=users, 
+                         search_term=search_term,
+                         pagination=users_pagination)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
