@@ -242,54 +242,59 @@ Dashboard Users-Management
                 {% endif %}
                 
                 <!-- Pagination Controls -->
-                {% if pagination.pages > 1 %}
-                <nav aria-label="User pagination" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <!-- Previous page link -->
-                        <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+    {% if pagination.pages > 1 %}
+    <div class="col-12">
+        <!-- Page info -->
+        <div class="text-muted mb-2 text-center text-md-start">
+            Showing page {{ pagination.page }} of {{ pagination.pages }} - 
+            {{ pagination.total }} users total
+        </div>
+
+        <nav aria-label="User pagination" class="mt-2">
+            <ul class="pagination justify-content-center justify-content-md-end flex-wrap">
+                <!-- Previous page link -->
+                <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                    <a class="page-link" 
+                    href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.prev_num) if pagination.has_prev else '#' }}">
+                        &laquo; Previous
+                    </a>
+                </li>
+                
+                <!-- Page number links -->
+                {% for page_num in pagination.iter_pages(left_edge=1, left_current=1, right_current=2, right_edge=1) %}
+                    {% if page_num %}
+                        <li class="page-item {% if page_num == pagination.page %}active{% endif %} d-none d-sm-block">
                             <a class="page-link" 
-                            href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.prev_num) if pagination.has_prev else '#' }}">
-                                &laquo; Previous
+                            href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=page_num) }}">
+                                {{ page_num }}
                             </a>
                         </li>
-                        
-                        <!-- Page number links -->
-                        {% for page_num in pagination.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2) %}
-                            {% if page_num %}
-                                <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
-                                    <a class="page-link" 
-                                    href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=page_num) }}">
-                                        {{ page_num }}
-                                    </a>
-                                </li>
-                            {% else %}
-                                <li class="page-item disabled">
-                                    <span class="page-link">…</span>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                        
-                        <!-- Next page link -->
-                        <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
-                            <a class="page-link" 
-                            href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.next_num) if pagination.has_next else '#' }}">
-                                Next &raquo;
-                            </a>
+                    {% else %}
+                        <li class="page-item disabled d-none d-sm-block">
+                            <span class="page-link">…</span>
                         </li>
-                    </ul>
-                    
-                    <!-- Page info -->
-                    <div class="text-center text-muted mt-2">
-                        Showing page {{ pagination.page }} of {{ pagination.pages }} - 
-                        {{ pagination.total }} users total
-                    </div>
-                </nav>
-                {% endif %}
-
-
-
-
-
+                    {% endif %}
+                {% endfor %}
+                
+                <!-- Mobile current page indicator -->
+                <li class="page-item active d-sm-none">
+                    <span class="page-link">
+                        {{ pagination.page }} / {{ pagination.pages }}
+                    </span>
+                </li>
+                
+                <!-- Next page link -->
+                <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                    <a class="page-link" 
+                    href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.next_num) if pagination.has_next else '#' }}">
+                        Next &raquo;
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+                
 
                 <!-- Beep Sound in Modals -->
                 <audio id="modal-beep" src="{{ url_for('static',filename='builtin/sound/beep-sound-software.wav') }}"></audio>

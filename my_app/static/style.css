@@ -257,9 +257,9 @@ body.sidebar-open .main-content {
 
 /* Kanban Pagination */
 
-.pagination {
+/* .pagination {
     margin: 20px 0;
-}
+} */
 
 .page-item.active .page-link {
     background-color: #0d6efd;
