@@ -203,7 +203,10 @@ def admin_dashboard_manage_users():
     # Get the page number from the query string, default to 1
     page = request.args.get('page', 1, type=int)
     
-    print(f"You Search: {search_term}, Page: {page}")
+    # Get the view type from the query string, default to 'kanban'
+    view_type = request.args.get('view', 'kanban', type=str)
+    
+    print(f"You Search: {search_term}, Page: {page}, View: {view_type}")
     
     # Start with a base query that JOINS the Usertype and USERS table
     query = Users.query.join(Usertype)
@@ -229,22 +232,9 @@ def admin_dashboard_manage_users():
     return render_template('admin/admin_users_management.html', 
                          users=users, 
                          search_term=search_term,
-                         pagination=users_pagination)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                         pagination=users_pagination,
+                         view_type=view_type
+                         )
 
 
 

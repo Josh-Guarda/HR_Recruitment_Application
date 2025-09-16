@@ -22,7 +22,7 @@ Dashboard Users-Management
                     <div class="card-body p-2">
                         <div class="text-center">
                             <h4 class="py-3 text-primary">Users Management</h4>
-                            
+
                                 <!--
                                 <form id="searchUserForm" method="POST">
                                     <input id="searchUserInput" name="search_user" type="text" class="form-control" placeholder="Search">
@@ -78,13 +78,15 @@ Dashboard Users-Management
                                     -->
                                     </li>
                                     <li>
-                                    <a class="kanban-view dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" href="#" data-bs-toggle="tooltip" title="Kanban View">
-                                        <i class="bi bi-kanban"></i>
+                                    <a href="{{ url_for('admin_dashboard_manage_users', view='kanban', q=search_term, page=1) }}" 
+                                    class="btn btn-outline-primary {% if view_type == 'kanban' %}active{% endif %}">
+                                        <i class="fas fa-th-large"></i> Kanban
                                     </a>
                                     </li>
                                     <li>
-                                    <a class="list-view dropdown-action-option dropdown-item border-radius-md d-flex justify-content-center" data-bs-toggle="tooltip" title="List View" href="#">
-                                        <i class="ri-menu-line"></i>
+                                    <a href="{{ url_for('admin_dashboard_manage_users', view='list', q=search_term, page=1) }}" 
+                                    class="btn btn-outline-primary {% if view_type == 'list' %}active{% endif %}">
+                                        <i class="fas fa-list"></i> List
                                     </a>
                                     </li>
                                 </ul>
@@ -179,7 +181,7 @@ Dashboard Users-Management
         </div>
 
         
-        <section id="UsersManagementKanbanView" class="container">
+        <section id="UsersManagementKanbanView" class="container {% if view_type != 'kanban' %}d-none{% endif %}">
             <div id="users-container" class="row row-cols-1 row-cols-lg-2 g-4 py-5">
                 {% if users %}
                     {% for user in users %}
@@ -255,7 +257,7 @@ Dashboard Users-Management
                                 <!-- Previous page link -->
                                 <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
                                     <a class="page-link" 
-                                    href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.prev_num) if pagination.has_prev else '#' }}">
+                                    href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.prev_num, view='kanban') if pagination.has_prev else '#' }}">
                                         &laquo; Previous
                                     </a>
                                 </li>
@@ -265,7 +267,7 @@ Dashboard Users-Management
                                     {% if page_num %}
                                         <li class="page-item {% if page_num == pagination.page %}active{% endif %} d-none d-sm-block">
                                             <a class="page-link" 
-                                            href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=page_num) }}">
+                                            href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=page_num, view='kanban') }}">
                                                 {{ page_num }}
                                             </a>
                                         </li>
@@ -286,7 +288,7 @@ Dashboard Users-Management
                                 <!-- Next page link -->
                                 <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
                                     <a class="page-link" 
-                                    href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.next_num) if pagination.has_next else '#' }}">
+                                    href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.next_num, view='kanban') if pagination.has_next else '#' }}">
                                         Next &raquo;
                                     </a>
                                 </li>
@@ -348,7 +350,7 @@ Dashboard Users-Management
             </div>
         </section>
         
-        <section id="UsersManagementTreeView" class="container d-none">
+        <section id="UsersManagementTreeView" class="container {% if view_type != 'list' %}d-none{% endif %}">
             <div class="pt-2 pb-5">
                     <div class="panel panel-default">
                         <br/>
@@ -390,6 +392,51 @@ Dashboard Users-Management
                                         {% endfor %}
                                     </tbody>
                                 </table>
+
+                                <!-- Pagination for List View -->
+                                {% if pagination.pages > 1 %}
+                                <nav aria-label="User pagination" class="mt-4">
+                                    <ul class="pagination justify-content-center">
+                                        <!-- Previous page link -->
+                                        <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                                            <a class="page-link" 
+                                            href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.prev_num, view='list') if pagination.has_prev else '#' }}">
+                                                &laquo; Previous
+                                            </a>
+                                        </li>
+                                        
+                                        <!-- Page number links -->
+                                        {% for page_num in pagination.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2) %}
+                                            {% if page_num %}
+                                                <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                                                    <a class="page-link" 
+                                                    href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=page_num, view='list') }}">
+                                                        {{ page_num }}
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">…</span>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        
+                                        <!-- Next page link -->
+                                        <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                                            <a class="page-link" 
+                                            href="{{ url_for('admin_dashboard_manage_users', q=search_term, page=pagination.next_num, view='list') if pagination.has_next else '#' }}">
+                                                Next &raquo;
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    
+                                    <!-- Page info -->
+                                    <div class="text-center text-muted mt-2">
+                                        Showing page {{ pagination.page }} of {{ pagination.pages }} - 
+                                        {{ pagination.total }} users total
+                                    </div>
+                                </nav>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
