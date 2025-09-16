@@ -91,7 +91,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ADMIN TREEVIEW SCRIPTS
-
     $(document).ready(function(){
     var dataTable = $('#users_data').DataTable({
         // dom: 'lrtip'  // removes the default search bar (the 'f' option)
@@ -117,9 +116,12 @@ document.addEventListener("DOMContentLoaded", function () {
             // top row
             '<"row mb-3 "<"col-md-12 text-end"l>>' +
             // table
-            'rt' +
+            'rt' + 
             // bottom row
-            '<"row mt-2 py-5"<"col-md-6"i><"col-md-6 text-end"p>>',
+            // '<"row mt-2 py-5"<"col-md-6"i><"col-md-6 text-end"p>>',
+            '<"row mt-2 py-5">',
+            
+
 
         pagingType: 'simple_numbers',
         language: { emptyTable: 'No users found – please add one.' ,lengthMenu: 'Show _MENU_ entries'},
