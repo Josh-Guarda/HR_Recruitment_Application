@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // table
             'rt' + 
             // bottom row
-            // '<"row mt-2 py-5"<"col-md-6"i><"col-md-6 text-end"p>>',
+            //'<"row mt-2 py-5"<"col-md-6"i><"col-md-6 text-end"p>>',
             '<"row mt-2 py-5">',
             
 
