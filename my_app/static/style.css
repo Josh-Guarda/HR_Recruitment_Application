@@ -300,11 +300,10 @@ table.dataTable tbody tr {
               color            .2s ease-in,
               transform        .3s ease,
               box-shadow       .2s ease;
-  
 }
 
 table.dataTable tbody tr:hover {
-  background: linear-gradient(to top, #ffffff 0%, #03611a 100%);
+  background: linear-gradient(to top, #ffffff 0%, #056baf 100%);
   transform: translateY(-3px);
   color: white;
   cursor: pointer;

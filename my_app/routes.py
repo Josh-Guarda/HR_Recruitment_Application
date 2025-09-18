@@ -197,24 +197,19 @@ def admin_dashboard():
 @app.route('/admin-get-users', methods=["GET"])
 @login_required
 def admin_dashboard_manage_users():
-    # Get the search term from the URL query string (e.g., ?q=john)
     search_term = request.args.get('q', '').strip()
-    
-    # Get the page number from the query string, default to 1
     page = request.args.get('page', 1, type=int)
-    
-    # Get the view type from the query string, default to 'kanban'
     view_type = request.args.get('view', 'kanban', type=str)
     
-    print(f"You Search: {search_term}, Page: {page}, View: {view_type}")
+    # print(f"You Search: {search_term}, Page: {page}, View: {view_type}")
     
-    # Start with a base query that JOINS the Usertype and USERS table
+    #Base Query JOINS the Usertype and USERS table
     query = Users.query.join(Usertype)
     
     # Create the full name concatenation
     full_name = Users.firstname + ' ' + Users.lastname
     
-    # Apply filters if a search term is provided
+    #filters for search
     if search_term:
         search_filter = (
             (Users.firstname.ilike(f"%{search_term}%")) |
@@ -223,12 +218,14 @@ def admin_dashboard_manage_users():
             (Users.email_address.ilike(f"%{search_term}%")) |
             (Usertype.name.ilike(f"%{search_term}%"))
         )   
-        query = query.filter(search_filter)
+        users = query.filter(search_filter)
+    #     users = query.filter(search_filter).all()
+    # else:
+    #     users = query.all()
     
-    # Paginate the results - 10 users per page
+    # Pagination
     users_pagination = query.paginate(page=page, per_page=10, error_out=False)
     users = users_pagination.items
-    
     return render_template('admin/admin_users_management.html', 
                          users=users, 
                          search_term=search_term,
@@ -240,7 +237,7 @@ def admin_dashboard_manage_users():
 
 
 @app.route('/get-user-form/<int:user_id>', methods=["GET"])
-# @login_required
+@login_required
 def get_user_form(user_id):
     user = Users.query.get_or_404(user_id)
     user_data = {
