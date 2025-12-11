@@ -374,7 +374,7 @@
         // LOAD AVATAR to CONTAINER WHEN UPLOADED
         let profilePicture= document.getElementById('avatar-preview');
         let inputPicture = document.getElementById('avatar-upload');
-
+        
         inputPicture.onchange=function() {
             profilePicture.src = URL.createObjectURL(inputPicture.files[0]);
         }

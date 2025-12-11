@@ -34,7 +34,7 @@ def validate_mobile_number(number_to_check):
         number_to_save = Users.query.filter_by(mobile_number=number_to_check.data).first()
         if number_to_save != number_to_save:
             raise ValidationError('Mobile number already exists.')
-        
+                    
 def validate_phone_number(number_to_check):
     if not number_to_check.data.isdigit():
         raise ValidationError('Only numbers are allowed.')
@@ -72,20 +72,7 @@ def validate_phone_number(number_to_check):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 def set_form_choices(form, user):
-    
     print(f"Fetch user: {user}")
     # Set province choices
     form.prov_id.choices = [('', '-- Select Province --')] + sorted(

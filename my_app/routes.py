@@ -120,9 +120,10 @@ def change_password_page(token):
             user_to_change_pw = Users.query.filter_by(email_address=email).first()
             user_to_change_pw.password = new_password
             db.session.commit()
-
             flash('Your password has been updated!', 'success')
-            return redirect(url_for('public_dashboard'))
+            # return redirect(url_for('public_dashboard',user_id=current_user.id))
+            return redirect(url_for('login_page'))
+            
     
     return render_template('auth/change_password.html', token=token,change_pw_form=change_pw_form)
 
@@ -386,7 +387,7 @@ def delete_user(user_id):
                 "message": "You cannot delete your own account!",
                 "category": "warning"
             }
-        }), 400
+        }), 400 
     
     if not current_user.user_type.name == 'admin':
         return jsonify({
@@ -474,7 +475,7 @@ def public_dashboard(user_id):
                 flash(f'Password changed Successfully!', category='success')
                 current_user.password = new_password
                 db.session.commit()
-                return redirect(url_for('public_dashboard'))
+                return redirect(url_for('public_dashboard',user_id=current_user.id))
 
     if change_pw_form.errors:
         for err_msg in change_pw_form.errors.values():
@@ -564,7 +565,6 @@ def get_provinces():
          for m in PROVINCE_DATA],
         key=lambda x: x['name'].lower()
     )
-    
     # print(f"Generated Provinces{provinces}")
     return jsonify(provinces)
 

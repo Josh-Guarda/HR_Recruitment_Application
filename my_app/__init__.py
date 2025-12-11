@@ -50,7 +50,7 @@ login_manager.login_message_category = "primary"
 def generate_reset_token(email):
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
     return serializer.dumps(email, salt='password-reset-salt')
-
+    
 
 # Returns the email if the token is valid, otherwise returns None
 def verify_reset_token(token, expiration=180):  # THIS declares the expiration of token base on seconds Valid for (3600s) i.e. 1 hour
@@ -60,6 +60,8 @@ def verify_reset_token(token, expiration=180):  # THIS declares the expiration o
         return email
     except Exception as e:
         return None
+
+
 
 
 def mailSetup():
